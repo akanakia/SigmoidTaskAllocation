@@ -2,7 +2,7 @@
 %2345678901234567890123456789012345678901234567890123456789012345678901234567890
 %        1         2         3         4         5         6         7         8
 
-\documentclass{article}  % Comment this line out
+\documentclass{TeXstyles/DARS/svmult}  % Comment this line out
                                                           % if you need a4paper
 %\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4
                                                           % paper
@@ -78,21 +78,22 @@
 \newcommand{\ceil}[1]{\lceil#1\rceil}
 
 
-\title{\LARGE \bf
-A Response Threshold Sigmoid Function Model for Swarm Robot Collaboration}
+\title*{A Response Threshold Sigmoid Function Model for Swarm Robot Collaboration}
 
 \author{Anshul Kanakia and Nikolaus Correll}
 
+\institute{Anshul Kanakia \at University of Colorado, Boulder\\ Dept. of Computer Science\\ \email{anshul.kanakia@colorado.edu}
+\and Nikolaus Correll \at University of Colorado, Boulder\\ Dept. of Computer Science\\ \email{nikolaus.correll@colorado.edu}}
+
 \begin{document}
 \maketitle
-\thispagestyle{empty}
-\pagestyle{empty}
+%\thispagestyle{empty}
+%\pagestyle{empty}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{abstract}
-We present a multi-agent collaboration algorithm to recruit an approximate number of individually simple robots. We propose a sigmoid response threshold function motivated by task allocation in social insects, and describe macro-level models backed by micro-level simulations to predict the resulting team sizes and their variance. We show that the slope of the response threshold function can be used to control the variance of group size, allowing agents to trade off deterministic team size with coordination speed, making the proposed mechanism applicable to a variety of applications. 
-\end{abstract}
+\abstract{
+We present a multi-agent collaboration algorithm to recruit an approximate number of individually simple robots. We propose a sigmoid response threshold function motivated by task allocation in social insects, and describe macro-level models backed by micro-level simulations to predict the resulting team sizes and their variance. We show that the slope of the response threshold function can be used to control the variance of group size, allowing agents to trade off deterministic team size with coordination speed, making the proposed mechanism applicable to a variety of applications.}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
