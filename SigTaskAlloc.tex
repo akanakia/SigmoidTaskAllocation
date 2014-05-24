@@ -3,21 +3,32 @@
 %        1         2         3         4         5         6         7         8
 
 \documentclass{TeXstyles/DARS/svmult}  % Comment this line out
-                                                          % if you need a4paper
-%\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4
-                                                          % paper
 
-%\IEEEoverridecommandlockouts                              % This command is only
-                                                          % needed if you want to
-                                                          % use the \thanks command
-%\overrideIEEEmargins
-% See the \addtolength command later in the file to balance the column lengths
-% on the last page of the document
+\usepackage{mathptmx}       % selects Times Roman as basic font
+\usepackage{helvet}         % selects Helvetica as sans-serif font
+\usepackage{courier}        % selects Courier as typewriter font
+\usepackage{type1cm}        % activate if the above 3 fonts are
+                            % not available on your system
+%
+\usepackage{makeidx}         % allows index generation
+\usepackage{graphicx}        % standard LaTeX graphics tool
+                             % when including figure files
+\usepackage{multicol}        % used for the two-column index
+\usepackage[bottom]{footmisc}% places footnotes at page bottom
+
+\usepackage{subcaption}
+% see the list of further useful packages
+% in the Reference Guide
+
+\makeindex             % used for the subject index
+                       % please use the style svind.ist with
+                       % your makeindex program
+
 
 % Usual setup packages
-\usepackage{times}
-\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
-\usepackage{geometry} % to change the page dimensions
+%\usepackage{times}
+%\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+%\usepackage{geometry} % to change the page dimensions
 \usepackage{graphicx} % General page control package
 %\usepackage[compact]{titlesec} % For compact title
 \usepackage{listings} % For including source code with highlighting
@@ -47,9 +58,11 @@
 \usepackage{multirow}
 %\usepackage{titling}
 \usepackage{float} % To make floats movable
-\usepackage[font=scriptsize,labelfont=bf]{caption}
-\usepackage[font=scriptsize,labelfont=bf]{subcaption}
+%\usepackage[font=scriptsize,labelfont=bf]{caption}
+%\usepackage[font=scriptsize,labelfont=bf]{subcaption}
 \usepackage[table]{xcolor}
+
+
 
 % Packages for drawing graphs, FSMs, etc.
 \usepackage{pgf}
@@ -103,7 +116,6 @@ We propose a probabilistic, threshold based multi agent collaboration algorithm 
 
 We wish to extend the stick pulling model of constant group sizes of robots to include a more general case of collaboration tasks that involve only approximate robot group sizes for successful collaboration. More specifically, we deal with tasks that have the property of ``concurrent benefit'' where single agents must wait for a group---with a range of permissible size---to form at their collaboration site before being able to collectively begin the task and complete it successfully. Examples of such tasks include fire containment, collective transport \cite{sugawara2012}, pattern recognition \cite{beni1993swarm}, real-time mapping of oil spills \cite{beni2005swarm}, determining coverage area of forest fires \cite{krishnanand2006glowworm}, and many others that require a subset of a swarm to coalesce and tackle a task collaboratively.  
 %More specifically, we deal with logistic tasks, i.e. where the probability of success is logistic in the number of robots. 
-
 A concrete example is fire containment. Dropping incremental amounts of water on a fire will be futile until a critical mass of robots drop their water at their same time. Waiting for an exact number of robots, however, is not necessary either, motivating a task allocation scheme that will result in an average number of robots with predictable variance. 
 
 It is important to note that we do not study any particular task in detail but rather, outline a general approach to modeling scenarios with the aforementioned properties. Here, tuning the permissible variance allows one to tune the likelihood with which collaborations happen. Formally understanding the dynamics of the underlying coordination mechanisms allows the designer not only to predict performance, but also to optimize a swarming system \cite{Correll2008}.  
@@ -124,10 +136,17 @@ While a response threshold function can also be applied to the swarm distributio
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Response threshold-based task allocation}\label{sec:expsetup}
-\begin{figure}[!htb]
-\centering\includegraphics[width=7cm]{figures/setup.png}
+\begin{figure*}[!htb]
+\centering\begin{subfigure}{.5\textwidth}
+\centering\includegraphics[width=1.0\textwidth]{figures/setup.png}
 \caption{A visual representation of the collaboration experiment being studied.}\label{fig:setup}
-\end{figure}
+\end{subfigure}~
+\centering\begin{subfigure}{.5\textwidth}
+\centering\includegraphics[width=1.0\textwidth]{figures/droplets.png}
+\caption{The Droplets swarm robotic platform \cite{farrow14,klingner14}.}\label{}
+\end{subfigure}~
+\end{figure*}
+
 We consider a generic collaboration task with $m$ uniformly distributed collaboration sites within a flat arena with area, $A$. A swarm of individually simple robots is deployed within the arena, uniformly and at random as shown in Fig.~\ref{fig:setup}. The number of robots being used per experiment varies, as we discuss results for a number of different scenarios. Collaboration sites in the arena can be of various sizes and configurations.
 
 Each individual agent is capable of locomotion and local sensing. The agents do not require global positioning and no centralized controller exists, but we assume each agent to be capable of local omnidirectional communication with other agents within its communication range. The agents are also capable of sensing the boundary of a collaboration site---we assume that sites have easily distinguishable boundary regions for the purposes of the model studied in this paper.
@@ -136,11 +155,11 @@ The objective of each agent in the robot swarm is to find a collaboration site i
 
 \begin{figure*}[!htb]
 \centering\begin{subfigure}{.5\textwidth}
-\centering\includegraphics[width=7.5cm]{figures/sigmoid2.png}
+\centering\includegraphics[width=1.0\textwidth]{figures/sigmoid2.png}
 \caption{Changing $\tau$ offsets the curve along the $x$ axis, allowing to set the desired mean team size.}\label{}
 \end{subfigure}~
 \centering\begin{subfigure}{.5\textwidth}
-\centering\includegraphics[width=7.5cm]{figures/sigmoid1.png}
+\centering\includegraphics[width=1.0\textwidth]{figures/sigmoid1.png}
 \caption{Changing $\theta$ changes the slope at the point $x^* = \tau$, $\sig(x^*) = 0.5$, allowing to control the team's variance.}\label{}
 \end{subfigure}~
 \caption{Sigmoidal response threshold function and its parameters.}\label{fig:sig}
@@ -317,15 +336,15 @@ Table~\ref{tab:params} lists the common system parameters used for all experimen
 \section{Results}
 \begin{figure*}[!htb]
 \begin{subfigure}{0.33\textwidth}
-\centering\includegraphics[width=4.5cm]{figures/LermanCollabCompare3.png}
+\centering\includegraphics[width=1.0\textwidth]{figures/LermanCollabCompare3.png}
 \centering\caption{$\theta=2$}\label{fig:lercol3}
 \end{subfigure}~
 \begin{subfigure}{0.33\textwidth}
-\centering\includegraphics[width=4.5cm]{figures/LermanCollabCompare2.png}
+\centering\includegraphics[width=1.0\textwidth]{figures/LermanCollabCompare2.png}
 \centering\caption{$\theta=1$}\label{fig:lercol2}
 \end{subfigure}~
 \begin{subfigure}{0.33\textwidth}
-\centering\includegraphics[width=4.5cm]{figures/LermanCollabCompare1.png}
+\centering\includegraphics[width=1.0\textwidth]{figures/LermanCollabCompare1.png}
 \centering\caption{$\theta=0$}\label{fig:lercol1}
 \end{subfigure}
 \caption{Comparison of the collaboration rate for task allocation with probabilistic and deterministic \cite{Lerman2001} for different values of $\theta$ and team sizes $\tau$ in an environment with one collaboration site and one hundred robots. }\label{fig:lercol}
@@ -338,19 +357,19 @@ With increasing $\theta$ the Logistic function approximates a unit step, minimiz
 
 \begin{figure*}[!htb]
 \begin{subfigure}{0.5\textwidth}
-\centering\includegraphics[width=7.5cm]{figures/collabratesweep4.png}
+\centering\includegraphics[width=1.0\textwidth]{figures/collabratesweep4.png}
 \centering\caption{$\tau = 4$}\label{fig:collabsweep4}
 \end{subfigure}~
 \begin{subfigure}{0.5\textwidth}
-\centering\includegraphics[width=7.5cm]{figures/collabratesweep8.png}
+\centering\includegraphics[width=1.0\textwidth]{figures/collabratesweep8.png}
 \centering\caption{$\tau = 8$}\label{fig:collabsweep8}
 \end{subfigure}
 \begin{subfigure}{0.5\textwidth}
-\centering\includegraphics[width=7.5cm]{figures/collabratesweep16.png}
+\centering\includegraphics[width=1.0\textwidth]{figures/collabratesweep16.png}
 \centering\caption{$\tau = 16$}\label{fig:collabsweep16}
 \end{subfigure}~
 \begin{subfigure}{0.5\textwidth}
-\centering\includegraphics[width=7.5cm]{figures/collabratesweep32.png}
+\centering\includegraphics[width=1.0\textwidth]{figures/collabratesweep32.png}
 \centering\caption{$\tau = 32$}\label{fig:collabsweep32}
 \end{subfigure}
 \caption{Histograms of resulting team sizes for various values of $\tau$ and $\theta$ with one hundred robots and one collaboration site.}\label{fig:collabsweep}
@@ -360,11 +379,11 @@ We observe the collaboration rate to be qualitatively and quantitatively very si
 
 \begin{figure*}[!htb]
 \begin{subfigure}{0.5\textwidth}
-\centering\includegraphics[width=7.5cm]{figures/means.png}
+\centering\includegraphics[width=1.0\textwidth]{figures/means.png}
 \centering\caption{}\label{fig:means}
 \end{subfigure}~
 \begin{subfigure}{0.5\textwidth}
-\centering\includegraphics[width=7.5cm]{figures/variances.png}
+\centering\includegraphics[width=1.0\textwidth]{figures/variances.png}
 \centering\caption{}\label{fig:vars}
 \end{subfigure}
 \caption{Showing the effects of varying $\theta$ on means and variances corresponding to the histograms seen in Fig.~\ref{fig:collabsweep}.}\label{fig:meansvars}
