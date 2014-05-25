@@ -331,14 +331,23 @@ We use the Droplet swarm robot platform to perform real experiments to study the
 
 I our experiment we assume that agents are currently at a collaboration site and measure the corresponding collaboration rates for a team of 6 robots while varying values of $\tau$ and $\theta$. The collaboration event for the group involves having all the agents turn on their green LEDs for 3 seconds. Each experiment lasted 30 minutes and an overhead camera system was set up to detect collaboration events (see Figure \ref{fig:camera}). The results of these experiments are seen in Table \ref{tab:realexpres}.
 
-\begin{figure}[!htb]
-\centering\includegraphics[width=\textwidth]{assets/droplet.png}
-\centering\caption{A single Droplet robot with its outer shell removed.}\label{fig:droplet}
-\end{figure}
-
+%\begin{figure}[!htb]
+%\centering\includegraphics[width=\textwidth]{assets/droplet.png}
+%\centering\caption{A single Droplet robot with its outer shell removed.}\label{fig:droplet}
+%\end{figure}
+%
 
 \begin{table}[!htb]
-\centering\begin{tabular}{|*6c}
+\centering\begin{tabular}{|*{6}{c|}}
+\hline
+  $\theta/\tau$  &       2 &       3 &       4 &       5 & 6\\
+\hline
+0.1 & 31.7776 & 26.1667 & 26.1667 & 24.5667 & 25.1333\\
+\hline
+1   & 20.7667 & 16.9667 & 11.0667 & 15.1    & 6.93333\\
+\hline
+10  & 0.76667 & 0.13333 & 1.23333 & 0       & 0\\
+\hline
 \end{tabular}
 \centering\caption{}\label{tab:realexpres}
 \end{table}
