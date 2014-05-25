@@ -323,19 +323,33 @@ We use Gillespie simulation \cite{gillespie76} to explore the dynamics of the pr
 For both experiments a single collaboration site is used and each run simulates 300s of time. The desired group size ($\tau$, in Eq.~\eqref{eq:sig}) is set to 4, 8, 16 and 32 agents out of a total of 100 robots. The collaboration task is programmed to take 10s, on average, per agent. Data points are gathered by averaging data from 100 identically set up runs in each case. The \emph{rate of collaboration} for the threshold model is computed by summing the number of groups that successfully collaborate and dividing by the total experiment time (300s). For the deterministic model, collaboration rate is computed by summing all successful collaborations, i.e. collaborations involving team sizes equal to $\tau$, and dividing the the experiment time (300s).
 
 
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Physical Experiments}
 We use the Droplet swarm robot platform to perform real experiments to study the effects of using the proposed task allocation scheme on a physical system. The Droplets are small individually simple robots capable of omni-directional motion and communication (via IR) as well as RGB sensing, as seen in Figure \ref{fig:Droplet}.
 
-I our experiment we assume that agents are currently at a collaboration site and measure the corresponding collaboration rates for a team of 6 robots while varying values of $\tau$ and $\theta$. The collaboration event for the group involves having all the agents turn on their green LEDs for 3 seconds. Each experiment lasted 30 minutes and an overhead camera system was set up to detect collaboration events (see Figure \ref{fig:camera}). The results of these experiments are seen in Table \ref{tab:realexpres}.
+I our experiment we assume that agents are currently at a collaboration site and measure the corresponding collaboration rates for a team of 6 robots while varying values of $\tau$ and $\theta$. Each agent is individually running the algorithm described in Alg.\ref{alg:sigalg}. A collaboration event is recognized by having the all the robots turn on their green LEDs for 3 seconds. After such a collaboration event, each agent resets its group size estimate and runs Alg.\ref{alg:sigalg} again. 
 
 %\begin{figure}[!htb]
 %\centering\includegraphics[width=\textwidth]{assets/droplet.png}
 %\centering\caption{A single Droplet robot with its outer shell removed.}\label{fig:droplet}
 %\end{figure}
 %
+
+We ran 15 experiments for all combinations of $\tau = 2,3,4,5$ and $6$, $\theta = 0.1, 1$ and $10$. Each experiment lasted 30 minutes and an overhead camera system was set up to detect collaboration events (see Figure \ref{fig:camera}). The collaboration rate was a value computed by counting the number of collaborations over the course of each 30 minute experiment and normalizing to collaborations per minute. The results of these experiments are seen in Table \ref{tab:realexpres}.
+
+Although observe qualitatively similar results to the micro-macro predictions, there were a number of factors that affected the number of collaborations happening in the real robot experiments. 
+\begin{enumerate}
+	\item We assume perfect group size estimation in the micro-level simulations which is not the case here. Due to imperfect communication many agents often incorrectly estimated the size of the group (which was always 6) that they were in and hence computed different collaboration probabilities using the sigmoid function.
+	\item The overhead camera system set up for automatically counting collaborations between agents used the \emph{Roborealm} vision software that, in some cases, failed to detect and/or intermittently detected a robot's green led turning on. This may have resulted in lower than actual collaborations being counted during the course of the 30 minute experiment.  
+	\item to account for the vision software's detection errors, the raw data gathered from each experiment was de-bounced and passed through a low-pass filter to expose real collaboration events while eliminating observation error (see Figure \ref{fig:data clean}). 
+\end{enumerate}
+
+\begin{figure}[!htb]
+\centering\includegraphics[width=\textwidth]{figures/expdat.png}
+\centering\caption{A snippet of raw data of physical experiments is seen in the top figure, in blue. It shows number of agents with green leds on (i.e. collaborating) over time as detected by the overhead camera system. The figure below shows time adjusted data (solid green) with a low-pass added for debouncing (dashed red). The peaks of this fixed data were counted to count the number of collaborations over the course of a 30 minute experiment.}\label{fig:datfix}
+\end{figure}
+
+
 
 \begin{table}[!htb]
 \centering\begin{tabular}{|*{6}{c|}}
