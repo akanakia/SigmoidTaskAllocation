@@ -105,7 +105,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \abstract{
-We present a multi-agent collaboration algorithm to recruit an approximate number of individually simple robots with controllable variance. We propose a sigmoid response threshold function motivated by task allocation in social insects, and describe macro-level models backed by micro-level simulations to predict the resulting team sizes and their variance. We show that the slope of the response threshold function can be used to control the variance of group size, allowing agents to trade off deterministic team size with coordination speed, making the proposed mechanism applicable to a variety of applications.}
+We present a multi-agent collaboration algorithm to recruit an approximate number of individually simple robots with controllable variance. We propose a sigmoid response threshold function motivated by task allocation in social insects, and describe macro-level models backed by micro-level simulations to predict the resulting team sizes and their variance. We show that the slope of the response threshold function can be used to control the variance of group size, allowing agents to trade off deterministic team size with coordination speed, and making the proposed mechanism applicable to a variety of applications.}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -142,8 +142,8 @@ While a response threshold function can also be applied to the swarm distributio
 \caption{A visual representation of the collaboration experiment being studied.\label{fig:setup}}
 \end{subfigure}~
 \begin{subfigure}{.5\textwidth}
-\centering\includegraphics[width=.9\textwidth]{figures/droplettop.jpg}
-\centering\caption{A single Droplet robot with its outer shell removed. Indicated are an RGB color sensor, 6 IR sensors/LEDs and 3 motors.\cite{farrow14, klingner14}}\label{fig:droplettop}
+\centering\includegraphics[width=.9\textwidth]{figures/droplets.png}
+\centering\caption{The Droplets swarm robotic platform \cite{farrow14,klingner14}.\label{fig:dropletexp}}\label{fig:droplettop}
 \end{subfigure}
 \end{figure*}
 
@@ -384,31 +384,18 @@ approximates the Normal distribution \eqref{eq:normalcdf}.
 Figure \ref{fig:vars} shows how the variance of group size decreases with increasing $\theta$. This is because the sigmoid function approximates the unit step, making the team size more and more deterministic. On the other hand, low values of $\theta$ lead to large variances in the group size. For $\theta=0$, the variance is constant for all values of $\tau$ and depends exclusively on the total number of robots. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Physical Experiments}
-We use the Droplet swarm robot platform to perform real experiments to study the effects of using the proposed task allocation scheme on a physical system. The Droplets are small individually simple robots capable of omni-directional motion and communication (via IR) as well as RGB sensing, as seen in Figure \ref{fig:droplettop}.
-
-I our experiment we assume that all agents are currently at a single collaboration site and measure the corresponding collaboration rates for a team of 6 robots while varying values of $\tau$ and $\theta$. Each agent is individually running the algorithm described in Alg.\ref{alg:sigalg}. A collaboration event is recognized by having the all the robots turn on their green LEDs for 3 seconds. After such a collaboration event, each agent resets its group size estimate and runs Alg.\ref{alg:sigalg} again. 
-
-We ran 15 experiments for all combinations of $\tau = 2,3,4,5$ and $6$, and $\theta = 0.1, 1$ and $10$. Each experiment lasted 30 minutes and an overhead camera system was set up to detect collaboration events (see Figure \ref{fig:camera}). The collaboration rate was a value computed by counting the number of collaborations over the course of each 30 minute experiment and normalizing to collaborations per minute. The results of these experiments are seen in Figure \ref{fig:expdat}.
-
-Although we observe qualitatively similar results to the micro-macro predictions, there were a number of factors that affected the number of collaborations happening in the real robot experiments. 
-
-\begin{enumerate}
-	\item We assume perfect group size estimation in the micro-level simulations which is not the case here. Due to imperfect communication many agents often incorrectly estimated the size of the group (which was always 6) that they were in and hence computed different collaboration probabilities using the sigmoid function.
-	\item The overhead camera system set up for automatically counting collaborations between agents used the \emph{Roborealm} vision software that, in some cases, failed to detect and/or intermittently detected a robot's green led turning on. This may have resulted in lower than actual collaborations being counted during the course of the 30 minute experiment.  
-	\item To account for the vision software's detection errors, the raw data gathered from each experiment was de-bounced and passed through a low-pass filter to expose real collaboration events while eliminating observation error. 
-\end{enumerate}
+%\subsection{Physical Experiments}
+Finally, we use the Droplet swarm robot platform to perform real experiments to study the effects of using the proposed task allocation scheme on a physical system. The Droplets are small individually simple robots capable of omni-directional motion and communication (via IR) as well as RGB sensing. In our experiment we assume that all agents are currently at a single collaboration site and measure the corresponding collaboration rates for a team of 6 robots while varying values of $\tau$ and $\theta$. Each agent is individually running the algorithm described in Alg.\ref{alg:sigalg}. A collaboration event is recognized by having the all the robots turn on their green LEDs for 3 seconds. After such a collaboration event, each agent resets its group size estimate and runs Alg.\ref{alg:sigalg} again. 
 
 \begin{figure}[!htb]
-\begin{subfigure}{.5\textwidth}
-\centering\includegraphics[width=\textwidth]{figures/realsimexp.png}
-\centering\caption{The solid lines show collaborations per min, over 30min, for a group of 6 real robots as the desired group size is varied from 2 to 6 and the slope of $\sig$ is varied between $0.1, 1$ and $10$. The dashed lines indicate simulation results with the same parameters.}\label{fig:expdat}
-\end{subfigure}~
-\begin{subfigure}{.5\textwidth}
-\centering\includegraphics[width=.8\textwidth]{figures/droplets.png}
-\caption{The Droplets swarm robotic platform \cite{farrow14,klingner14}.\label{fig:dropletexp}}
-\end{subfigure}
+\centering\includegraphics[width=0.5\textwidth]{figures/realsimexp.png}
+%\centering\includegraphics[width=.4\textwidth]{figures/droplets.png}
+\caption{Left: The solid lines show collaborations per min, over 30min, for a group of 6 real robots as the desired group size is varied from 2 to 6 and the slope of $\sig$ is varied between $0.1, 1$ and $10$. The dashed lines indicate simulation results with the same parameters.\label{fig:expdat} }
 \end{figure}
+
+We ran 15 experiments for all combinations of $\tau = 2,3,4,5$ and $6$, and $\theta = 0.1, 1$ and $10$. Each experiment lasted 30 minutes and an overhead camera system was set up to detect collaboration events using the software \emph{RoboRealm}. The collaboration rate was a value computed by counting the number of collaborations over the course of each 30 minute experiment and normalizing to collaborations per minute. 
+To account for the vision software's detection errors, the raw data gathered from each experiment was de-bounced and passed through a low-pass filter to expose real collaboration events while eliminating observation error. The results of these experiments are seen in Figure \ref{fig:expdat}. While results are in accordance with simulation for $\theta$ being low, the collaboration rate on the real robot platform is much lower than expected for larger $\theta$ as simulation assumes perfect communication and group size estimates.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Discussion}\label{sec:discussion}
@@ -423,6 +410,18 @@ We note that there is no optimal wait time as in pulling-like collaboration \cit
 Although the algorithm does not deadlock---the probability to collaborate even if the team size is far off the desired value---the resulting behavior might be undesirable, resulting in potentially very long wait times and poor task performance. This could be mitigated by introducing preferential detachment from small groups and preferential attachment to larger groups as customary in swarm robotic aggregation \cite{correll2011modeling}.
 
 In practice, effective collaboration rates will also be limited by the embodiment of the robots, which might finding physical space at a site cumbersome. In the presented microscopic simulation, for both stochastic and deterministic team sizes, the number of robots per site were not limited, allowing scenarios in which multiple groups collaborate in quick succession at the same site. While comparing both models without embodiment is reasonable, we wish to study the effect of embodiment in future work.
+
+
+%Although we observe qualitatively similar results to the micro-macro predictions, there were a number of factors that affected the number of collaborations happening in the real robot experiments. 
+%
+%\begin{enumerate}
+	%\item We assume perfect group size estimation in the micro-level simulations which is not the case here. Due to imperfect communication many agents often incorrectly estimated the size of the group (which was always 6) that they were in and hence computed different collaboration probabilities using the sigmoid function.
+	%\item The overhead camera system set up for automatically counting collaborations between agents used the \emph{Roborealm} vision software that, in some cases, failed to detect and/or intermittently detected a robot's green led turning on. This may have resulted in lower than actual collaborations being counted during the course of the 30 minute experiment.  
+	%\item To account for the vision software's detection errors, the raw data gathered from each experiment was de-bounced and passed through a low-pass filter to expose real collaboration events while eliminating observation error. 
+%\end{enumerate}
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}\label{sec:conclusion}
