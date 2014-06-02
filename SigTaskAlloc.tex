@@ -93,7 +93,7 @@
 
 \title*{A Response Threshold Sigmoid Function Model for Swarm Robot Collaboration}
 
-\author{Anshul Kanakia, John Klingner and Nikolaus Correll}
+\author{Anshul Kanakia and John Klingner and Nikolaus Correll}
 
 \institute{Anshul Kanakia, John Klingner and Nikolaus Correll \at University of Colorado, Boulder\\ Dept. of Computer Science\\ \email{anshul.kanakia@colorado.edu}\\ \email{john.klingner@colorado.edu}\\ \email{nikolaus.correll@colorado.edu}}
 
@@ -105,7 +105,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \abstract{
-We present a multi-agent collaboration algorithm to recruit an approximate number of individually simple robots with controllable variance. We propose a sigmoid response threshold function motivated by task allocation in social insects, and describe macro-level models backed by micro-level simulations to predict the resulting team sizes and their variance. We show that the slope of the response threshold function can be used to control the variance of group size, allowing agents to trade off deterministic team size with coordination speed, and making the proposed mechanism applicable to a variety of applications.}
+We present a multi-agent collaboration algorithm to recruit an approximate number of individually simple robots with controllable variance. We propose a sigmoid response threshold function motivated by task allocation in social insects, and describe macro-level models backed by micro-level simulations to predict the resulting team sizes and their variance.  These results are further validated through physical experiments using the ``Droplet'' swarm robotics platform. We show that the slope of the response threshold function can be used to control the variance of group size, allowing agents to trade off deterministic team size with coordination speed, and making the proposed mechanism applicable to a variety of applications.}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -125,8 +125,7 @@ The proposed algorithm and model is inspired from task allocation in biological 
 The rest of the paper is organized as follows. Section \ref{sec:expsetup} introduces the task allocation algorithm that we will be studying throughout the course of the paper.
 Section \ref{sec:macromodel} provides a mathematical basis for the threshold based collaboration model and attempts to explain how the voting strategy being employed affects group sizes and their variance.
 Section \ref{sec:micromodel} provides an explanation of the agent level controller in the system. This section further outlines the experimental setup being used to run simulations and the important parameters of the system. 
-We compare collaboration rates of our model with the constant group size model introduced by Lerman et al.~\cite{Lerman2001} using micro-level Gillespie simulation in Section \ref{sec:micromodel}, showing that the dynamics are comparable for similar team sizes, yet allow us to tune the variance of the resulting group size.  
-Finally, Sections \ref{sec:discussion} and \ref{sec:conclusion} provide discussion of the drawbacks and limitations of the proposed model and scenarios where it could fail as well as discussing possible avenues for future work.
+We compare collaboration rates of our model with the constant group size model introduced by Lerman et al.~\cite{Lerman2001} using micro-level Gillespie simulation in Section \ref{sec:micromodel}, showing that the dynamics are comparable for similar team sizes, yet allow us to tune the variance of the resulting group size. We also discuss results obtained from conducting real physical experiments and compare them to microscopic simulation results. Finally, Sections \ref{sec:discussion} and \ref{sec:conclusion} provide discussion of the drawbacks and limitations of the proposed model and scenarios where it could fail as well as discussing possible avenues for future work.
 
 \subsection{Related work}
 Task allocation is a canonical problem in multi-robot systems \cite{Gerkey2004}. Whereas capable robots might be able to approximate optimal task allocation, e.g., using market-based approaches \cite{amstutz2008distributed,vig2007coalition} or using  leader-follower coalition algorithms \cite{Chen2011}, probabilistic algorithms are of particular interest for swarm robotics with individually simple controllers \cite{dantu2012comparison}. Recruitment of an exact number of robots to a particular task has been extensively studied using the ``Stick Pulling'' experiment \cite{Lerman2001,Martinoli2004}. The problem of distributing a swarm of robots across a discrete number of sites/tasks with a specific desired distribution has been studied in \cite{Berman2009,Correll2008}. The proposed algorithm extends upon the first group of work, and we show how the proposed stochastic task allocation algorithm reduces to the ones described in \cite{Lerman2001,Martinoli2004} when using appropriate parameters.  Mather \cite{mather2010towards} instead presents a stochastic approach that is a hybrid between the work in \cite{Berman2009} and \cite{Martinoli2004}, allowing allocation to tasks requiring a varying number of robots.
@@ -390,7 +389,7 @@ Finally, we use the Droplet swarm robot platform to perform real experiments to 
 \begin{figure}[!htb]
 \centering\includegraphics[width=0.5\textwidth]{figures/realsimexp.png}
 %\centering\includegraphics[width=.4\textwidth]{figures/droplets.png}
-\caption{Left: The solid lines show collaborations per min, over 30min, for a group of 6 real robots as the desired group size is varied from 2 to 6 and the slope of $\sig$ is varied between $0.1, 1$ and $10$. The dashed lines indicate simulation results with the same parameters.\label{fig:expdat} }
+\caption{The solid lines show collaborations per min, over 30min, for a group of 6 real robots as the desired group size is varied from 2 to 6 and the slope of $\sig$ is varied between $0.1, 1$ and $10$. The dashed lines indicate simulation results with the same parameters.\label{fig:expdat} }
 \end{figure}
 
 We ran 15 experiments for all combinations of $\tau = 2,3,4,5$ and $6$, and $\theta = 0.1, 1$ and $10$. Each experiment lasted 30 minutes and an overhead camera system was set up to detect collaboration events using the software \emph{RoboRealm}. The collaboration rate was a value computed by counting the number of collaborations over the course of each 30 minute experiment and normalizing to collaborations per minute. 
