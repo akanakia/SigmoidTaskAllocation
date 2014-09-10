@@ -3,21 +3,32 @@
 %        1         2         3         4         5         6         7         8
 
 \documentclass{TeXstyles/DARS/svmult}  % Comment this line out
-                                                          % if you need a4paper
-%\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4
-                                                          % paper
 
-%\IEEEoverridecommandlockouts                              % This command is only
-                                                          % needed if you want to
-                                                          % use the \thanks command
-%\overrideIEEEmargins
-% See the \addtolength command later in the file to balance the column lengths
-% on the last page of the document
+\usepackage{mathptmx}       % selects Times Roman as basic font
+\usepackage{helvet}         % selects Helvetica as sans-serif font
+\usepackage{courier}        % selects Courier as typewriter font
+\usepackage{type1cm}        % activate if the above 3 fonts are
+                            % not available on your system
+%
+\usepackage{makeidx}         % allows index generation
+\usepackage{graphicx}        % standard LaTeX graphics tool
+                             % when including figure files
+\usepackage{multicol}        % used for the two-column index
+\usepackage[bottom]{footmisc}% places footnotes at page bottom
+
+\usepackage{subcaption}
+% see the list of further useful packages
+% in the Reference Guide
+
+\makeindex             % used for the subject index
+                       % please use the style svind.ist with
+                       % your makeindex program
+
 
 % Usual setup packages
-\usepackage{times}
-\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
-\usepackage{geometry} % to change the page dimensions
+%\usepackage{times}
+%\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+%\usepackage{geometry} % to change the page dimensions
 \usepackage{graphicx} % General page control package
 %\usepackage[compact]{titlesec} % For compact title
 \usepackage{listings} % For including source code with highlighting
@@ -47,9 +58,11 @@
 \usepackage{multirow}
 %\usepackage{titling}
 \usepackage{float} % To make floats movable
-\usepackage[font=scriptsize,labelfont=bf]{caption}
-\usepackage[font=scriptsize,labelfont=bf]{subcaption}
+%\usepackage[font=scriptsize,labelfont=bf]{caption}
+%\usepackage[font=scriptsize,labelfont=bf]{subcaption}
 \usepackage[table]{xcolor}
+
+
 
 % Packages for drawing graphs, FSMs, etc.
 \usepackage{pgf}
@@ -80,7 +93,7 @@
 
 \title*{A Response Threshold Sigmoid Function Model for Swarm Robot Collaboration}
 
-\author{Anshul Kanakia, John Klingner and Nikolaus Correll}
+\author{Anshul Kanakia and John Klingner and Nikolaus Correll}
 
 \institute{Anshul Kanakia, John Klingner and Nikolaus Correll \at University of Colorado, Boulder\\ Dept. of Computer Science\\ \email{anshul.kanakia@colorado.edu}\\ \email{john.klingner@colorado.edu}\\ \email{nikolaus.correll@colorado.edu}}
 
@@ -92,7 +105,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \abstract{
-We present a multi-agent collaboration algorithm to recruit an approximate number of individually simple robots. We propose a sigmoid response threshold function motivated by task allocation in social insects, and describe macro-level models backed by micro-level simulations to predict the resulting team sizes and their variance. We show that the slope of the response threshold function can be used to control the variance of group size, allowing agents to trade off deterministic team size with coordination speed, making the proposed mechanism applicable to a variety of applications.}
+We present a multi-agent collaboration algorithm to recruit an approximate number of individually simple robots with controllable variance. We propose a sigmoid response threshold function motivated by task allocation in social insects, and describe macro-level models backed by micro-level simulations to predict the resulting team sizes and their variance.  These results are further validated through physical experiments using the ``Droplet'' swarm robotics platform. We show that the slope of the response threshold function can be used to control the variance of group size, allowing agents to trade off deterministic team size with coordination speed, and making the proposed mechanism applicable to a variety of applications.}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -103,6 +116,8 @@ We propose a probabilistic, threshold based multi agent collaboration algorithm 
 
 We wish to extend the stick pulling model of constant group sizes of robots to include a more general case of collaboration tasks that involve only approximate robot group sizes for successful collaboration. More specifically, we deal with tasks that have the property of ``concurrent benefit'' where single agents must wait for a group---with a range of permissible size---to form at their collaboration site before being able to collectively begin the task and complete it successfully. Examples of such tasks include fire containment, collective transport \cite{sugawara2012}, pattern recognition \cite{beni1993swarm}, real-time mapping of oil spills \cite{beni2005swarm}, determining coverage area of forest fires \cite{krishnanand2006glowworm}, and many others that require a subset of a swarm to coalesce and tackle a task collaboratively.  
 %More specifically, we deal with logistic tasks, i.e. where the probability of success is logistic in the number of robots. 
+A concrete example is fire containment. Dropping incremental amounts of water on a fire will be futile until a critical mass of robots drop their water at the same time. Waiting for an exact number of robots, however, is not necessary either, motivating a task allocation scheme that will result in an average number of robots with predictable variance. 
+
 It is important to note that we do not study any particular task in detail but rather, outline a general approach to modeling scenarios with the aforementioned properties. Here, tuning the permissible variance allows one to tune the likelihood with which collaborations happen. Formally understanding the dynamics of the underlying coordination mechanisms allows the designer not only to predict performance, but also to optimize a swarming system \cite{Correll2008}.  
 
 The proposed algorithm and model is inspired from task allocation in biological systems such as ant colonies \cite{Bonabeau1999,Krieger2000}. We employ the use of a response threshold sigmoid function that probabilistically triggers the beginning of a collaboration step between robots at the same collaboration site. We study this approach via macroscopic models and microscopic simulations. The sigmoid function used in our model is commonly referred to as the \emph{logistic} function and has control parameters that allow us to alter its offset and slope. We study the effects that changing these parameters has on the system-wide behavior of the robot swarm. We also draw comparisons between this collaboration model and similar models used by Lerman et al. for the \emph{n}-robot stick pulling experiment \cite{Lerman2001} and discuss situations where it is beneficial to use one model over the other.
@@ -110,42 +125,46 @@ The proposed algorithm and model is inspired from task allocation in biological 
 The rest of the paper is organized as follows. Section \ref{sec:expsetup} introduces the task allocation algorithm that we will be studying throughout the course of the paper.
 Section \ref{sec:macromodel} provides a mathematical basis for the threshold based collaboration model and attempts to explain how the voting strategy being employed affects group sizes and their variance.
 Section \ref{sec:micromodel} provides an explanation of the agent level controller in the system. This section further outlines the experimental setup being used to run simulations and the important parameters of the system. 
-We compare collaboration rates of our model with the constant group size model introduced by Lerman et al.~\cite{Lerman2001} using micro-level Gillespie simulation in Section \ref{sec:micromodel}, showing that the dynamics are comparable for similar team sizes, yet allow us to tune the variance of the resulting group size.  
-Finally, Sections \ref{sec:discussion} and \ref{sec:conclusion} provide discussion of the drawbacks and limitations of the proposed model and scenarios where it could fail as well as discussing possible avenues for future work.
+We compare collaboration rates of our model with the constant group size model introduced by Lerman et al.~\cite{Lerman2001} using micro-level Gillespie simulation in Section \ref{sec:micromodel}, showing that the dynamics are comparable for similar team sizes, yet allow us to tune the variance of the resulting group size. We also discuss results obtained from conducting real physical experiments and compare them to microscopic simulation results. Finally, Sections \ref{sec:discussion} and \ref{sec:conclusion} provide discussion of the drawbacks and limitations of the proposed model and scenarios where it could fail as well as discussing possible avenues for future work.
 
 \subsection{Related work}
-Task allocation is a canonical problem in multi-robot systems \cite{Gerkey2004}. Whereas capable robots might be able to approximate optimal task allocation, e.g., using market-based approaches \cite{amstutz2008distributed,vig2007coalition} or using  leader-follower coalition algorithms \cite{Chen2011}, probabilistic algorithms are of particular interest for swarm robotics with individually simple controllers \cite{dantu2012comparison}. Recruitment of an exact number of robots to a particular task has been extensively studied at the hands of the ``Stick Pulling'' experiment \cite{Lerman2001,Martinoli2004}. The problem of distributing a swarm of robots across a discrete number of sites/tasks with a specific desired distribution has been studied in \cite{Berman2009,Correll2008}. The proposed algorithm extends upon the first group of work, and we show how the proposed stochastic task allocation algorithm reduces to the ones described in \cite{Lerman2001,Martinoli2004} when using appropriate parameters.  Mather \cite{mather2010towards} instead presents a stochastic approach that is a hybrid between the work in \cite{Berman2009} and \cite{Martinoli2004}, allowing allocation to tasks requiring a varying number of robots.
+Task allocation is a canonical problem in multi-robot systems \cite{Gerkey2004}. Whereas capable robots might be able to approximate optimal task allocation, e.g., using market-based approaches \cite{amstutz2008distributed,vig2007coalition} or using  leader-follower coalition algorithms \cite{Chen2011}, probabilistic algorithms are of particular interest for swarm robotics with individually simple controllers \cite{dantu2012comparison}. Recruitment of an exact number of robots to a particular task has been extensively studied using the ``Stick Pulling'' experiment \cite{Lerman2001,Martinoli2004}. The problem of distributing a swarm of robots across a discrete number of sites/tasks with a specific desired distribution has been studied in \cite{Berman2009,Correll2008}. The proposed algorithm extends upon the first group of work, and we show how the proposed stochastic task allocation algorithm reduces to the ones described in \cite{Lerman2001,Martinoli2004} when using appropriate parameters.  Mather \cite{mather2010towards} instead presents a stochastic approach that is a hybrid between the work in \cite{Berman2009} and \cite{Martinoli2004}, allowing allocation to tasks requiring a varying number of robots.
 While a response threshold function can also be applied to the swarm distribution problem, this problem is complementary to the problem of recruiting teams of varying sizes addressed in this paper. 
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Response threshold-based task allocation}\label{sec:expsetup}
-\begin{figure}[!htb]
-\centering\includegraphics[width=7cm]{figures/setup.png}
-\caption{A visual representation of the collaboration experiment being studied.}\label{fig:setup}
-\end{figure}
-We consider a generic collaboration task with $m$ uniformly distributed collaboration sites within a flat arena with area, $A$. A swarm of individually simple robots is deployed within the arena, uniformly and at random as shown in Fig.~\ref{fig:setup}. The number of robots being used per experiment varies, as we discuss results for a number of different scenarios. Collaboration sites in the arena can be of various sizes and configurations.
+\begin{figure*}[!htb]
+\centering\begin{subfigure}{.5\textwidth}
+\centering\includegraphics[width=\textwidth]{figures/setup.png}
+\caption{A visual representation of the collaboration experiment being studied.\label{fig:setup}}
+\end{subfigure}~
+\begin{subfigure}{.5\textwidth}
+\centering\includegraphics[width=.9\textwidth]{figures/droplets.png}
+\centering\caption{The Droplets swarm robotic platform \cite{farrow14,klingner14}.\label{fig:dropletexp}}\label{fig:droplettop}
+\end{subfigure}
+\end{figure*}
 
-Each individual agent is capable of locomotion and local sensing. The agents do not require global positioning and no centralized controller exists, but we assume each agent to be capable of local omnidirectional communication with other agents within its communication range. The agents are also capable of sensing the boundary of a collaboration site---we assume that sites have easily distinguishable boundary regions for the purposes of the model studied in this paper.
+We consider a generic collaboration task with $m$ uniformly distributed collaboration sites within a flat arena with area $A$. A swarm of individually simple robots such as the \emph{Droplet} platform \cite{farrow14,klingner14} is deployed within the arena, uniformly and at random as shown in Fig.~\ref{fig:setup}. The number of robots being used per experiment varies, as we discuss results for a number of different scenarios. Collaboration sites in the arena can be of various sizes and configurations.
+
+Each individual agent is capable of locomotion \cite{klingner14} and local sensing \cite{farrow14}. The agents do not require global positioning and no centralized controller exists, but we assume each agent to be capable of local omnidirectional communication with other agents within its communication range. The agents are also capable of sensing the boundary of a collaboration site---we assume that sites have easily distinguishable boundary regions for the purposes of the model studied in this paper. 
 
 The objective of each agent in the robot swarm is to find a collaboration site in the arena and perform a collective task with other agents at that site. The precise details of the collective task are not important for the purpose of understanding the coordination mechanism. We assume the actual collective task takes each agent a probabilistic, finite amount of time to complete. Once collaboration is complete, the agent detaches itself from its current site and returns to searching for other sites in the arena. 
 
 \begin{figure*}[!htb]
 \centering\begin{subfigure}{.5\textwidth}
-\centering\includegraphics[width=7.5cm]{figures/sigmoid2.png}
+\centering\includegraphics[width=\textwidth]{figures/sigmoid2.png}
 \caption{Changing $\tau$ offsets the curve along the $x$ axis, allowing to set the desired mean team size.}\label{}
 \end{subfigure}~
 \centering\begin{subfigure}{.5\textwidth}
-\centering\includegraphics[width=7.5cm]{figures/sigmoid1.png}
+\centering\includegraphics[width=\textwidth]{figures/sigmoid1.png}
 \caption{Changing $\theta$ changes the slope at the point $x^* = \tau$, $\sig(x^*) = 0.5$, allowing to control the team's variance.}\label{}
 \end{subfigure}~
 \caption{Sigmoidal response threshold function and its parameters.}\label{fig:sig}
 \end{figure*}
 
 It is perfectly reasonable to assume that agents arrive at the same collaboration site after having just completed a task there (possibly unsuccessfully) but will now be part of a new collaboration group. Each agent individually decides whether or not to collaborate at a given time step, while waiting at a collaboration site. If the majority of agents at that site decide to collaborate then the entire population is recruited for the task and thus a collective consensus is reached using a majority voting scheme. Here, we consider a ``majority'' to mean exactly half or more of a given population. 
-
-\mycomment{Talk about concurrent benefit here.}
 
 An individual agent-$i$'s willingness to collaborate is a stochastic term governed by a sigmoid based threshold function that takes as input, the number of agents $\xm$ currently at the same collaboration site as agent-$i$ and outputs a probability of collaboration using control parameters $\theta$ and $\tau$:
 \begin{equation}
@@ -174,8 +193,6 @@ Note that the proposed response threshold function is different from \cite{Bonab
 	\EndFunction
 \end{algorithmic} 
 \end{algorithm}
-
-
 
 
 
@@ -219,15 +236,6 @@ A caveat of \eqref{eq:normalcdf} is that the Normal approximation yields poor re
 
 
 
-\subsection{Optimal team formation}
-The proposed task allocation mechanisms lets agents wait infinitely to achieve collaboration. In case a deterministic number of agents is required, this bears the risk that the agents run into a deadlock, e.g., when the number of collaboration sites times the required team size exceeds the number of agents. 
-
-For this reason, stick pulling-like collaboration \cite{Lerman2001} has an optimal wait time, which can be analytically derived for teams of two ($\tau=2$) \cite{Martinoli2004}. Such an optimum does not exist in the proposed model as there is a non-zero probability team sizes with $n<\tau$ to eventually collaborate. 
-
-Indeed, Algorithm \ref{alg:sigalg} eventually completes as $\sig(x) > 0 \forall x$, i.e., even if only very few robots are at a collaboration site and $\tau$ is large, there is a non-zero probability that half or more of the agents at the site eventually collaborate (see also Equation \ref{eq:cdf}).
-
-
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Microscopic Model}\label{sec:micromodel}
@@ -241,7 +249,18 @@ As the proposed collaboration mechanism are strongly non-linear, we chose micros
 
 The probabilistic finite state machine that describes individual agent behavior for this swarm system is shown in Fig.~\ref{fig:sm}. From the individual agent's perspective only one state each exists for \emph{wait} and \emph{collaborate}. From a probabilistic modeling perspective, the wait and collaborate states are meta states, divided into $m$ states each, one for each collaboration site in the arena. This is done to clarify that the probability of collaborating at a given site \emph{only} depends on the number of agents at that specific site and collaborations \emph{only} happen between agents at the same site.
 
-The probability $p_{SW_i}$ in the PFSM model of the system shown in Fig.~\ref{fig:sm} is the probability that an agent encounters a collaboration site. This is geometrically computed as the ratio between the total area of the search space (arena) and the total area of collaboration sites, i.e. $p_{SW_i} = n_s(A_s)/A$ ($n_s$ = number of sites, $A_s$ = area per site). The probability, $P_{W_iC_i}$, of going from a wait state to a collaboration state is given by eq.~\eqref{eq:cdf} with input $N_{W_i}$, i.e. the number of agents at collaboration site-$i$. $P_{C_iS}$ stochastically models the time it takes for an agent to complete a generic collaborative task and is equal to $1/T$, where $T$ is the amount of time (on average) that it takes an agent to complete the collective task. Numerical values are assigned to each of these system parameters (see Table ~\ref{tab:params}) and these probabilities are numerically computed for the stochastic simulation results discussed in the next section.
+The probability $p_{SW_i}$ in the PFSM model of the system shown in Fig.~\ref{fig:sm} is the probability that an agent encounters a collaboration site. This is geometrically computed as the ratio between the total area of the search space (arena) and the total area of collaboration sites, i.e. $p_{SW_i} = n_s(A_s)/A$ ($n_s$ = number of sites, $A_s$ = area per site). The probability, $P_{W_iC_i}$, of going from a wait state to a collaboration state is given by eq.~\eqref{eq:cdf} with input $N_{W_i}$, i.e. the number of agents at collaboration site-$i$. $P_{C_iS}$ stochastically models the time it takes for an agent to complete a generic collaborative task and is equal to $1/T$, where $T$ is the amount of time (on average) that it takes an agent to complete the collective task. We chose the following numerical values for all simulations, instead otherwise noted: $A=100cm^2$ and $A_s=10cm^2$.
+
+%\rowcolors{1}{lightgray}{white}
+%\begin{table}
+%\centering\begin{tabular}{|c|c|c|}
+%\hline
+%\# Agents & Arena Area & Area per Site\\
+%100 & $100cm^2$ & $10cm^2$\\
+%\hline
+%\end{tabular}
+%\centering\caption{}\label{tab:params}
+%\end{table}
 
 For the sake of simplicity, consensus between agents---i.e. going from $W_i$ to $C_i$---at the same collaboration site is assumed to happen instantly and therefore the extra state(s) is/are omitted from robot controller.
 \begin{figure}[!htb]
@@ -295,34 +314,23 @@ For the sake of simplicity, consensus between agents---i.e. going from $W_i$ to 
 In order to compare the dynamics of the proposed probabilistic task allocation mechanism with the deterministic one by Lerman et. al\cite{Lerman2001}, we implemented a variation of the above algorithm using a unit-step at $\tau$ instead of the sigmoid function and removing the consensus step, which is not necessary in this model. 
 
 We use Gillespie simulation \cite{gillespie76} to explore the dynamics of the proposed collaboration model.
-Table~\ref{tab:params} lists the common system parameters used for all experiments. For both experiments a single collaboration site is used and each run simulates 300s of time. The desired group size ($\tau$, in Eq.~\eqref{eq:sig}) is set to 4, 8, 16 and 32 agents. The collaboration task is programmed to take 10s, on average, per agent. Data points are gathered by averaging data from 100 identically set up runs in each case. The \emph{rate of collaboration} for the threshold model is computed by summing the number of groups that successfully collaborate and dividing by the total experiment time (300s). For the deterministic model, collaboration rate is computed by summing all successful collaborations, i.e. collaborations involving team sizes equal to $\tau$, and dividing the the experiment time (300s).
-
-\rowcolors{1}{lightgray}{white}
-\begin{table}
-\centering\begin{tabular}{|c|c|c|}
-\hline
-\# Agents & Arena Area & Area per Site\\
-100 & $100cm^2$ & $10cm^2$\\
-\hline
-\end{tabular}
-\centering\caption{}\label{tab:params}
-\end{table}
-
+%Table~\ref{tab:params} lists the common system parameters used for all experiments. 
+For both experiments a single collaboration site is used and each run simulates 300s of time. The desired group size ($\tau$, in Eq.~\eqref{eq:sig}) is set to 4, 8, 16 and 32 agents out of a total of 100 robots. The collaboration task is programmed to take 10s, on average, per agent. Data points are gathered by averaging data from 100 identically set up runs in each case. The \emph{rate of collaboration} for the threshold model is computed by summing the number of groups that successfully collaborate and dividing by the total experiment time (300s). For the deterministic model, collaboration rate is computed by summing all successful collaborations, i.e. collaborations involving team sizes equal to $\tau$, and dividing the the experiment time (300s).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
 \begin{figure*}[!htb]
 \begin{subfigure}{0.33\textwidth}
-\centering\includegraphics[width=4.5cm]{figures/LermanCollabCompare3.png}
+\centering\includegraphics[width=1.0\textwidth]{figures/LermanCollabCompare3.png}
 \centering\caption{$\theta=2$}\label{fig:lercol3}
 \end{subfigure}~
 \begin{subfigure}{0.33\textwidth}
-\centering\includegraphics[width=4.5cm]{figures/LermanCollabCompare2.png}
+\centering\includegraphics[width=1.0\textwidth]{figures/LermanCollabCompare2.png}
 \centering\caption{$\theta=1$}\label{fig:lercol2}
 \end{subfigure}~
 \begin{subfigure}{0.33\textwidth}
-\centering\includegraphics[width=4.5cm]{figures/LermanCollabCompare1.png}
+\centering\includegraphics[width=1.0\textwidth]{figures/LermanCollabCompare1.png}
 \centering\caption{$\theta=0$}\label{fig:lercol1}
 \end{subfigure}
 \caption{Comparison of the collaboration rate for task allocation with probabilistic and deterministic \cite{Lerman2001} for different values of $\theta$ and team sizes $\tau$ in an environment with one collaboration site and one hundred robots. }\label{fig:lercol}
@@ -330,24 +338,24 @@ Table~\ref{tab:params} lists the common system parameters used for all experimen
 
 We will first compare the dynamics of the proposed approach with Lerman et al.'s k-collaboration model \cite{Lerman2001} and then validate the emergence of group sizes with similar means but varying variances.
 
-Figure \ref{fig:lercol1} shows collaboration rates for both models when $\theta$ is set to 2 (for the probabilistic model) and the wait time is set to $\infty$ (for the deterministic model), in order to allow for a fair comparison. (All experiments are run in an regime where infinite wait times are optimal wait times in \cite{Lerman2001}.) Figures \ref{fig:lercol3}, \ref{fig:lercol2} and \ref{fig:lercol1} show collaborations rates for $\theta = 2$, $\theta = 1$ and $\theta=0$ with infinite wait time. With $\theta=0$, the logistic function is uniformly 0.5, allowing any team size to form.  
+Figure \ref{fig:lercol3} shows collaboration rates for both models when $\theta$ is set to 2 (for the probabilistic model) and the wait time is set to $\infty$ (for the deterministic model), in order to allow for a fair comparison. (All experiments are run in an regime where infinite wait times are optimal wait times, i.e., there are more agents than collaboration sites.) Figures \ref{fig:lercol3}, \ref{fig:lercol2} and \ref{fig:lercol1} show collaboration rates for $\theta = 2$, $\theta = 1$ and $\theta=0$ with infinite wait time. With $\theta=0$, the logistic function is uniformly 0.5, allowing any team size to form.  
 With increasing $\theta$ the Logistic function approximates a unit step, minimizing the variance. 
 
 \begin{figure*}[!htb]
 \begin{subfigure}{0.5\textwidth}
-\centering\includegraphics[width=7.5cm]{figures/collabratesweep4.png}
+\centering\includegraphics[width=1.0\textwidth]{figures/collabratesweep4.png}
 \centering\caption{$\tau = 4$}\label{fig:collabsweep4}
 \end{subfigure}~
 \begin{subfigure}{0.5\textwidth}
-\centering\includegraphics[width=7.5cm]{figures/collabratesweep8.png}
+\centering\includegraphics[width=1.0\textwidth]{figures/collabratesweep8.png}
 \centering\caption{$\tau = 8$}\label{fig:collabsweep8}
 \end{subfigure}
 \begin{subfigure}{0.5\textwidth}
-\centering\includegraphics[width=7.5cm]{figures/collabratesweep16.png}
+\centering\includegraphics[width=1.0\textwidth]{figures/collabratesweep16.png}
 \centering\caption{$\tau = 16$}\label{fig:collabsweep16}
 \end{subfigure}~
 \begin{subfigure}{0.5\textwidth}
-\centering\includegraphics[width=7.5cm]{figures/collabratesweep32.png}
+\centering\includegraphics[width=1.0\textwidth]{figures/collabratesweep32.png}
 \centering\caption{$\tau = 32$}\label{fig:collabsweep32}
 \end{subfigure}
 \caption{Histograms of resulting team sizes for various values of $\tau$ and $\theta$ with one hundred robots and one collaboration site.}\label{fig:collabsweep}
@@ -357,11 +365,11 @@ We observe the collaboration rate to be qualitatively and quantitatively very si
 
 \begin{figure*}[!htb]
 \begin{subfigure}{0.5\textwidth}
-\centering\includegraphics[width=7.5cm]{figures/means.png}
+\centering\includegraphics[width=1.0\textwidth]{figures/means.png}
 \centering\caption{}\label{fig:means}
 \end{subfigure}~
 \begin{subfigure}{0.5\textwidth}
-\centering\includegraphics[width=7.5cm]{figures/variances.png}
+\centering\includegraphics[width=1.0\textwidth]{figures/variances.png}
 \centering\caption{}\label{fig:vars}
 \end{subfigure}
 \caption{Showing the effects of varying $\theta$ on means and variances corresponding to the histograms seen in Fig.~\ref{fig:collabsweep}.}\label{fig:meansvars}
@@ -374,10 +382,18 @@ approximates the Normal distribution \eqref{eq:normalcdf}.
 
 Figure \ref{fig:vars} shows how the variance of group size decreases with increasing $\theta$. This is because the sigmoid function approximates the unit step, making the team size more and more deterministic. On the other hand, low values of $\theta$ lead to large variances in the group size. For $\theta=0$, the variance is constant for all values of $\tau$ and depends exclusively on the total number of robots. 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\subsection{Physical Experiments}
+Finally, we use the Droplet swarm robot platform to perform real experiments to study the effects of using the proposed task allocation scheme on a physical system. The Droplets are small individually simple robots capable of omni-directional motion and communication (via IR) as well as sensing patterns projected from above. In our experiment we assume that all agents have already arrived at a collaboration site and measure the corresponding collaboration rates for a team of 6 robots while varying values of $\tau$ and $\theta$. Each agent is individually running the algorithm described in Alg.\ref{alg:sigalg}. A collaboration event is recognized by having the all the robots turn on their green LEDs for 3 seconds. After such a collaboration event, each agent resets its group size estimate and runs Alg.\ref{alg:sigalg} again. 
 
+\begin{figure}[!htb]
+\centering\includegraphics[width=0.5\textwidth]{figures/realsimexp.png}
+%\centering\includegraphics[width=.4\textwidth]{figures/droplets.png}
+\caption{The solid lines show collaborations per min, over 30min, for a group of 6 real robots as the desired group size is varied from 2 to 6 and the slope of $\sig$ is varied between $0.1, 1$ and $10$. The dashed lines indicate simulation results with the same parameters.\label{fig:expdat} }
+\end{figure}
 
-
-%Both these plots in 
+We ran 15 experiments for all combinations of $\tau = 2,3,4,5$ and $6$, and $\theta = 0.1, 1$ and $10$. Each experiment lasted 30 minutes and an overhead camera system was set up to detect collaboration events using the software \emph{RoboRealm}. The collaboration rate was a value computed by counting the number of collaborations over the course of each 30 minute experiment and normalizing to collaborations per minute. 
+To account for the vision software's detection errors, the raw data gathered from each experiment was de-bounced and passed through a low-pass filter to expose real collaboration events while eliminating observation error. The results of these experiments are seen in Figure \ref{fig:expdat}. While results are in accordance with simulation for $\theta$ being low, the collaboration rate on the real robot platform is much lower than expected for larger $\theta$ as simulation assumes perfect communication and group size estimates.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -386,9 +402,25 @@ Results in Figures \ref{fig:lercol}, \ref{fig:collabsweep} and \ref{fig:meansvar
 
 The proposed task allocation algorithm requires an estimate of the group size at each collaboration site as well as the ability to communicate with the group in order to reach a consensus. While these assumptions seem to be limiting at first sight, they can be rolled into the analysis process and possibly exploited to design the task allocation process. For example, an increasing variance for observing the group size $\tau$ or noise in the consensus process simply increase the variance of the task allocation process and could therefore be countered---to some extent---by altering the properties of the response threshold function. 
 
+This effect is clearly observed in the physical experiment results (see Figure \ref{fig:expdat}). Since the communication between real robots is not perfect, they almost always  underestimate the size of their group resulting in lower collaborations for high $\theta$ and $\tau$ values. As we observe from comparing the micro simulation results---that are modeled with perfect communication---with real experiment data, we observe a large discrepancy when $\theta = 10$. This happens because although individual agents are set up to be in a group of size 6, their estimates for the group size never cross 4 due to imperfect and blocked communication. Coupled with the fact that the sigmoid threshold effectively acts as a step function when $\theta = 10$, this results in approx. 0 probability of collaboration between agents for a desired group size of 6 but a group size estimate of $\leq 4$. Lower values of $\theta$ result in better matching between real and simulation data since lower slopes effectively increase the variance in allowed group sizes and mitigate this effect.
+
+We note that there is no optimal wait time as in stick pulling-like collaboration \cite{Lerman2001}. This optimum exists in swarms with less robots than sticks, which is shown analytically in \cite{Martinoli2004}. Such an optimum does not exist in the proposed model as there is a non-zero probability team sizes with $n<\tau$ will eventually collaborate. Indeed, Algorithm \ref{alg:sigalg} eventually completes as $\sig(x) > 0 \forall x$, i.e., even if only very few robots are at a collaboration site and $\tau$ is large, there is a non-zero probability that half or more of the agents at the site eventually collaborate (see also Equation \ref{eq:cdf}).
+
 Although the algorithm does not deadlock---the probability to collaborate even if the team size is far off the desired value---the resulting behavior might be undesirable, resulting in potentially very long wait times and poor task performance. This could be mitigated by introducing preferential detachment from small groups and preferential attachment to larger groups as customary in swarm robotic aggregation \cite{correll2011modeling}.
 
-In practice, effective collaboration rates will also be limited by the embodiment of the robots, which might finding physical space at a site cumbersome. In the presented microscopic simulation, for both stochastic and deterministic team sizes, the number of robots per site were not limited, allowing scenarios in which multiple groups collaborate in quick succession at the same site. While comparing both models without embodiment is reasonable, we wish to study the effect of embodiment in future work.
+In practice, effective collaboration rates will also be limited by the embodiment of the robots, which might make finding physical space at a site cumbersome. In the presented microscopic simulation, for both stochastic and deterministic team sizes, the number of robots per site were not limited, allowing scenarios in which multiple groups collaborate in quick succession at the same site. While comparing both models without embodiment is reasonable, we wish to study the effect of embodiment in future work.
+
+
+%Although we observe qualitatively similar results to the micro-macro predictions, there were a number of factors that affected the number of collaborations happening in the real robot experiments. 
+%
+%\begin{enumerate}
+	%\item We assume perfect group size estimation in the micro-level simulations which is not the case here. Due to imperfect communication many agents often incorrectly estimated the size of the group (which was always 6) that they were in and hence computed different collaboration probabilities using the sigmoid function.
+	%\item The overhead camera system set up for automatically counting collaborations between agents used the \emph{Roborealm} vision software that, in some cases, failed to detect and/or intermittently detected a robot's green led turning on. This may have resulted in lower than actual collaborations being counted during the course of the 30 minute experiment.  
+	%\item To account for the vision software's detection errors, the raw data gathered from each experiment was de-bounced and passed through a low-pass filter to expose real collaboration events while eliminating observation error. 
+%\end{enumerate}
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}\label{sec:conclusion}
@@ -401,7 +433,7 @@ We investigate the limitations of the proposed approach, which shows lesser fide
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Acknowledgments}
-This research has been supported by NSF grant xxxxxx. We are grateful for this support.
+This research has been supported by NSF grant \#1150223. We are grateful for this support.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%   The Bibliography, if any   %%%%%%%%%
