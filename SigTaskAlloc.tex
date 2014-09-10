@@ -184,18 +184,18 @@ Note that the proposed response threshold function is different from \cite{Bonab
 In this section we study how the local parameters $\tau$ and $\theta$ from an individual agent's sigmoid threshold function affect formation of groups of different sizes at the macroscopic system level.
 
 \subsection{A general model of probabilistic task allocation}
-Equation \eqref{eq:sig} is a cumulative probability density function approaching $1.0$ as the number of agents approaches infinity, that is $\lim_{x \to \infty}\sig(x)=1$. For $\theta \to \infty$, equation \eqref{eq:sig} approximates the unit step, except for the special case $\xm=\tau$:
+Equation \eqref{eq:sig} is a cumulative probability density function approaching $1.0$ as the number of agents approaches infinity, that is $\lim_{x \to \infty}\sig(x)=1$. For $\theta \to \infty$, equation \eqref{eq:sig} approximates the unit step:
 \begin{equation}
-\lim_{\theta \to \infty} \frac{1}{1+e^{\theta(\tau-\xm)}}=
+\lim_{\theta \to \infty} \frac{1}{1+e^{\theta(\tau-\xm)}}\approx
 \left\{
 \begin{array}{cc}
  1 & \hspace{.5cm} \xm>\tau \\
- 1/2 & \hspace{.5cm} \xm=\tau	\\
+ 1/2 & \hspace{.5cm} \xm=\tau \\
  0 & \hspace{.5cm} \xm<\tau
 \end{array}
-\right.
+\right.\label{eq:siglim}
 \end{equation}
-The discontinuity at $x=\tau$ is the rational for having collaboration to include half or more of the agents to decide to collaborate. Including the mid-point makes the agents behave like they are using a unit-step function in the case of $\theta \to \infty$. The proposed model is therefore a generalization of the ``stick-pulling'' task allocation model with deterministic team size \cite{Lerman2001}, allowing us to tune the variance of the resulting group sizes. 
+Although, unlike the unit step function, the limit on the left in \eqref{eq:siglim} is always continuous, even at $\xm = \tau$ where the value of the sigmoid is $1/2$. The proposed model is therefore a generalization of the ``stick-pulling'' task allocation model with deterministic team size \cite{Lerman2001}, allowing us to tune the variable resulting group sizes using the tuning parameters $\tau$ and $\theta$ in \eqref{eq:sig}. 
 
 \subsection{From individual choices to team-level collaboration}
 Assuming the agents to be loosely synchronized, e.g., by considering decisions within a finite window of time, determining a majority vote corresponds to a Bernoulli trial with each agent flipping a biased coin---the bias being computed using the sigmoid function---to decide whether or not to collaborate in the next time step. The probability that exactly $k$ agents collaborate from a population of $n$ agents at a collaboration site is given by the probability mass function (PMF) of a Binomial distribution.
