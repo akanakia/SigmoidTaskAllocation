@@ -116,7 +116,7 @@ We propose a probabilistic, threshold based multi agent collaboration algorithm 
 
 We wish to extend the stick pulling model of constant group sizes of robots to include a more general case of collaboration tasks that involve only approximate robot group sizes for successful collaboration. More specifically, we deal with tasks that have the property of ``concurrent benefit'' where single agents must wait for a group---with a range of permissible size---to form at their collaboration site before being able to collectively begin the task and complete it successfully. Examples of such tasks include fire containment, collective transport \cite{sugawara2012}, pattern recognition \cite{beni1993swarm}, real-time mapping of oil spills \cite{beni2005swarm}, determining coverage area of forest fires \cite{krishnanand2006glowworm}, and many others that require a subset of a swarm to coalesce and tackle a task collaboratively.  
 
-A concrete example is fire containment. Dropping incremental amounts of water on a fire will be futile until a critical mass of robots drop their water at the same time. Waiting for an exact number of robots, however, is not necessary either, motivating a task allocation scheme that will result in an average number of robots with predictable variance. 
+A concrete example is fire containment (See Fig.~\ref{fig:setup}). Dropping incremental amounts of water on a fire will be futile until a critical mass of robots drop their water at the same time. Waiting for an exact number of robots, however, is not necessary either, motivating a task allocation scheme that will result in an average number of robots with predictable variance. 
 
 It is important to note that we do not study any particular task in detail but rather, outline a general approach to modeling scenarios with the aforementioned properties. Here, tuning the permissible variance allows one to tune the likelihood with which collaborations happen. Formally understanding the dynamics of the underlying coordination mechanisms allows the designer not only to predict performance, but also to optimize a swarming system \cite{Correll2008}.  
 
@@ -135,21 +135,26 @@ While a response threshold function can also be applied to the swarm distributio
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Response threshold-based task allocation}\label{sec:expsetup}
-\begin{figure*}[!htb]
-\centering\begin{subfigure}{.5\textwidth}
-\centering\includegraphics[width=\textwidth]{figures/setup.png}
-\caption{}\label{fig:setup}
-\end{subfigure}~
-\begin{subfigure}{.5\textwidth}
-\centering\includegraphics[width=.9\textwidth]{figures/droplets.png}
-\centering\caption{}\label{fig:droplettop}
-\end{subfigure}
-\caption{Left (a): A visual representation of the collaboration experiment with the firefighting example. Right (b): The Droplets swarm robotic platform \cite{farrow14,klingner14}.}
+%\begin{figure*}[!htb]
+%\centering\begin{subfigure}{.5\textwidth}
+%\centering\includegraphics[width=\textwidth]{figures/setup.png}
+%\caption{}\label{fig:setup}
+%\end{subfigure}~
+%\begin{subfigure}{.5\textwidth}
+%\centering\includegraphics[width=.9\textwidth]{figures/droplets.png}
+%\centering\caption{}\label{fig:droplettop}
+%\end{subfigure}
+%\caption{Left (a): A visual representation of the collaboration experiment with the firefighting example. Right (b): The Droplets swarm robotic platform \cite{farrow14,klingner14}.}
+%\end{figure*}
+
+\begin{figure*}[!htb]`
+\centering\includegraphics[width=.98\textwidth]{figures/setup.png}
+\centering\caption{A visual representation of the collaboration experiment firefighting scenario using the Droplet swarm robotic platform \cite{farrow14,klingner14}.}\label{fig:setup}
 \end{figure*}
 
-We consider a generic collaboration task with $m$ uniformly distributed collaboration sites within a flat arena with area $A$. A swarm of individually simple robots such as the \emph{Droplet} platform \cite{farrow14,klingner14} is deployed within the arena, uniformly and at random as shown in Fig.~\ref{fig:setup}. The number of robots being used per experiment varies, as we discuss results for a number of different scenarios. Collaboration sites in the arena can be of various sizes and configurations.
+We consider a generic collaboration task with $m$ uniformly distributed collaboration sites within a flat arena with area $A$. A swarm of individually simple robots such as the \emph{Droplet} platform \cite{farrow14,klingner14} is deployed within the arena, uniformly and at random. The number of robots being used per experiment varies, as we discuss results for a number of different scenarios. Collaboration sites in the arena can be of various sizes and configurations.
 
-Each individual agent is capable of locomotion \cite{klingner14} and local sensing \cite{farrow14}. The agents do not require global positioning and no centralized controller exists, but we assume each agent to be capable of local omnidirectional communication with other agents within its communication range. The agents are also capable of sensing the boundary of a collaboration site---we assume that sites have easily distinguishable boundary regions for the purposes of the model studied in this paper. 
+Each individual agent is capable of locomotion \cite{klingner14} and local sensing \cite{farrow14}. The agents do not require global positioning and no centralized controller exists, but we assume each agent to be capable of local omnidirectional communication with other agents within its communication range. The agents are also capable of sensing the boundary of a collaboration site---we assume that sites have easily distinguishable boundary regions, as shown in Fig.~\ref{fig:setup}, for the purposes of the model studied in this paper. 
 
 The objective of each agent in the robot swarm is to find a collaboration site in the arena and perform a collective task with other agents at that site. The precise details of the collective task are not important for the purpose of understanding the coordination mechanism. We assume the actual collective task takes each agent a probabilistic, finite amount of time to complete. Once collaboration is complete, the agent detaches itself from its current site and returns to searching for other sites in the arena. 
 
