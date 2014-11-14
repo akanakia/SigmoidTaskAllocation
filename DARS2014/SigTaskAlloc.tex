@@ -2,7 +2,7 @@
 %2345678901234567890123456789012345678901234567890123456789012345678901234567890
 %        1         2         3         4         5         6         7         8
 
-\documentclass{TeXstyles/DARS/svmult}  % Comment this line out
+\documentclass{svmult}  % Comment this line out
 
 \usepackage{mathptmx}       % selects Times Roman as basic font
 \usepackage{helvet}         % selects Helvetica as sans-serif font
@@ -136,7 +136,7 @@ While a response threshold function can also be applied to the swarm distributio
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Response threshold-based task allocation}\label{sec:expsetup}
 \begin{figure*}[!htb]`
-\centering\includegraphics[width=.98\textwidth]{figures/setup.png}
+\centering\includegraphics[width=.98\textwidth]{../figures/setup.png}
 \centering\caption{A visual representation of the collaboration experiment firefighting scenario using the Droplet swarm robotic platform \cite{farrow14,klingner14}.}\label{fig:setup}
 \end{figure*}
 
@@ -148,11 +148,11 @@ The objective of each agent in the robot swarm is to find a collaboration site i
 
 \begin{figure*}[!htb]
 \centering\begin{subfigure}{.5\textwidth}
-\centering\includegraphics[width=\textwidth]{figures/sigmoid2.png}
+\centering\includegraphics[width=\textwidth]{../figures/sigmoid2.png}
 \caption{Changing $\tau$ offsets the curve along the $x$ axis, allowing to set the desired mean team size.}\label{}
 \end{subfigure}~
 \centering\begin{subfigure}{.5\textwidth}
-\centering\includegraphics[width=\textwidth]{figures/sigmoid1.png}
+\centering\includegraphics[width=\textwidth]{../figures/sigmoid1.png}
 \caption{Changing $\theta$ changes the slope at the point $x^* = \tau$, $\sig(x^*) = 0.5$, allowing to control the team's variance.}\label{}
 \end{subfigure}~
 \caption{Sigmoidal response threshold function and its parameters.}\label{fig:sig}
@@ -304,15 +304,15 @@ For both experiments a single collaboration site is used and each run simulates 
 \section{Results}
 \begin{figure*}[!htb]
 \begin{subfigure}{0.33\textwidth}
-\centering\includegraphics[width=1.0\textwidth]{figures/LermanCollabCompare3.png}
+\centering\includegraphics[width=1.0\textwidth]{../figures/LermanCollabCompare3.png}
 \centering\caption{$\theta=2$}\label{fig:lercol3}
 \end{subfigure}~
 \begin{subfigure}{0.33\textwidth}
-\centering\includegraphics[width=1.0\textwidth]{figures/LermanCollabCompare2.png}
+\centering\includegraphics[width=1.0\textwidth]{../figures/LermanCollabCompare2.png}
 \centering\caption{$\theta=1$}\label{fig:lercol2}
 \end{subfigure}~
 \begin{subfigure}{0.33\textwidth}
-\centering\includegraphics[width=1.0\textwidth]{figures/LermanCollabCompare1.png}
+\centering\includegraphics[width=1.0\textwidth]{../figures/LermanCollabCompare1.png}
 \centering\caption{$\theta=0$}\label{fig:lercol1}
 \end{subfigure}
 \caption{Comparison of the collaboration rate for task allocation with probabilistic and deterministic \cite{Lerman2001} for different values of $\theta$ and team sizes $\tau$ in an environment with one collaboration site and one hundred robots. }\label{fig:lercol}
@@ -325,19 +325,19 @@ With increasing $\theta$ the Logistic function approximates a unit step, minimiz
 
 \begin{figure*}[!htb]
 \begin{subfigure}{0.5\textwidth}
-\centering\includegraphics[width=1.0\textwidth]{figures/collabratesweep4.png}
+\centering\includegraphics[width=1.0\textwidth]{../figures/collabratesweep4.png}
 \centering\caption{$\tau = 4$}\label{fig:collabsweep4}
 \end{subfigure}~
 \begin{subfigure}{0.5\textwidth}
-\centering\includegraphics[width=1.0\textwidth]{figures/collabratesweep8.png}
+\centering\includegraphics[width=1.0\textwidth]{../figures/collabratesweep8.png}
 \centering\caption{$\tau = 8$}\label{fig:collabsweep8}
 \end{subfigure}
 \begin{subfigure}{0.5\textwidth}
-\centering\includegraphics[width=1.0\textwidth]{figures/collabratesweep16.png}
+\centering\includegraphics[width=1.0\textwidth]{../figures/collabratesweep16.png}
 \centering\caption{$\tau = 16$}\label{fig:collabsweep16}
 \end{subfigure}~
 \begin{subfigure}{0.5\textwidth}
-\centering\includegraphics[width=1.0\textwidth]{figures/collabratesweep32.png}
+\centering\includegraphics[width=1.0\textwidth]{../figures/collabratesweep32.png}
 \centering\caption{$\tau = 32$}\label{fig:collabsweep32}
 \end{subfigure}
 \caption{Histograms of resulting team sizes for various values of $\tau$ and $\theta$ with one hundred robots and one collaboration site.}\label{fig:collabsweep}
@@ -347,11 +347,11 @@ We observe the collaboration rate to be qualitatively and quantitatively very si
 
 \begin{figure*}[!htb]
 \begin{subfigure}{0.5\textwidth}
-\centering\includegraphics[width=1.0\textwidth]{figures/means.png}
+\centering\includegraphics[width=1.0\textwidth]{../figures/means.png}
 \centering\caption{}\label{fig:means}
 \end{subfigure}~
 \begin{subfigure}{0.5\textwidth}
-\centering\includegraphics[width=1.0\textwidth]{figures/variances.png}
+\centering\includegraphics[width=1.0\textwidth]{../figures/variances.png}
 \centering\caption{}\label{fig:vars}
 \end{subfigure}
 \caption{Showing the effects of varying $\theta$ on means and variances corresponding to the histograms seen in Fig.~\ref{fig:collabsweep}.}\label{fig:meansvars}
@@ -367,8 +367,8 @@ Figure \ref{fig:vars} shows how the variance of group size decreases with increa
 Finally, we use the Droplet swarm robot platform to perform real experiments to study the effects of using the proposed task allocation scheme on a physical system. The Droplets are small individually simple robots capable of omni-directional motion and communication (via IR) as well as sensing patterns projected from above. In our experiment we assume that all agents have already arrived at a collaboration site and measure the corresponding collaboration rates for a team of 6 robots while varying values of $\tau$ and $\theta$. Each agent is individually running the algorithm described in Alg.\ref{alg:sigalg}. A collaboration event is recognized by having all the robots turn on their green LEDs for 3 seconds. After such a collaboration event, each agent resets its group size estimate and runs Alg.\ref{alg:sigalg} again. 
 
 \begin{figure}[!htb]
-\centering\includegraphics[width=0.5\textwidth]{figures/realsimexp.png}
-%\centering\includegraphics[width=.4\textwidth]{figures/droplets.png}
+\centering\includegraphics[width=0.5\textwidth]{../figures/realsimexp.png}
+%\centering\includegraphics[width=.4\textwidth]{../figures/droplets.png}
 \caption{The solid lines show collaborations per min, over 30min, for a group of 6 real robots as the desired group size is varied from 2 to 6 and the slope of $\sig$ is varied between $0.1, 1$ and $10$. The dashed lines indicate simulation results with the same parameters.\label{fig:expdat} }
 \end{figure}
 
