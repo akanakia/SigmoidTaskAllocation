@@ -135,18 +135,6 @@ While a response threshold function can also be applied to the swarm distributio
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Response threshold-based task allocation}\label{sec:expsetup}
-%\begin{figure*}[!htb]
-%\centering\begin{subfigure}{.5\textwidth}
-%\centering\includegraphics[width=\textwidth]{figures/setup.png}
-%\caption{}\label{fig:setup}
-%\end{subfigure}~
-%\begin{subfigure}{.5\textwidth}
-%\centering\includegraphics[width=.9\textwidth]{figures/droplets.png}
-%\centering\caption{}\label{fig:droplettop}
-%\end{subfigure}
-%\caption{Left (a): A visual representation of the collaboration experiment with the firefighting example. Right (b): The Droplets swarm robotic platform \cite{farrow14,klingner14}.}
-%\end{figure*}
-
 \begin{figure*}[!htb]`
 \centering\includegraphics[width=.98\textwidth]{figures/setup.png}
 \centering\caption{A visual representation of the collaboration experiment firefighting scenario using the Droplet swarm robotic platform \cite{farrow14,klingner14}.}\label{fig:setup}
@@ -401,16 +389,6 @@ We note that there is no optimal wait time as in stick pulling-like collaboratio
 Although the algorithm does not deadlock---the probability to collaborate even if the team size is far off the desired value---the resulting behavior might be undesirable, resulting in potentially very long wait times and poor task performance. This could be mitigated by introducing preferential detachment from small groups and preferential attachment to larger groups as customary in swarm robotic aggregation \cite{correll2011modeling}.
 
 In practice, effective collaboration rates will also be limited by the embodiment of the robots, which might make finding physical space at a site cumbersome. In the presented microscopic simulation, for both stochastic and deterministic team sizes, the number of robots per site were not limited, allowing scenarios in which multiple groups collaborate in quick succession at the same site. While comparing both models without embodiment is reasonable, we wish to study the effect of embodiment in future work.
-
-
-%Although we observe qualitatively similar results to the micro-macro predictions, there were a number of factors that affected the number of collaborations happening in the real robot experiments. 
-%
-%\begin{enumerate}
-	%\item We assume perfect group size estimation in the micro-level simulations which is not the case here. Due to imperfect communication many agents often incorrectly estimated the size of the group (which was always 6) that they were in and hence computed different collaboration probabilities using the sigmoid function.
-	%\item The overhead camera system set up for automatically counting collaborations between agents used the \emph{Roborealm} vision software that, in some cases, failed to detect and/or intermittently detected a robot's green led turning on. This may have resulted in lower than actual collaborations being counted during the course of the 30 minute experiment.  
-	%\item To account for the vision software's detection errors, the raw data gathered from each experiment was de-bounced and passed through a low-pass filter to expose real collaboration events while eliminating observation error. 
-%\end{enumerate}
-
 
 
 
