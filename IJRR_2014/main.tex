@@ -2,44 +2,19 @@
 %2345678901234567890123456789012345678901234567890123456789012345678901234567890
 %        1         2         3         4         5         6         7         8
 
-\documentclass{sage}  % Comment this line out
-
-\usepackage{mathptmx}       % selects Times Roman as basic font
-\usepackage{helvet}         % selects Helvetica as sans-serif font
-\usepackage{courier}        % selects Courier as typewriter font
-\usepackage{type1cm}        % activate if the above 3 fonts are
-                            % not available on your system
-%
-\usepackage{makeidx}         % allows index generation
-\usepackage{graphicx}        % standard LaTeX graphics tool
-                             % when including figure files
-\usepackage{multicol}        % used for the two-column index
-\usepackage[bottom]{footmisc}% places footnotes at page bottom
-
-\usepackage{subcaption}
-% see the list of further useful packages
-% in the Reference Guide
-
-\makeindex             % used for the subject index
-                       % please use the style svind.ist with
-                       % your makeindex program
-
+\documentclass{sage}
 
 % Usual setup packages
-%\usepackage{times}
-%\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
-%\usepackage{geometry} % to change the page dimensions
-\usepackage{graphicx} % General page control package
-%\usepackage[compact]{titlesec} % For compact title
 \usepackage{listings} % For including source code with highlighting
-\usepackage{subfiles} % For better multiple file per paper handling
 \usepackage{hyperref} % For better hyper-link integration
+\usepackage[bottom]{footmisc} % places footnotes at page bottom
 
 % Packages for verbatim text blocks
 \usepackage{alltt} % Package for including math in verbatim text
 \usepackage{fancyvrb}
 
 % Packages for math symbols and other mathey things
+\usepackage{amsthm}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
@@ -49,20 +24,12 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 
-% Packages that handle lists
-\usepackage{enumerate} % For reduced enumeration spacing
-\usepackage{mdwlist} % Better control of lists
-
 % Packages that handle tables, figures and other floats
 \usepackage{tabularx}
 \usepackage{multirow}
-%\usepackage{titling}
 \usepackage{float} % To make floats movable
-%\usepackage[font=scriptsize,labelfont=bf]{caption}
-%\usepackage[font=scriptsize,labelfont=bf]{subcaption}
+\usepackage{subcaption}
 \usepackage[table]{xcolor}
-
-
 
 % Packages for drawing graphs, FSMs, etc.
 \usepackage{pgf}
@@ -78,7 +45,8 @@
     urlcolor=blue
 }
 
-% Nice Little macro for adding a comment box. Include incrementing comment numbers.
+% ------------------------------ CUSTOM MACROS ------------------------------------
+% Nice little macro for adding a comment box. Include incrementing comment numbers.
 \newcounter{comcount}
 \setcounter{comcount}{0}
 \newcommand{\mycomment}[1]
@@ -91,20 +59,31 @@
 \newcommand{\ceil}[1]{\lceil#1\rceil}
 \newcommand{\xm}{x_{\hat{m}}}
 
-\title{Maximizing Swarm System Utility for Time-Varying Tasks}
-
-\author{Anshul Kanakia and Nikolaus Correll}
+%%%Article information%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\journal{International Journal of Robotics Research}
+\volume{000}
+\issue{00}
+\copyrightline{$\copyright$ Copyright}
+\firstpage{1}
+\lastpage{13}
+\doi{doi number}
+\articletype{Article type}
+\pubyear{2015}
+%%%%%%%%%%%%%%Article information%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
+\title{Maximizing Swarm System Utility for Time-Varying Tasks}
+\author{Anshul Kanakia and Nikolaus Correll}
+\address{Department of Computer Science,
+	University of Colorado, Boulder, USA}
+
 \maketitle
-%\thispagestyle{empty}
-%\pagestyle{empty}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\abstract{
-Abstract goes here\ldots}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+Abstract goes here\ldots
+\end{abstract}
+\keywords{Swarm Robotics, Multi-Agent Systems, Collaboration, Task Allocation, Utility Theory, Optimization}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
