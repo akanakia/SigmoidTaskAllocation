@@ -4,6 +4,9 @@
 
 \documentclass{sage}
 
+% Subfiles package
+\usepackage{subfiles}
+
 % Usual setup packages
 \usepackage{listings} % For including source code with highlighting
 \usepackage{hyperref} % For better hyper-link integration
@@ -34,7 +37,7 @@
 % Packages for drawing graphs, FSMs, etc.
 \usepackage{pgf}
 \usepackage{tikz}
-\usetikzlibrary{shapes,arrows,calc,fit,positioning,shapes.symbols,shapes.callouts,patterns,automata}
+\usetikzlibrary{shapes,arrows,calc,fit,positioning,shapes.symbols,shapes.callouts,patterns,automata,matrix}
 
 % Remove red boxes around refs
 \hypersetup{
@@ -125,6 +128,11 @@ The total system level ensemble utility at time-$t$ is then,
 \end{equation}
 
 The goal of the system is to complete all the tasks in the environment while maximizing system utility, $U$, by tuning the available agent-level parameters, $\theta_i$ and $\tau_i)$, i.e. $goal = \amin{\theta_i, \tau_i} U$.
+
+\subfile{StateMachineTikZ.tex}
+
+\section{Robot Experiments}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%   The Bibliography, if any   %%%%%%%%%
