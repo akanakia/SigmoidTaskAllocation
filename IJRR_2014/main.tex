@@ -96,7 +96,14 @@ There has been considerable research done using swarm robot systems to tackle ta
 
 The goal of this model is to represent tasks that have the property of ``concurrent benefit''. We define concurrent benefit as an attribute of a collaborative task wherein the exact number of robots required to successfully complete the task is unknown and varies with time but the probability of success depends, non-linearly, on the average number of agents assigned to that task. For example, in a firefighting scenario a single robot trying to contain a large fire will almost definitely be unsuccessful on its own (and will waste water in trying) but a group of robots within a certain group size range may be able to contain the flames to a reasonable level of success. This measure of success is related non-linearly to the group size, i.e. where 5 or even 10 robots have a negligible effect on containing the fire, perhaps 12 or more very quickly become capable of succeeding in the task.
 
+\begin{figure}[!ht]
+\centering\includegraphics[width=\textwidth]{../figures/dropletfire.png}
+\centering\caption{}\label{fig:dropletfire}
+\end{figure}
+
 It is for such tasks that we create this swarm system model and describe optimization methods for global, system level utility. The scenario is set up as follows. We assume a large operational area, compared to the size of a collaboration site. Collaboration sites are distributed randomly (but not necessarily uniformly) around the operational area. We assume a large swarm of robots is also dispersed in the operational area. The total number of robots is arbitrary but we assume it is unchanging throughout the course of the scenario. This is done mostly for mathematical simplicity of the system model and we later discuss how to relax this condition for size varying swarms. Each collaboration site comprises of some arbitrary task that a group of robots must perform to increase the overall system utility of the swarm. These tasks can include the aforementioned fire containment or lifting an object for collective transport, etc. Henceforth, we will use the terms collaboration site and task interchangeably.
+
+
 
 \section{System Model}
 We define the following terms for our model:
@@ -106,18 +113,23 @@ We define the following terms for our model:
 	\item $T$   -- Total time elapsed
 	\item $N_i$ -- Number of agents at site-$i$
 	\item $C_i$ -- Bernoulli distribution that indicates if the task at site-$i$ has been successfully completed
+	\item $collab(\hat{N}_i^j, \theta_i, \tau_i)$ -- Agent specific sigmoid threshold collaboration function
+	\begin{equation}
+		collab(\hat{N}_i^j, \theta_i, \tau_i) = \frac{1}{1 + e^{\theta_i\left(\tau_i - \hat{N}_i^j\right)}}
+	\end{equation}
+	\item $\hat{N}_i^j$ -- Agent-$j$'s estimate of the current number of robots at its site-$i$
 	\item $\theta_i$ -- Site specific sigmoid model variance parameter
 	\item $\tau_i$   -- Site specific sigmoid model mean parameter
-	\item $U_i$ -- Site specific ensemble utility of completing task-$i$
 	\item $R_i$ -- Agent specific resource cost of attempting task-$i$
 	\item $P_i$ -- Agent specific payoff for successfully completing task-$i$
 	\item $D_i$ -- Bernoulli distribution that indicates whether a group of agents decide to collaborate at the current time step
 	\item $k$   -- Constant cost incurred per time step at task-$i$
+	\item $U_i$ -- Site specific ensemble utility of completing task-$i$
+	\begin{equation}
+		U_i(t) = -k.t.(1 - C_i) - N_i.R_i.D_i(t-1) + N_i.P_i.D_i(t-1).C_i
+	\end{equation}
 \end{itemize}
 
-\begin{equation}
-	U_i(t) = -k.t.(1 - C_i) - N_i.R_i.D_i(t-1) + N_i.P_i.D_i(t-1).C_i
-\end{equation}
 
 The total system level ensemble utility at time-$t$ is then,
 \begin{equation}
