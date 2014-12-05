@@ -97,7 +97,14 @@ Abstract goes here\ldots
 \section{Introduction}
 There has been considerable research done using swarm robot systems to tackle tasks  such as firefighting. Time often plays an important role in such situations, e.g. fires tend to spread at an exponential rate if not contained quickly. Thus, the overall utility of the system also varies with time. We describe a process that maximizes time-varying utility of a swarm robot system for accomplishing time-varying tasks, through the use of sigmoid threshold functions for collaboration decisions.
 
-The goal of this model is to represent tasks that have the property of ``concurrent benefit''. We define concurrent benefit as an attribute of a collaborative task wherein the exact number of robots required to successfully complete the task is unknown and varies with time but the probability of success depends, non-linearly, on the average number of agents assigned to that task. For example, in a firefighting scenario a single robot trying to contain a large fire will almost definitely be unsuccessful on its own (and will waste water in trying) but a group of robots within a certain group size range may be able to contain the flames to a reasonable level of success. This measure of success is related non-linearly to the group size, i.e. where 5 or even 10 robots have a negligible effect on containing the fire, perhaps 12 or more very quickly become capable of succeeding in the task.
+The goal of this model is to represent tasks that have the property of ``concurrent benefit''. We define concurrent benefit as an attribute of a collaborative task wherein the exact number of robots required to successfully complete the task is unknown and varies with time but the probability of success depends, non-linearly, on the average number of agents assigned to that task. For example, in a firefighting scenario a single robot trying to contain a large fire will almost definitely be unsuccessful on its own (and will waste water in trying) but a group of robots within a certain group size range may be able to contain the flames to a reasonable level of success. This measure of success is related non-linearly to the group size, i.e. where 5 or even 10 robots have a negligible effect on containing the fire, perhaps 12 or more very quickly become capable of succeeding in the task. The group size to payoff ratio is described by a utility function that is itself sigmoid in nature, as seen in Fig. \ref{fig:sigmoid}.
+
+\begin{figure}[!ht]
+\centering\includegraphics[width=.5\textwidth]{../figures/sigmoid1.png}
+\centering\caption{}\label{fig:sigmoid}
+\end{figure}
+
+
 
 \begin{figure}[!ht]
 \centering\includegraphics[width=\textwidth]{../figures/dropletfire.png}
