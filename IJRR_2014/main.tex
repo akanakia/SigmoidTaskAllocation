@@ -120,33 +120,33 @@ We define the following terms for our model:
 \begin{itemize}
 	\item $N$   -- Total number of agents
 	\item $M$   -- Total number of tasks/collaboration sites
-	\item $T$   -- Total time elapsed
 	\item $N_i$ -- Number of agents at site-$i$
-	\item $C_i$ -- Bernoulli distribution that indicates if the task at site-$i$ has been successfully completed
-	\item $collab(\hat{N}_i^j, \theta_i, \tau_i)$ -- Agent specific sigmoid threshold collaboration function
-	\begin{equation}
-		collab(\hat{N}_i^j, \theta_i, \tau_i) = \frac{1}{1 + e^{\theta_i\left(\tau_i - \hat{N}_i^j\right)}}
-	\end{equation}
-	\item $\hat{N}_i^j$ -- Agent-$j$'s estimate of the current number of robots at its site-$i$
-	\item $\theta_i$ -- Site specific sigmoid model variance parameter
-	\item $\tau_i$   -- Site specific sigmoid model mean parameter
+%	\item $collab(\hat{N}_i^j, \theta_i, \tau_i)$ -- Agent specific sigmoid threshold collaboration function
+%	\begin{equation}
+%		collab(\hat{N}_i^j, \theta_i, \tau_i) = \frac{1}{1 + e^{\theta_i\left(\tau_i - \hat{N}_i^j\right)}}
+%	\end{equation}
+%	\item $\hat{N}_i^j$ -- Agent-$j$'s estimate of the current number of robots at its site-$i$
+%	\item $\theta_i$ -- Site specific sigmoid model variance parameter
+%	\item $\tau_i$   -- Site specific sigmoid model mean parameter
 	\item $R_i$ -- Agent specific resource cost of attempting task-$i$
 	\item $P_i$ -- Agent specific payoff for successfully completing task-$i$
-	\item $D_i$ -- Bernoulli distribution that indicates whether a group of agents decide to collaborate at the current time step
-	\item $k$   -- Constant cost incurred per time step at task-$i$
-	\item $U_i$ -- Site specific ensemble utility of completing task-$i$
-	\begin{equation}
-		U_i(t) = -k.t.(1 - C_i) - N_i.R_i.D_i(t-1) + N_i.P_i.D_i(t-1).C_i
-	\end{equation}
+%	\item $D_i$ -- Indicator variable; $1$ if a group of agents decide to collaborate at site-$i$
+	\item $D_j^i$ -- Agent specific binary decision variable indicating whether or not agent-$j$ performs task-$i$
+%	\item $C_i$ -- Indicator variable; $1$ if the task at site-$i$ has been successfully completed
+%	\item $k$   -- Constant cost incurred per time step at task-$i$
+	\item $U_j^i$ -- Agent specific total utility time given agent-$j$ is at site-$i$
+%	\begin{equation}
+%		U_i(t) = -k.t.(1 - C_i) - N_i.R_i.D_i(t-1) + N_i.P_i.D_i(t-1).C_i
+%	\end{equation}
 \end{itemize}
 
 
 The total system level ensemble utility at time-$t$ is then,
 \begin{equation}
-	U(t) = \sum\limits_{i=1}^{M} U_i(t)
+	U(t) = \sum\limits_{\forall j \in N}\sum\limits_{\forall i \in M} U_j^i(t)
 \end{equation}
 
-The objective of the system is to complete all the tasks in the environment while maximizing system utility, $U$, by tuning the available agent-level parameters, $\theta_i$ and $\tau_i)$, i.e. $goal = \amin{\theta_i, \tau_i} U$.
+The objective of the system is to complete all the tasks in the environment while maximizing system utility, $U$, by tuning available agent-level parameters, i.e. $goal = \amin{\theta_i, \tau_i} U$.
 
 %\subfile{StateMachineTikZ.tex}
 %
