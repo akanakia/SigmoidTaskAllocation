@@ -2,10 +2,11 @@
 %2345678901234567890123456789012345678901234567890123456789012345678901234567890
 %        1         2         3         4         5         6         7         8
 
-\documentclass{sage}
+\documentclass[conference]{IEEETran}
+\usepackage{times}
 
 % Subfiles package
-\usepackage{subfiles}
+%\usepackage{subfiles}
 
 % Usual setup packages
 \usepackage{listings} % For including source code with highlighting
@@ -67,23 +68,9 @@
 \newcommand{\ceil}[1]{\lceil#1\rceil}
 \newcommand{\xm}{x_{\hat{m}}}
 
-%%%Article information%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\journal{International Journal of Robotics Research}
-\volume{000}
-\issue{00}
-\copyrightline{$\copyright$ Copyright}
-\firstpage{1}
-\lastpage{13}
-\doi{doi number}
-\articletype{Article type}
-\pubyear{2015}
-%%%%%%%%%%%%%%Article information%%%%%%%%%%%%%%%%%%%%%%%%
-
 \begin{document}
 \title{Maximizing Swarm System Utility for Time-Varying Tasks}
-\author{Anshul Kanakia and Nikolaus Correll}
-\address{Department of Computer Science,
-	University of Colorado, Boulder, USA}
+\author{Author Names Omitted for Anonymous Review. Paper-ID [add your ID here]}
 
 \maketitle
 
@@ -91,7 +78,8 @@
 \begin{abstract}
 Abstract goes here\ldots
 \end{abstract}
-\keywords{Swarm Robotics, Multi-Agent Systems, Collaboration, Task Allocation, Utility Theory, Optimization}
+
+\IEEEpeerreviewmaketitle
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
@@ -100,16 +88,14 @@ There has been considerable research done using swarm robot systems to tackle ta
 The goal of this model is to represent tasks that have the property of ``concurrent benefit''. We define concurrent benefit as an attribute of a collaborative task wherein the exact number of robots required to successfully complete the task is unknown and varies with time but the probability of success depends, non-linearly, on the average number of agents assigned to that task. For example, in a firefighting scenario a single robot trying to contain a large fire will almost definitely be unsuccessful on its own (and will waste water in trying) but a group of robots within a certain group size range may be able to contain the flames to a reasonable level of success. This measure of success is related non-linearly to the group size, i.e. where 5 or even 10 robots have a negligible effect on containing the fire, perhaps 12 or more very quickly become capable of succeeding in the task. The group size to payoff ratio is described by a utility function that is itself sigmoid in nature, as seen in Fig. \ref{fig:sigmoid}.
 
 \begin{figure}[!ht]
-\centering\includegraphics[width=.5\textwidth]{../figures/sigmoid1.png}
+\centering\includegraphics[width=\columnwidth]{../figures/sigmoid1.png}
 \centering\caption{}\label{fig:sigmoid}
 \end{figure}
 
-
-
-\begin{figure}[!ht]
+\begin{figure*}[!ht]
 \centering\includegraphics[width=\textwidth]{../figures/dropletfire.png}
 \centering\caption{}\label{fig:dropletfire}
-\end{figure}
+\end{figure*}
 
 It is for such tasks that we create this swarm system model and describe optimization methods for global, system level utility. The scenario is set up as follows. We assume a large operational area, compared to the size of a collaboration site. Collaboration sites are distributed randomly (but not necessarily uniformly) around the operational area. We assume a large swarm of robots is also dispersed in the operational area. The total number of robots is arbitrary but we assume it is unchanging throughout the course of the scenario. This is done mostly for mathematical simplicity of the system model and we later discuss how to relax this condition for size varying swarms. Each collaboration site comprises of some arbitrary task that a group of robots must perform to increase the overall system utility of the swarm. These tasks can include the aforementioned fire containment or lifting an object for collective transport, etc. Henceforth, we will use the terms collaboration site and task interchangeably.
 
@@ -117,9 +103,54 @@ It is for such tasks that we create this swarm system model and describe optimiz
 \subsection{Properties of a ``Task''}
 A task (or collaboration site) requires one or more agents to perform a particular collaborative action to achieve completion. A task is complete when no more agents are required to perform any  actions at that site. Tasks require agents' resources to complete, i.e. every action performed by an agent to complete a task has an associated cost. The cost to complete a task varies with time; it typically increases non-linearly with time. Completing a task provides agents (and conseuently, the entire swarm) with rewards. These rewards can be arbitrary, task-specific constructs to motivate collaboration. The difference between overall system cost and reward at any given instant is the ``Utility'' of the system at that point in time. 
 
+We define the following terms for our model:
+\begin{itemize}
+	\item $N$   -- Total number of agents
+	\item $M$   -- Total number of tasks/collaboration sites
+	\item $N_i$ -- Number of agents at site-$i$
+%	\item $collab(\hat{N}_i^j, \theta_i, \tau_i)$ -- Agent specific sigmoid threshold collaboration function
+%	\begin{equation}
+%		collab(\hat{N}_i^j, \theta_i, \tau_i) = \frac{1}{1 + e^{\theta_i\left(\tau_i - \hat{N}_i^j\right)}}
+%	\end{equation}
+%	\item $\hat{N}_i^j$ -- Agent-$j$'s estimate of the current number of robots at its site-$i$
+%	\item $\theta_i$ -- Site specific sigmoid model variance parameter
+%	\item $\tau_i$   -- Site specific sigmoid model mean parameter
+	\item $R_i$ -- Agent specific resource cost of attempting task-$i$
+	\item $P_i$ -- Agent specific payoff for successfully completing task-$i$
+%	\item $D_i$ -- Indicator variable; $1$ if a group of agents decide to collaborate at site-$i$
+	\item $D_j^i$ -- Agent specific binary decision variable indicating whether or not agent-$j$ performs task-$i$
+%	\item $C_i$ -- Indicator variable; $1$ if the task at site-$i$ has been successfully completed
+%	\item $k$   -- Constant cost incurred per time step at task-$i$
+	\item $U_j^i$ -- Agent specific total utility time given agent-$j$ is at site-$i$
+	\begin{equation}
+		U_i(t) = -k.t.(1 - C_i) - N_i.R_i.D_i(t-1) + N_i.P_i.D_i(t-1).C_i
+	\end{equation}
+\end{itemize}
+
+
+The total system level ensemble utility at time-$t$ is then,
+\begin{equation}
+	U(t) = \sum\limits_{\forall j \in N}\sum\limits_{\forall i \in M} U_j^i(t)
+\end{equation}
+
+The objective of the system is to complete all the tasks in the environment while maximizing system utility, $U$, by tuning available agent-level parameters, i.e. $goal = \amin{\theta_i, \tau_i} U$.
+
+
+
+
+Important Points:
+
+- We define a class of tasks where there is a trade-off between time (waiting for more agents) vs probability of success (starting to work immediately).
+
+- The Utility of the system is sigmoid in nature.
+
+- Our approach accounts for errors in the model coming from robot sensors, inaccurate measurements, etc. (using theta in the sigmoid function)
+
+-
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%   The Bibliography, if any   %%%%%%%%%
-\bibliographystyle{harvard}		% or "siam", or "alpha", etc.
+\bibliographystyle{plainnat}		% or "siam", or "alpha", etc.
 %\nocite{*}						% list all refs in database, cited or not
 \bibliography{../refworks}
 \end{document}
