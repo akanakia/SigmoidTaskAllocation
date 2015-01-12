@@ -104,7 +104,9 @@ The goal of this paper is to model and analyze tasks that have the property of `
 \section{Collaboration Model}
 We generalize a multi-agent collaboration scenario with the property of concurrent benefit as follows.
 
-All tasks take place in a large operational area. Tasks or collaboration sites appear within the operational area at random but not necessarily uniformly spaced locations. All agents are dispersed uniformly and at random within the operational area. The reader should note that the act of searching for a collaboration site is arbitrarily chosen for the purposes of the model discussed in this paper; in practice, any search pattern or algorithm that best fits the scenario at hand may be chosen without affecting the conclusions provided by our model. Once an agent arrives at a collaboration site, it independently makes an estimate, $\tau$, for the group size required to successfully complete the task at that site. Agents at a task site employ a threshold based voting policy on whether or not to begin a collaborative action at that task site. The threshold function takes as input, that agent's estimate for the number of robots currently at the same collaboration site.
+All tasks take place in a large operational area. Tasks or collaboration sites appear within the operational area at random---but not necessarily uniformly spaced---locations. All agents are dispersed uniformly and at random within the operational area. The reader should note that the method of searching for a collaboration site is arbitrarily chosen for the purposes of the model discussed in this paper; in practice, any search pattern or algorithm that best fits the scenario may be chosen without affecting the conclusions provided by our model. Once an agent arrives at a collaboration site, it independently makes an estimate, $\tau$, for the group size required to successfully complete the task at that site. Agents at a task site employ a threshold based voting policy on whether or not to begin a collaborative action at that task site. The threshold function takes as input, an agent's estimate for the number of robots currently at the same collaboration site.
+
+Estimating the required group size for a task is a multi-step process. We assume that all agents are pre-programmed with an estimation function $\eta(\sigma)$, where $\sigma$ is a collection of sensor readings and internal parameters.
 
 \begin{figure}
 \centering\includegraphics[width=\columnwidth]{../figures/globalgamesetup.png}
@@ -114,7 +116,7 @@ All tasks take place in a large operational area. Tasks or collaboration sites a
 The signal received by an agent is,
 
 \begin{equation}
-	x_i = \theta + \eta_i
+	x_i = \theta + \epsilon_i
 \end{equation}
 
 
