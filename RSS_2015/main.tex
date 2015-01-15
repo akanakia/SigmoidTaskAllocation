@@ -2,7 +2,7 @@
 %2345678901234567890123456789012345678901234567890123456789012345678901234567890
 %        1         2         3         4         5         6         7         8
 
-\documentclass[conference]{IEEETran}
+\documentclass[conference]{IEEEtran}
 \usepackage{times}
 
 % Subfiles package
@@ -82,67 +82,59 @@ Abstract goes here\ldots
 \IEEEpeerreviewmaketitle
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Introduction}
+\section{Introduction}\label{sec:intro}
 Collaborative tasks are an important set of scenarios often studied in the field of swarm robotics. Many of the tasks we envision teams of robots performing, such as object transport, oil-spill containment, firefighting, and cooperative surveillance fall under this broad umbrella of collaborative tasks. While considerable work has been done in studying the specific details of particular tasks in the above list, the more general question of estimating a team size appropriate for the size of the task remains unanswered. It is generally assumed that a robot team size is hard-coded beforehand by a domain expert before a collaborative task is attempted by the robots. But, as is often the case with teams of humans attempting a collaborative task, this number not easy to guess, e.g., When trying to lift and move a heavy grand-piano, it is difficult to estimate how many people will be required. A number of factors such as the mass of the piano and the length and complexity of the path (perhaps involving staircases) come into play when deciding this number and a range of team sizes may accomplish this task to varying degrees of success.
-
-The goal of this paper is to model and analyze tasks that have the property of ``concurrent benefit''. We define concurrent benefit as an attribute of a collaborative task wherein the exact number of agents required to successfully complete the task is unknown and varies with time but the probability of success depends, non-linearly, on the average number of agents assigned to that task. For example, in a firefighting scenario a single robot trying to contain a large fire will almost definitely be unsuccessful on its own (and will waste water in trying) but a group of robots within a certain group size range may be able to contain the flames to a reasonable level of success. This measure of success is related non-linearly to the group size, i.e. where 5 or even 10 robots have a negligible effect on containing the fire, perhaps 12 or more very quickly become capable of succeeding in the task. The group size to payoff ratio is described by a utility function that is itself sigmoid in nature, as seen in Fig. \ref{fig:sigmoid}.
-
-\begin{figure}[!ht]
-\centering\includegraphics[width=\columnwidth]{../figures/sigmoid1.png}
-\centering\caption{}\label{fig:sigmoid}
-\end{figure}
 
 \begin{figure*}[!ht]
 \centering\includegraphics[width=\textwidth]{../figures/dropletfire.png}
 \centering\caption{}\label{fig:dropletfire}
 \end{figure*}
 
-\section{Global Games: A Brief Overview}
+The goal of this paper is to model and analyze tasks that have the property of ``concurrent benefit'' using the concept of global games from the field of game theory. We define concurrent benefit as an attribute of a collaborative task wherein the exact number of agents required to successfully complete the task is unknown and varies with time but the probability of success depends, non-linearly, on the average number of agents assigned to that task. For example, in a firefighting scenario (see Fig.~\ref{fig:dropletfire})a single robot trying to contain a large fire will almost definitely be unsuccessful on its own (and will waste water in trying) but a group of robots within a certain group size range may be able to contain the flames to a reasonable level of success. This measure of success is related non-linearly to the group size, i.e. where 5 or even 10 robots have a negligible effect on containing the fire, perhaps 12 or more very quickly become capable of succeeding in the task. The group size to payoff ratio is described by a utility function that is itself sigmoid in nature, as seen in Fig. \ref{fig:sigmoid}.
 
+\begin{figure}[!ht]
+\centering\includegraphics[width=\columnwidth]{../figures/sigmoid1.png}
+\centering\caption{}\label{fig:sigmoid}
+\end{figure}
 
+Such tasks can be modeled as a global game with multiple players/agents. All tasks take place in a large operational area. Tasks or collaboration sites appear within the operational area at random. All agents are dispersed uniformly and at random within the operational area. The reader should note that the method of searching for a collaboration site is arbitrarily chosen for the purposes of the model discussed in this paper; in practice, any search pattern or algorithm that best fits the scenario may be chosen without affecting the conclusions provided by our model. Once an agent arrives at a collaboration site, it independently makes an estimate, $\tau$, for the group size required to successfully complete the task at that site. This estimate is derived from an estimation function, $\Xi(\cdot)$, that takes in a noisy signal, $x$, as input. $\Xi(x)$ quantifies the size and complexity of the presented task using the robot's sensors and internal state information. This is analogous to a human assessing a situation using their senses and other domain specific data provided to him. The reason for using an estimation function is discussed in Section\ref{sec:ggresults} of this paper.
 
-\section{Collaboration Model}
-We generalize a multi-agent collaboration scenario with the property of concurrent benefit as follows.
-
-All tasks take place in a large operational area. Tasks or collaboration sites appear within the operational area at random---but not necessarily uniformly spaced---locations. All agents are dispersed uniformly and at random within the operational area. The reader should note that the method of searching for a collaboration site is arbitrarily chosen for the purposes of the model discussed in this paper; in practice, any search pattern or algorithm that best fits the scenario may be chosen without affecting the conclusions provided by our model. Once an agent arrives at a collaboration site, it independently makes an estimate, $\tau$, for the group size required to successfully complete the task at that site. Agents at a task site employ a threshold based voting policy on whether or not to begin a collaborative action at that task site. The threshold function takes as input, an agent's estimate for the number of robots currently at the same collaboration site.
-
-Estimating the required group size for a task is a multi-step process. We assume that all agents are pre-programmed with an estimation function $\eta(\sigma)$, where $\sigma$ is a collection of sensor readings and internal parameters.
-
-\begin{figure}
+\begin{figure}[!ht]
 \centering\includegraphics[width=\columnwidth]{../figures/globalgamesetup.png}
 \centering\caption{}\label{fig:ggsetup}
 \end{figure}
 
-The signal received by an agent is,
+The noisy signal $x$ is a sum of two terms, $x = \theta + \epsilon$, where $\theta$ is considered the \emph{ground truth} signal and $\epsilon$ is a Gaussian noise term with mean $0$ and standard deviation $\sigma$, as seen in Fig.~\ref{fig:ggsetup}. This setup helps situate this multi-robot collaboration model in a global game setting. The \emph{player} terminology often used in game theory literature maps directly to robots (or agents) in swarm robotics. Each player/agent makes independent algorithmic decisions and overall system equilibrium conditions are measured via the set of joint actions between agents. A brief overview of the theory of global games is provided in Section \ref{sec:ggoverview}.
 
-\begin{equation}
-	x_i = \theta + \epsilon_i
-\end{equation}
+\subsection{Related Work}\label{subsec:rw}
+The proposed algorithm and model is inspired from task allocation in biological systems such as ant colonies \cite{Bonabeau1999,Krieger2000}. We employ the use of a response threshold sigmoid function that probabilistically triggers the beginning of a collaboration step between robots at the same collaboration site. We study this approach via macroscopic models and microscopic simulations. The sigmoid function used in our model is commonly referred to as the Logistic function and has control parameters that allow us to alter its offset and slope. We study the effects that changing these parameters has on the system-wide behavior of the robot swarm. We also draw comparisons between this collaboration model and similar models used by Lerman et al. for the \emph{n}-robot stick pulling experiment \cite{Lerman2001} and discuss situations where it is beneficial to use one model over the other.
 
+We wish to extend the stick pulling model of constant group sizes of robots to include a more general case of collaboration tasks that involve only approximate robot group sizes for successful collaboration. More specifically, we deal with tasks that have the property of ``concurrent benefit'' where single agents must wait for a group---with a range of permissible size---to form at their collaboration site before being able to collectively begin the task and complete it successfully. Examples of such tasks include fire containment, collective transport \cite{sugawara2012}, pattern recognition \cite{beni1993swarm}, real-time mapping of oil spills \cite{beni2005swarm}, determining coverage area of forest fires \cite{krishnanand2006glowworm}, and many others that require a subset of a swarm to coalesce and tackle a task collaboratively. 
 
-\section{Results from Game Theory}
-\subsection{Case I: Agents Not Sharing State Information}
-
-\subsection{Case II: Agents Sharing State Information Perfectly}
-
-\subsection{Case III: Agents Sharing State Information Imperfectly}
-
-\subsection{Imperfect Knowledge of Group Size}
+\section{Global Games: A Brief Overview}\label{sec:ggoverview}
 
 
 
 
-\section{Experimental Results}
+\section{Results from Game Theory}\label{sec:ggresults}
+
+
+
+\section{Experiment Setup}\label{sec:expsetup}
+We ran collaborative task completion experiments with the \emph{Droplet} swarm robot platform to validate results presented in the previous section. The experiment employs they robots' overhead RGB sensors to simulate a fire that is projected down onto the arena using a standard off-the-shelf projector. The goal of the experiment is to have the robots collaboratively put out these projected fires by congregating at the perimeter of the fire and turning on their blue LEDs together. The projected fires increase in size and intensity (indicated by changing color from the red to the yellow spectrum) with time.
+
+
+\section{Experimental Results}\label{sec:expresults}
 
 
 
 
-\section{Discussion}
+\section{Discussion}\label{sec:disc}
 
 
 
 
-\section{Conclusion}
+\section{Conclusion}\label{sec:conc}
 
 
 
@@ -169,6 +161,5 @@ The signal received by an agent is,
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%   The Bibliography, if any   %%%%%%%%%
 \bibliographystyle{plainnat}		% or "siam", or "alpha", etc.
-%\nocite{*}						% list all refs in database, cited or not
 \bibliography{../refworks}
 \end{document}
