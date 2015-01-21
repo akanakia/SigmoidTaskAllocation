@@ -22,6 +22,10 @@
 
 % Packages for math symbols and other mathey things
 \usepackage{amsthm}
+\newtheorem{theorem}{Theorem}
+\newtheorem{claim}{Claim}
+\newtheorem{corollary}{Corollary}
+\newtheorem{proposition}{Proposition}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
@@ -32,6 +36,7 @@
 \usepackage{algpseudocode}
 
 % Packages that handle tables, figures and other floats
+\usepackage{enumerate}
 \usepackage{tabularx}
 \usepackage{multirow}
 \usepackage{float} % To make floats movable
@@ -67,6 +72,10 @@
 \DeclareMathOperator*{\argmax}{\arg\!\min\>}
 \newcommand{\amax}[1]{\underset{#1}\argmax}
 
+\def\a{\mathbf{a}}
+\def\Z{\mathbb{Z}}
+\def\R{\mathbb{R}}
+\def\N{\mathcal{N}}
 \newcommand{\sig}{\mathcal{S}}
 \newcommand{\ceil}[1]{\lceil#1\rceil}
 \newcommand{\xm}{x_{\hat{m}}}
@@ -86,7 +95,7 @@ Abstract goes here\ldots
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}\label{sec:intro}
-Collaborative tasks are an important set of scenarios often studied in the field of swarm robotics. Many of the tasks we envision teams of robots performing, such as object transport \cite{sugawara2012}, oil-spill containment\cite{beni2005swarm}, firefighting\cite{krishnanand2006glowworm}, pattern recognition \cite{beni1993swarm}, and cooperative surveillance fall under this broad umbrella of collaborative tasks. While considerable work has been done in studying the specific details of particular tasks in the above list, the more general question of estimating a team size appropriate for the size of the task remains largely unanswered. It is generally assumed that a required team size is provided by a domain expert before a collaborative task is attempted by the robots. But, as is often the case with teams of humans attempting a collaborative task, this number not easy to guess, e.g., When trying to lift and move a heavy object, it is difficult to estimate how many people will be required. A number of factors such as the mass and dimensions of the object, and the length and complexity of the path (perhaps involving staircases) come into play when deciding this number. Therefore, there exist a range of team sizes that may accomplish this task to varying degrees of success.
+Collaborative tasks are an important set of scenarios often studied in the field of swarm robotics. Many of the tasks we envision teams of robots performing, such as object transport \cite{sugawara2012}, oil-spill containment \cite{beni2005swarm}, firefighting \cite{krishnanand2006glowworm}, pattern recognition  \cite{beni1993swarm}, and cooperative surveillance fall under this broad umbrella of collaborative tasks. While considerable work has been done in studying the specific details of particular tasks in the above list, the more general question of estimating a team size appropriate for the size of the task remains largely unanswered. It is generally assumed that a required team size is provided by a domain expert before a collaborative task is attempted by the robots. But, as is often the case with teams of humans attempting a collaborative task, this number not easy to guess, e.g., When trying to lift and move a heavy object, it is difficult to estimate how many people will be required. A number of factors such as the mass and dimensions of the object, and the length and complexity of the path (perhaps involving staircases) come into play when deciding this number. Therefore, there exist a range of team sizes that may accomplish this task to varying degrees of success.
 
 \begin{figure*}[!ht]
 \centering\includegraphics[width=\textwidth]{../figures/dropletfire.png}
@@ -105,7 +114,7 @@ The goal of this paper is to model and analyze such tasks that have the property
 Collaborative tasks can be modeled as a global game with multiple players/agents. All tasks take place in a large operational area. Tasks or collaboration sites appear within the operational area at random. All agents are dispersed uniformly and at random within the operational area. The reader should note that the method of searching for a collaboration site is arbitrarily chosen for the purposes of the model discussed in this paper; in practice, any search pattern or algorithm that best fits the scenario may be chosen without affecting the conclusions provided by our model. Once an agent arrives at a collaboration site, it independently makes an estimate, $\tau$, for the group size required to successfully complete the task at that site. This estimate is derived from an estimation function, $\Xi(\cdot)$, that takes in a noisy signal, $x$, as input. $\Xi(x)$ quantifies the size and complexity of the presented task using the robot's sensors and internal state information. This is analogous to a human assessing a situation using their senses and other domain specific data provided to him. The reason for using an estimation function is discussed in Section\ref{sec:ggresults} of this paper.
 
 \begin{figure}[!ht]
-\centering\includegraphics[width=\columnwidth]{../figures/globalgamesetup.png}
+\centering\includegraphics[width=.75\columnwidth]{../figures/globalgamesetup.png}
 \centering\caption{}\label{fig:ggsetup}
 \end{figure}
 
@@ -116,11 +125,42 @@ The noisy signal $x$ is a sum of two terms, $x = \theta + \epsilon$, where $\the
 
 
 \section{Global Games: A Brief Overview}\label{sec:ggoverview}
+Game theory is the study of strategic interactions among multiple agents or players, such as robots, people, firms, etc. where the decision of each party affects the payoff of the rest. A fundamentally important class of games is one with incomplete information where each agent's utility depends not only on the actions of the other agents but also on an underlying fundamental signal that cannot be accurately ordained by the agents. Returning to our previous example of firefighting, this fundamental signal is the difficulty of the task of putting out the fire. The size and intensity of the fire, along with environmental and other site-specific factors all play a major role in determining whether an agent should begin the task or wait for more help to arrive. 
+%As an example, consider the decision making problem where each  person is deciding whether use a given road today or not. The congestion of the given road not only depends on how many other people are using the road but also, the weather condition which is unknown to the people. Some people may use the weather forecast to gain more knowledge on this unknown parameter but regardless, the utility of each agent depends on the unknown fundamental of weather condition. 
+
+This class of global games with incomplete information was originally introduced in \cite{Carlsson1993} where two players are playing a game and the utility of the two players depends on an underlying fundamental signal, $\theta$, but each agent observes a noisy variation of $\theta$. Note that noisy variation in $\theta$ is not a result of inaccuracy in sensor measurements but represents a culmination of underlying unknown factors of the scenario. We discuss how sensor noise, from agents measuring the fundamental signal, can be modeled in the following section. Global games have been substantially generalized to study and model different economical phenomena such as pricing debt, currency crisis, and bank runs. See \cite{Morris2000} and the references therein for more details.
+%A subclass of games with incomplete information is the class of global games which was originally introduced in \cite{Carlsson1993} where two players are playing a game and the utility of the two players depends on an underlying economics fundamental $\theta$ and each agent observes a noisy variation of $\theta$. Such games have been substantially generalized to study and model different economical phenomena such as pricing debt, currency crisis, and bank runs, see \cite{Morris2000} and the references therein for more details.
 
 
 
+\section{Concurrent Benefit Task with Incomplete Information}
+In this section, we mathematically define a concurrent benefit task which is central to our study. Consider a set of $n$ robots and suppose that each robot has an action set $A_i=\{0,1\}$ where $0$ represents ``not participating'' in the task and $1$ represents ``participating'' in the task.  Another object which plays an important role in our formalism is the \textit{easiness} parameter $\theta$ of the given task. We let $\theta$ be an (often random) real number which simply represents how easy/hard a task is and we further assume that it belongs to an interval $E=[c,d]$ in $\R$.  Finally, we let $u_i:A_1\times\Z^+\times \R\to \R$ be the utility of the $i$th robot, where $u_i(a_i,g,\theta)$ is the utility of the $i$th robot when  $g$ other robots have decided to participate in the task and $\theta$ is the easiness parameter of the task\footnote{In general, the utility of each robot depends on the joint actions of the rest of the robots. However, here we assume that the utility depends only on the number of robots participating in the activity. The following discussions can be substantially generalized to a more general setting but this form of utility serves the purpose of this study.}. 
 
-\section{Results from Game Theory}\label{sec:ggresults}
+We define a task $T$ to be a \textit{concurrent benefit task} if: 
+\begin{enumerate}[a.]
+	\item $u_i(1,g,\theta)\geq u_i(0,g,\theta)$ for all $g\in[n-1]:=\{0,1,\ldots,n-1\}$ and $\theta \in E$. 
+	\item $u_i(a_i,g,\theta)$ is an increasing and continuous function of $\theta$ for any $a_i$ and $g$. 
+	\item $u_i(1,g,\theta)-u_i(0,g,\theta)\geq u_i(1,g',\theta)-u_i(0,g',\theta)$ for any $g\geq g'$ in $[n-1]$ and any $\theta\in E$. In other words, the more the number of the rest of the robots participating in the task, the more beneficial would be taking part in the activity.
+	\item For any $g$ and any $\theta\geq \theta'$, we have $u_i(1,g,\theta)-u_i(0,g,\theta)\geq \lambda (\theta-\theta')$. 
+	\item For extreme easiness factors, taking part in the activity has unique trivial equilibrium, i.e. there exists $\underline{\theta},\bar{\theta}\in (c,d)$ with $\underline{\theta}\leq \bar{\theta}$ such that for any $\theta\geq \bar{\theta}$, the only equilibrium of the game is $(1,1,\ldots,1)$ and for $\theta\leq \underline{\theta}$, the only equilibrium of the game is $(0,0,\ldots,0)$.
+\end{enumerate}
+
+Note that in order to have such a task, we need the above conditions to hold for all the robots, i.e. for all $i\in\{1,\ldots,n\}$.
+An example of a utility function that would satisfy such conditions is a function $u_i(a_i,g,\theta)=a_i(\beta_is+\gamma_i\theta)$ with $\beta_i,\gamma_i\geq 0$, and $c<0$.
+
+The main challenge in devising strategies in performing a concurrent benefit task is that the knowledge of the easiness parameter is not easily accessible to the robots. For example consider the firefighting task described above. In this task, how easy/hard the task is not exactly clear for each robot. Rather, each robot, with the help of the sensors on board, has some knowledge of this factor. We model this imperfect knowledge by assuming that robot $i$ observes $x_i=\theta+\nu \eta_i$ where $\eta_i$ is a continuous random variable with finite support and $\nu\geq 0$ is a parameter of the system. 
+
+
+Given the above scenario, we say that $s_i:\R\to \{0,1\}$ is a pure strategy if  $s_i$ maps any private measurement $x_i$ to an action in $\{0,1\}$. We say that $s_i$ is a threshold strategy if there exists some $\tau$ such that $s_i(x_i)=1$ for $x_i\geq \tau$ and $s_i(x_i)=0$ if $x_i<\tau$. In other words, $s_i$ prescribes taking part in the task if the private information is small and prescribes not taking part in the activity if the private measurement is large. 
+
+\begin{theorem}
+Let task $T$ be a task satisfying the above conditions and suppose that the easiness factor $\theta$ is uniformly distributed over $E$. Then, for sufficiently small $\nu>0$, there exists a unique joint strategy $s^*=(s_1^*,s_2^*,\ldots,s_n^*)$ that survives iterative strict dominance. Moreover, the strategy $s^*$ is a threshold equilibrium, i.e.\ each $s_i^*$ is a threshold strategy.
+\end{theorem}
+
+
+\begin{proof}
+\mycomment{To be done by Behrouz!}
+\end{proof}
 
 
 
