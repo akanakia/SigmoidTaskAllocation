@@ -76,6 +76,8 @@
 \def\Z{\mathbb{Z}}
 \def\R{\mathbb{R}}
 \def\N{\mathcal{N}}
+\def\estt{\hat{\tau}}
+\def\estg{\gamma}
 \newcommand{\sig}{\mathcal{S}}
 \newcommand{\ceil}[1]{\lceil#1\rceil}
 \newcommand{\xm}{x_{\hat{m}}}
@@ -103,11 +105,6 @@ Collaborative tasks are an important set of scenarios often studied in the field
 \end{figure*}
 
 The goal of this paper is to model and analyze such tasks that have the property of \emph{concurrent benefit} using the concept of global games from the field of game theory. We define concurrent benefit as an attribute of a collaborative task wherein the exact number of agents required to successfully complete the task is unknown and varies with time. The probability of success depends, non-linearly, on the average number of agents assigned to that task. For example, in a firefighting scenario (see Fig.~\ref{fig:dropletfire}), a single robot trying to contain a large fire will likely be unsuccessful on its own (and will waste fire retardant in trying) but a group of robots within a certain group size range may be able to contain the flames to a reasonable level of success. This measure of success is related non-linearly to the group size, i.e. where 5 or even 10 robots have a negligible effect on containing the fire, perhaps 12 or more very quickly become capable of succeeding in the task.
-
-\begin{figure}[!ht]
-\centering\includegraphics[width=\columnwidth]{../figures/sigmoid1.png}
-\centering\caption{}\label{fig:sigmoid}
-\end{figure}
 
 Collaborative tasks can be modeled as a global game with multiple players/agents. All tasks take place in a large operational area. Tasks or collaboration sites appear within the operational area at random. All agents are dispersed uniformly and at random within the operational area. The reader should note that the method of searching for a collaboration site is arbitrarily chosen for the purposes of the model discussed in this paper; in practice, any search pattern or algorithm that best fits the scenario may be chosen without affecting the conclusions provided by our model. Once an agent arrives at a collaboration site, it independently makes an estimate, $\tau$, for the group size required to successfully complete the task at that site. This estimate is derived from an estimation function, $\Xi(\cdot)$, that takes in a noisy signal, $x$, as input. $\Xi(x)$ quantifies the size and complexity of the presented task using the robot's sensors and internal state information. This is analogous to a human assessing a situation using their senses and other domain specific data provided to him. The reason for using an estimation function is discussed in Section\ref{sec:ggresults} of this paper.
 
@@ -155,15 +152,46 @@ Given the above scenario, we say that $s_i:\R\to \{0,1\}$ is a pure strategy if 
 Let task $T$ be a task satisfying the above conditions and suppose that the easiness factor $\theta$ is uniformly distributed over $E$. Then, for sufficiently small $\nu>0$, there exists a unique joint strategy $s^*=(s_1^*,s_2^*,\ldots,s_n^*)$ that survives iterative strict dominance. Moreover, the strategy $s^*$ is a threshold equilibrium, i.e.\ each $s_i^*$ is a threshold strategy.
 \end{theorem}
 
-
 \begin{proof}
-\mycomment{To be done by Behrouz!}
+\textbf{To be done by Behrouz\ldots}
 \end{proof}
 
+\section{Sigmoid Threshold Function}
+We are presented with a scenario where a swarm of robots must complete a collaborative task that requires $\geq \tau$ agents. A threshold function chosen for each agent to decide whether or not to attempt this task could be a step-function based on their estimate of the required group size-$\estt$, as well as their estimate, $\estg$, of the number of agents currently present at the collaboration site. In this case, the probability with which an agent decides to collaborate is given by, 
+\begin{equation}\label{eq:step}
+	P_{yes}(\estt,\estg) = \left\{
+	\begin{array}{ll}
+		1 & : \estg >= \estt\\ 
+		0 & : \estg < \estt
+	\end{array}\right.
+\end{equation}
 
+The major drawback of using this method is it's rigidity to an individual agent's estimation errors. Let us assume, for the sake of argument, that agents independently make estimates-$\estt_i$ of the group size required to successfully complete a task. Let us also assume that these estimations come from noisy measurements of environmental parameters such that an independent agent estimate is picked from a normal distribution, $\estt_i = \mathcal{N}(x_i, \tau, \sigma)$, with mean equal to the actual required group size-$\tau$ and some standard deviation-$\sigma$ for a perceived sensor measurement-$x_i$. The agents do not share their independent estimates with each other. For simplicity, we assume all agents have perfect communication and can make precisely count the number of other agents sharing the same collaboration site with them. Thus, all agents estimate $\estg$ perfectly.
+
+Under these conditions and using the step-function threshold policy from Eq.~\ref{eq:step}, when there are exactly $\tau$ agents at the collaboration site with perfect communication, we expect about half of them to collaborate as they underestimate the actual required group size $\estt_i < \tau$ while the other half will not collaborate as they overestimate the number of required robots, $\estt_j > \tau$. One can see that this is not the desired behavior as about half the required number of agents always attempt the task and fail.
+
+\begin{figure}[!ht]
+\centering\includegraphics[width=\columnwidth]{../figures/sigmoid1.png}
+\centering\caption{}\label{fig:sigmoid}
+\end{figure}
+
+A similar argument can be made in the case where agents have unreliable communication as well as noisy sensor measurements. We instead propose the use of a continuous, sigmoid threshold function for computing collaboration probability. The sigmoid function we use is commonly referred to as the \emph{logistic} function and is mathematically defined as,
+\begin{equation}\label{eq:sig}
+	\sig(\estg, \estt, \theta) = \frac{1}{1 + e^{\theta(\estt - \estg)}}
+\end{equation}
+Here, the term $\theta$ is referred to as the sigmoid slope parameter as it controls the slope of the curve at $\sig(\cdot) = 0.5$, as seen in Fig.~\ref{fig:sigmoid}. 
+\begin{equation}
+	\sig(\estg, \estt, \theta) =  \left\{
+	\begin{array}{ll}
+		0.5 & : \theta = 0\\ 
+		P_{yes}(\estt,\estg) & : \theta \to \infty
+	\end{array}\right.
+\end{equation}
+When $\theta = 0$, the sigmoid curve becomes the straight line $\sig(\estg, \estt, 0) = 0.5$ and as $\theta \to \infty$, Eq.~\ref{eq:sig} begins to resemble the step function seen in Eq.~\ref{eq:step}.
 
 \section{Experiment Setup}\label{sec:expsetup}
 We ran collaborative task completion experiments with the \emph{Droplet} swarm robot platform to validate results presented in the previous section. The experiment employs they robots' overhead RGB sensors to simulate a fire that is projected down onto the arena using a standard off-the-shelf projector. The goal of the experiment is to have the robots collaboratively put out these projected fires by congregating at the perimeter of the fire and turning on their blue LEDs together. The projected fires increase in size and intensity (indicated by changing color from the red to the yellow spectrum) with time.
+
 
 
 \section{Experimental Results}\label{sec:expresults}
