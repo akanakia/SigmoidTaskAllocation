@@ -2,14 +2,14 @@
 %2345678901234567890123456789012345678901234567890123456789012345678901234567890
 %        1         2         3         4         5         6         7         8
 
-\documentclass[conference]{IEEEtran}
-\usepackage{times}
+\documentclass[conference]{ieeeconf}
+%\usepackage{times}
 
 % Subfiles package
 %\usepackage{subfiles}
 
 % References
-\usepackage[numbers]{natbib}
+%\usepackage[numbers]{natbib}
 
 % Usual setup packages
 \usepackage{listings} % For including source code with highlighting
@@ -21,7 +21,7 @@
 \usepackage{fancyvrb}
 
 % Packages for math symbols and other mathey things
-\usepackage{amsthm}
+%\usepackage{amsthm}
 \newtheorem{theorem}{Theorem}
 \newtheorem{claim}{Claim}
 \newtheorem{corollary}{Corollary}
@@ -104,8 +104,6 @@ Collaborative tasks are an important set of scenarios often studied in the field
 
 The goal of this paper is to model and analyze such tasks that have the property of \emph{concurrent benefit} using the concept of global games from the field of game theory. We define concurrent benefit as an attribute of a collaborative task wherein the exact number of agents required to successfully complete the task is unknown and varies with time. The probability of success depends, non-linearly, on the average number of agents assigned to that task. For example, in a firefighting scenario (see Fig.~\ref{fig:dropletfire}), a single robot trying to contain a large fire will likely be unsuccessful on its own (and will waste fire retardant in trying) but a group of robots within a certain group size range may be able to contain the flames to a reasonable level of success. This measure of success is related non-linearly to the group size, i.e. where 5 or even 10 robots have a negligible effect on containing the fire, perhaps 12 or more very quickly become capable of succeeding in the task.
 
-
-
 \begin{figure}[!ht]
 \centering\includegraphics[width=\columnwidth]{../figures/sigmoid1.png}
 \centering\caption{}\label{fig:sigmoid}
@@ -185,6 +183,6 @@ We ran collaborative task completion experiments with the \emph{Droplet} swarm r
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%   The Bibliography, if any   %%%%%%%%%
-\bibliographystyle{plainnat}		% or "siam", or "alpha", etc.
+\bibliographystyle{IEEEtran}		% or "siam", or "alpha", etc.
 \bibliography{../refworks}
 \end{document}
