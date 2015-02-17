@@ -97,7 +97,7 @@ Abstract goes here\ldots
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}\label{sec:intro}
-Collaborative tasks are an important set of scenarios often studied in the field of swarm robotics. Many of the tasks we envision teams of robots performing, such as object transport \cite{sugawara2012}, oil-spill containment \cite{beni2005swarm}, firefighting \cite{krishnanand2006glowworm}, pattern recognition  \cite{beni1993swarm}, and cooperative surveillance fall under this broad umbrella of collaborative tasks. While considerable work has been done in studying the specific details of particular tasks in the above list, the more general question of estimating a team size appropriate for the size of the task remains largely unanswered. It is generally assumed that a required team size is provided by a domain expert before a collaborative task is attempted by the robots. But, as is often the case with teams of humans attempting a collaborative task, this number not easy to guess, e.g., When trying to lift and move a heavy object, it is difficult to estimate how many people will be required. A number of factors such as the mass and dimensions of the object, and the length and complexity of the path (perhaps involving staircases) come into play when deciding this number. Therefore, there exist a range of team sizes that may accomplish this task to varying degrees of success.
+Collaborative tasks are an important set of scenarios often studied in the field of swarm robotics. Many of the tasks we envision teams of robots performing, such as object transport \cite{sugawara2012}, oil-spill containment \cite{beni2005swarm}, firefighting \cite{Krishnanand2006}, pattern recognition  \cite{beni1993swarm}, and cooperative surveillance fall under this broad umbrella of collaborative tasks. While considerable work has been done in studying the specific details of particular tasks in the above list, the more general question of estimating a team size appropriate for the size of the task remains largely unanswered. It is generally assumed that a required team size is provided by a domain expert before a collaborative task is attempted by the robots. But, as is often the case with teams of humans attempting a collaborative task, this number not easy to guess, e.g., When trying to lift and move a heavy object, it is difficult to estimate how many people will be required. A number of factors such as the mass and dimensions of the object, and the length and complexity of the path (perhaps involving staircases) come into play when deciding this number. Therefore, there exist a range of team sizes that may accomplish this task to varying degrees of success.
 
 \begin{figure*}[!ht]
 \centering\includegraphics[width=\textwidth]{../figures/dropletfire.png}
@@ -106,14 +106,26 @@ Collaborative tasks are an important set of scenarios often studied in the field
 
 The goal of this paper is to model and analyze such tasks that have the property of \emph{concurrent benefit} using the concept of global games from the field of game theory. We define concurrent benefit as an attribute of a collaborative task wherein the exact number of agents required to successfully complete the task is unknown and varies with time. The probability of success depends, non-linearly, on the average number of agents assigned to that task. For example, in a firefighting scenario (see Fig.~\ref{fig:dropletfire}), a single robot trying to contain a large fire will likely be unsuccessful on its own (and will waste fire retardant in trying) but a group of robots within a certain group size range may be able to contain the flames to a reasonable level of success. This measure of success is related non-linearly to the group size, i.e. where 5 or even 10 robots have a negligible effect on containing the fire, perhaps 12 or more very quickly become capable of succeeding in the task.
 
-Collaborative tasks can be modeled as a global game with multiple players/agents. All tasks take place in a large operational area. Tasks or collaboration sites appear within the operational area at random. All agents are dispersed uniformly and at random within the operational area. The reader should note that the method of searching for a collaboration site is arbitrarily chosen for the purposes of the model discussed in this paper; in practice, any search pattern or algorithm that best fits the scenario may be chosen without affecting the conclusions provided by our model. Once an agent arrives at a collaboration site, it independently makes an estimate, $\tau$, for the group size required to successfully complete the task at that site. This estimate is derived from an estimation function, $\Xi(\cdot)$, that takes in a noisy signal, $x$, as input. $\Xi(x)$ quantifies the size and complexity of the presented task using the robot's sensors and internal state information. This is analogous to a human assessing a situation using their senses and other domain specific data provided to him. The reason for using an estimation function is discussed in Section\ref{sec:ggresults} of this paper.
+We introduced sigmoid threshold based task allocation in an earlier paper \cite{Kanakia2014} and we extend upon this core algorithm here. The task allocation algorithm seen in \cite{Kanakia2014} makes use of the logistic function with two tuning parameters, $\theta$ and $\tau$ that tune the slope and mean of the probability function governing an agent's willingness to collaborate on a task based on its estimate of the current group size at its collaborate site. We mentioned one of the drawbacks of this approach was that these two parameters had to be tuned by hand based on a domain expert's assessment of the task size at any given time. We now alleviate this problem by having the agents independently assess the situation and make estimates to the required group size, $\estt_i$, on their own, without the need for a centralized controller.
 
-\begin{figure}[!ht]
-\centering\includegraphics[width=.75\columnwidth]{../figures/globalgamesetup.png}
-\centering\caption{}\label{fig:ggsetup}
-\end{figure}
+As a note to readers, this paper refers to ``Group size estimation'' in two different but related contexts which requires some clarification. Our algorithm involves two separate estimation steps for an agent. 
 
-The noisy signal $x$ is a sum of two terms, $x = \theta + \epsilon$, where $\theta$ is considered the \emph{ground truth} signal and $\epsilon$ is a Gaussian noise term with mean $0$ and standard deviation $\sigma$, as seen in Fig.~\ref{fig:ggsetup}. This setup helps situate this multi-robot collaboration model in a global game setting. The \emph{player} terminology often used in game theory literature maps directly to robots (or agents) in swarm robotics. Each player/agent makes independent algorithmic decisions and overall system equilibrium conditions are measured via the set of joint actions between agents. A brief overview of the theory of global games is provided in Section \ref{sec:ggoverview}.
+Firstly, an agent estimates how many other agents may be required to successfully complete a task presented before it. This estimate is made by sensing physical parameters at a collaboration site and independently deciding how many other agents may be required to complete the task at that site successfully. Returning to our fire containment scenario, a robot may travel to the perimeter of the fire and then use its heat sensors, camera and other provided data to generate an estimate of the number of other robots required to put out the fire. We call this first estimation step the \emph{required} group size estimate, $\estt_i$ for a robot-$i$.
+
+Secondly, once an agent is at a collaboration site, it estimates how many other agents share the same collaboration site using sensors, minimal communication and statistical inferencing techniques. This estimate, designated the \emph{observed} group size estimate, is labeled $\estg_i$ for robot-$i$.
+
+Together, both, the required and observed estimates are provided as inputs to the logistic function along with the slope parameter-$\theta$ which outputs an individual agent's probability to collaborate on a task as seen in \eqref{eq:sig}.
+\begin{equation}\label{eq:sig}
+	\sig(\estg, \estt, \theta) = \frac{1}{1 + e^{\theta(\estt - \estg)}}
+\end{equation}
+A more detailed analysis of this proccess is found in section \ref{sec:sig} of this paper.
+
+%\begin{figure}[!ht]
+%\centering\includegraphics[width=.75\columnwidth]{../figures/globalgamesetup.png}
+%\centering\caption{}\label{fig:ggsetup}
+%\end{figure}
+
+%The noisy signal $x$ is a sum of two terms, $x = \theta + \epsilon$, where $\theta$ is considered the \emph{ground truth} signal and $\epsilon$ is a Gaussian noise term with mean $0$ and standard deviation $\sigma$, as seen in Fig.~\ref{fig:ggsetup}. This setup helps situate this multi-robot collaboration model in a global game setting. The \emph{player} terminology often used in game theory literature maps directly to robots (or agents) in swarm robotics. Each player/agent makes independent algorithmic decisions and overall system equilibrium conditions are measured via the set of joint actions between agents. A brief overview of the theory of global games is provided in Section \ref{sec:ggoverview}.
 
 \subsection{Related Work}\label{subsec:rw}
 
@@ -121,10 +133,8 @@ The noisy signal $x$ is a sum of two terms, $x = \theta + \epsilon$, where $\the
 
 \section{Global Games: A Brief Overview}\label{sec:ggoverview}
 Game theory is the study of strategic interactions among multiple agents or players, such as robots, people, firms, etc. where the decision of each party affects the payoff of the rest. A fundamentally important class of games is one with incomplete information where each agent's utility depends not only on the actions of the other agents but also on an underlying fundamental signal that cannot be accurately ordained by the agents. Returning to our previous example of firefighting, this fundamental signal is the difficulty of the task of putting out the fire. The size and intensity of the fire, along with environmental and other site-specific factors all play a major role in determining whether an agent should begin the task or wait for more help to arrive. 
-%As an example, consider the decision making problem where each  person is deciding whether use a given road today or not. The congestion of the given road not only depends on how many other people are using the road but also, the weather condition which is unknown to the people. Some people may use the weather forecast to gain more knowledge on this unknown parameter but regardless, the utility of each agent depends on the unknown fundamental of weather condition. 
 
 This class of global games with incomplete information was originally introduced in \cite{Carlsson1993} where two players are playing a game and the utility of the two players depends on an underlying fundamental signal, $\theta$, but each agent observes a noisy variation of $\theta$. Note that noisy variation in $\theta$ is not a result of inaccuracy in sensor measurements but represents a culmination of underlying unknown factors of the scenario. We discuss how sensor noise, from agents measuring the fundamental signal, can be modeled in the following section. Global games have been substantially generalized to study and model different economical phenomena such as pricing debt, currency crisis, and bank runs. See \cite{Morris2000} and the references therein for more details.
-%A subclass of games with incomplete information is the class of global games which was originally introduced in \cite{Carlsson1993} where two players are playing a game and the utility of the two players depends on an underlying economics fundamental $\theta$ and each agent observes a noisy variation of $\theta$. Such games have been substantially generalized to study and model different economical phenomena such as pricing debt, currency crisis, and bank runs, see \cite{Morris2000} and the references therein for more details.
 
 
 
@@ -156,7 +166,7 @@ Let task $T$ be a task satisfying the above conditions and suppose that the easi
 \textbf{To be done by Behrouz\ldots}
 \end{proof}
 
-\section{Sigmoid Threshold Function}
+\section{Sigmoid Threshold Function}\label{sec:sig}
 We are presented with a scenario where a swarm of robots must complete a collaborative task that requires $\geq \tau$ agents. A threshold function chosen for each agent to decide whether or not to attempt this task could be a step-function based on their estimate of the required group size-$\estt$, as well as their estimate, $\estg$, of the number of agents currently present at the collaboration site. In this case, the probability with which an agent decides to collaborate is given by, 
 \begin{equation}\label{eq:step}
 	P_{yes}(\estt,\estg) = \left\{
@@ -175,11 +185,7 @@ Under these conditions and using the step-function threshold policy from Eq.~\re
 \centering\caption{}\label{fig:sigmoid}
 \end{figure}
 
-A similar argument can be made in the case where agents have unreliable communication as well as noisy sensor measurements. We instead propose the use of a continuous, sigmoid threshold function for computing collaboration probability. The sigmoid function we use is commonly referred to as the \emph{logistic} function and is mathematically defined as,
-\begin{equation}\label{eq:sig}
-	\sig(\estg, \estt, \theta) = \frac{1}{1 + e^{\theta(\estt - \estg)}}
-\end{equation}
-Here, the term $\theta$ is referred to as the sigmoid slope parameter as it controls the slope of the curve at $\sig(\cdot) = 0.5$, as seen in Fig.~\ref{fig:sigmoid}. 
+A similar argument can be made in the case where agents have unreliable communication as well as noisy sensor measurements. We instead propose the use of a continuous, sigmoid threshold function for computing collaboration probability as seen in \eqref{eq:sig}. Here, the term $\theta$ is referred to as the sigmoid slope parameter as it controls the slope of the curve at $\sig(\cdot) = 0.5$, as seen in Fig.~\ref{fig:sigmoid}. 
 \begin{equation}
 	\sig(\estg, \estt, \theta) =  \left\{
 	\begin{array}{ll}
