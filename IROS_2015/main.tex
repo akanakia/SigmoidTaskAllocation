@@ -187,7 +187,16 @@ Here, the term $\theta$ is referred to as the sigmoid slope parameter as it cont
 		P_{yes}(\estt,\estg) & : \theta \to \infty
 	\end{array}\right.
 \end{equation}
-When $\theta = 0$, the sigmoid curve becomes the straight line $\sig(\estg, \estt, 0) = 0.5$ and as $\theta \to \infty$, Eq.~\ref{eq:sig} begins to resemble the step function seen in Eq.~\ref{eq:step}.
+When $\theta = 0$, the sigmoid curve becomes the straight line $\sig(\estg, \estt, 0) = 0.5$ and as $\theta \to \infty$, \eqref{eq:sig} begins to resemble the step function seen in \eqref{eq:step}.
+
+Since we care about the case when half or more of the agents ($n/2$) decide to collaborate, the probability $P(n)$ that half or more agents in a group of $n$ collaborate is the cumulative probability of the above PMF from $k = {n/2}$ to $k = n$. 
+\begin{equation}
+	P(n) = \sum\limits_{i={n/2}}^{n}\binom{n}{i}\sig(n)^{i}\left(1 - \sig(n)\right)^{n - i}\label{eq:cdf}
+\end{equation}
+This equation describes the probability with which a group of size $n$ at a given collaboration site will decide to successfully collaborate. \eqref{eq:cdf} allows us to limit the probability of small group sizes from forming.q 
+
+The continuity of the logistic function ensures that there is always a non-zero probability to collaborate even under noisy conditions. Estimates of the current group size, $\estg$ can be made without explicit communication. Using a combination of sensors and Bayesian inferencing techniques, an agent can estimate the number of other agents that should be at the same collaboration site. 
+
 
 \section{Experiment Setup}\label{sec:expsetup}
 We ran collaborative task completion experiments with the \emph{Droplet} swarm robot platform to validate results presented in the previous section. The experiment employs they robots' overhead RGB sensors to simulate a fire that is projected down onto the arena using a standard off-the-shelf projector. The goal of the experiment is to have the robots collaboratively put out these projected fires by congregating at the perimeter of the fire and turning on their blue LEDs together. The projected fires increase in size and intensity (indicated by changing color from the red to the yellow spectrum) with time.
