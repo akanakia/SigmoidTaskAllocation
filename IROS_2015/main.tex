@@ -83,7 +83,7 @@
 \newcommand{\xm}{x_{\hat{m}}}
 
 \begin{document}
-\title{Modeling Collaborative Swarming Behavior as a Global Game}
+\title{Modeling Multi-Robot Task Assignment as a Global Game}
 
 \author{\authorblockN{Anshul Kanakia and Nikolaus Correll}
 \authorblockA{College of Engineering and Applied Sciences\\
@@ -104,93 +104,44 @@ Email: behrouz.touri@colorado.edu}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
-We prove that agent level threshold strategies result in system level equilibrium for the task allocation problem in swarm robotics. While threshold policies have long been used by swarm roboticists to model task allocation and collaborative tasks, there has so far been no formal argument for using this strategy besides the fact their biological inspiration. We present a proof is derived from the theory of global games.
+We show that using an agent level threshold strategy for the task assignment problem in swarm robotics results in system level equilibrium for a certain class of collaborative tasks that have the property of \emph{concurrent benefit}. While threshold policies have long been used by swarm roboticists to model task assignment, the justification for their use has always been phenomenological in nature; drawing inspiration from threshold based task assignment models in biological systems such as ant colonies. We, instead, present a proof derived from the theory of global games to show that individual agent threshold response strategies for task assignment do indeed result in system-wide equilibrium (but not necessarily system-wide optimum), under certain conditions.
 \end{abstract}
 
 \IEEEpeerreviewmaketitle
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}\label{sec:intro}
-Collaborative tasks are an important set of scenarios often studied in the field of swarm robotics. Many of the tasks we envision teams of robots performing, such as object transport \cite{sugawara2012}, oil-spill containment \cite{beni2005swarm}, firefighting \cite{Krishnanand2006}, pattern recognition  \cite{beni1993swarm}, and cooperative surveillance, fall under this broad umbrella of collaborative tasks. While considerable work has been done in studying the specific details of particular tasks in the above list, the more general question of estimating a team size appropriate for the size of the task remains largely unanswered. It is generally assumed that a required team size is provided by a domain expert before a collaborative task is attempted by the robots. But, as is often the case with teams of humans attempting a collaborative task, this number not easy to guess, e.g., When trying to lift and move a heavy object, it is difficult to estimate how many people will be required. A number of factors such as the mass and dimensions of the object, and the length and complexity of the path (perhaps involving staircases) come into play when deciding this number. Therefore, there exist a range of team sizes that may accomplish this task to varying degrees of success.
+Collaborative tasks such as object transport \cite{Sugawara2012}, oil-spill containment \cite{Beni2005}, firefighting \cite{Krishnanand2006}, pattern recognition \cite{Beni1993}, and cooperative surveillance are often referenced as practical applications for swarm robotics. Multi-robot task assignment for such collaborative tasks forms a core area of research for swarm roboticists \cite{Gerkey2004}. Strategies for task allocation in a multi-agent system (MAS) vary from deterministic leader-follower coalition algorithms \cite{Chen2011} and more complex market-based approaches \cite{Amstutz2008,Vig2007} to simpler probabilistic algorithms for individually simplistic agents \cite{Dantu2012}. These probabilistic strategies are inspired from biological models of insect colonies and provide a phenomenological approach to solving the task assignment problem. While response threshold models have provided good agreement with observed behavior in insect colonies and have proved invaluable in engineering solutions to multi-robot collaboration problems, there has so far been no theoretical analysis of their benefit versus the other strategies mentioned above.
 
 \begin{figure*}[!ht]
 \centering\includegraphics[width=\textwidth]{../figures/dropletfire.png}
 \centering\caption{}\label{fig:dropletfire}
 \end{figure*}
 
-The goal of this paper is to propose and analyze a novel task-allocation algorithm for tasks that have the property of \emph{concurrent benefit}, extending our current approach to account for distributed team size estimation. We prove that using a threshold based task-allocation policy results in system level equilibrium using the concept of global games from the field of game theory. 
+The goal of this paper is to prove that a response threshold strategy for a broad class of task assignment problems seen in biological and artificial MASs results in unique system-wide equilibrium conditions such that no individual agent will receive a better utility by deviating from their strategy to act based on some threshold value-$k$. 
 
-Informally, concurrent benefit is as an attribute of a collaborative task wherein the exact number of agents required to successfully complete the task is unknown and varies over time due to numerous, complex physical parameters. Many collaborative tasks---particularly those seen in biological systems---exhibit the property of concurrent benefit ranging from distributed mapping, surveillance and coordinated defense of enclosed areas like termite mounds and honey bee hives to collective transport of heavy objects and even containment of oil spills and forest fires. The probability of success depends, non-linearly, on the average number of agents assigned to that task. For example, in a firefighting scenario (see Fig.~\ref{fig:dropletfire}), a single robot trying to contain a large fire will likely be unsuccessful on its own (and will waste fire retardant in trying) but a group of robots within a certain group size range may be able to contain the flames to a reasonable level of success. This measure of success is related non-linearly to the group size, i.e. where 5 or even 10 robots have a negligible effect on containing the fire, perhaps 12 or more very quickly become capable of succeeding in the task. It is for tasks with this common property that we propose our novel task-allocation algorithm.
+To prove this statement we employ a sub-class of Game Theory called \emph{global games}, first introduced by Carlsson and Van Damme in 1993 \cite{Carlsson1993}. Global games have been substantially generalized over the years to study and model different economical phenomena such as pricing debt, currency crisis, and bank runs, and we strongly believe they can be further applied to the analysis of task assignment in MASs. See \cite{Morris2000} and the references therein for more details on applications of global games.
 
-The rest of the paper is laid out as follows. The next section presents related work including our previous contribution to swarm robotics task allocation algorithms. Following that, section \ref{sec:model} re-introduces the sigmoid function based task allocation model proposed in \cite{Kanakia2014} and follows to extend this model to account for distributed team size estimation. Section \ref{sec:ggames} provides a brief introduction to the theory of global games and then formally defines the property of concurrent benefit tasks. We then use this definition to prove a theorem stating system level equilibrium conditions and further explain what an equilibrium condition means for a swarm robot system. These theoretical results are backed up by simulations and real robot experiments in section \ref{sec:exp}. Finally, the Discussion and Conclusion sections provide an analysis of the proposed method of task-allocation in a robotic swarm as well as avenues for further study while re-iterating the major contribution of this paper.
+Collaborative tasks for MASs can be formally defined as global games with the property of \emph{concurrent benefit}. Informally, concurrent benefit is an attribute of a collaborative task wherein the exact number of agents required to successfully complete the task is unknown and varies over time due to numerous, complex physical parameters. Many collaborative tasks---particularly those seen in biological systems---exhibit the property of concurrent benefit ranging from distributed mapping, surveillance and coordinated defense of enclosed areas like termite mounds and honey bee hives \cite{Breed1990} to collective transport of heavy objects and even containment of oil spills and forest fires. The probability of success depends, non-linearly, on the average number of agents assigned to that task. For example, in a firefighting scenario (see Fig.~\ref{fig:dropletfire}), a single robot trying to contain a large fire will likely be unsuccessful on its own (and will waste fire retardant in trying) but a group of robots within a certain group size range may be able to contain the flames to a reasonable level of success. This measure of success is related non-linearly to the group size, i.e. where 5 or even 10 robots have a negligible effect on containing the fire, perhaps 12 or more very quickly become capable of succeeding in the task. It is for tasks with this common property that we propose our novel task-assignment algorithm.
+
+The rest of the paper is laid out as follows. The next section presents related work in the field of multi-robot task assignment. Section \ref{sec:ggames} provides a brief introduction to the theory of global games and then formally defines the property of concurrent benefit tasks. We then use this definition to prove a theorem stating system level equilibrium conditions and further explain what an equilibrium condition means for a swarm robot system. Section \ref{sec:} Finally, the Discussion and Conclusion sections provide an analysis of the proposed method of task-assignment in a robotic swarm as well as avenues for further study while re-iterating the major contribution of this paper.
 
 \section{Related Work}\label{subsec:rw}
-We introduced sigmoid threshold based task allocation in an earlier paper \cite{Kanakia2014} and we extend upon this core algorithm here. Please refer to the related works section in the previous paper for more information on other swarm robot task-allocation algorithms.
+Recruitment of an exact number of robots to a particular task has been extensively studied using the ``Stick Pulling'' experiment \cite{Lerman2001,Martinoli2004}. The problem of distributing a swarm of robots across a discrete number of sites/tasks with a specific desired distribution has been studied in \cite{Berman2009,Correll2008}. The proposed algorithm extends upon the first group of work, and we show how the proposed stochastic task assignment algorithm reduces to the ones described in \cite{Lerman2001,Martinoli2004} when using appropriate parameters.  Mather \cite{Mather2010} instead presents a stochastic approach that is a hybrid between the work in \cite{Berman2009} and \cite{Martinoli2004}, allowing assignment to tasks requiring a varying number of robots.
+While a response threshold function can also be applied to the swarm distribution problem, this problem is complementary to the problem of recruiting teams of varying sizes addressed in this paper. 
 
-We also prove that using an agent based threshold policy for task allocation results in an equilibrium for the whole swarm system using the theory of global games, first introduced by Carlsson and Van Damme in 1993 \cite{Carlsson1993}. Global games have been substantially generalized to study and model different economical phenomena such as pricing debt, currency crisis, and bank runs. See \cite{Morris2000} and the references therein for more details. So far as we are aware, global games have never been used in the context of swarm robotics before and this is a novel approach to proving system-level equilibrium, i.e. no individual agent can perform better by deviating from a threshold based policy.
+We also prove that using an agent based threshold policy for task assignment results in an equilibrium for the whole swarm system using the theory of global games So far as we are aware, global games have never been used in the context of swarm robotics before and this is a novel approach to proving system-level equilibrium, i.e. no individual agent can perform better by deviating from a threshold based policy.
 
-\section{Sigmoid Function based Collaboration Policy Model}\label{sec:model}
-The task allocation algorithm seen in \cite{Kanakia2014} makes use of the logistic function with two tuning parameters, $\theta$ and $\tau$ that tune the slope and mean of the probability function governing an agent's willingness to collaborate on a task based on its estimate of the current group size at its collaborate site. We mentioned one of the drawbacks of this approach was that these two parameters had to be tuned by hand based on a domain expert's assessment of the task size at any given time. We now alleviate this problem by having the agents independently assess the situation and make estimates to the required group size, $\estt_i$, on their own, without the need for a centralized controller.
-
-\subsection{Group Size Estimation}\label{sec:gpsizeest}
-As a note to readers, this paper refers to ``group/team size estimation'' in two different but related contexts which requires some clarification. Our algorithm involves two separate estimation steps for an agent. 
-
-Firstly, an agent estimates how many other agents may be required to successfully complete a task presented before it. This estimate is made by sensing physical parameters at a collaboration site and independently deciding how many other agents may be required to complete the task at that site successfully. Returning to our fire containment scenario, a robot may travel to the perimeter of the fire and then use its heat sensors, camera and other provided data to generate an estimate of the number of other robots required to put out the fire. We call this first estimation step the \emph{required} group size estimate, $\estt_i$ for a robot-$i$.
-
-Secondly, once an agent is at a collaboration site, it estimates how many other agents share the same collaboration site using sensors, minimal communication and statistical inferencing techniques. This estimate, designated the \emph{observed} group size estimate, is labeled $\estg_i$ for robot-$i$.
-
-Together, both, the required and observed estimates are provided as inputs to the logistic function along with the slope parameter-$\theta$ which outputs an individual agent's probability to collaborate on a task as seen in \eqref{eq:sig}.
-
-\subsection{Sigmoid Threshold Function}\label{sec:sig}
-We are presented with a scenario where a swarm of robots must complete a collaborative task that requires $\geq \tau$ agents. A threshold function chosen for each agent to decide whether or not to attempt this task could be a step-function based on their estimate of the required group size-$\estt$, as well as their estimate, $\estg$, of the number of agents currently present at the collaboration site. In this case, the probability with which an agent-$i$ decides to collaborate is given by, 
-\begin{equation}\label{eq:step}
-	P_{yes}(\estt_i,\estg_i) = \left\{
-	\begin{array}{ll}
-		1 & : \estg_i >= \estt_i\\ 
-		0 & : \estg_i < \estt_i
-	\end{array}\right.
-\end{equation}
-
-The major drawback of using this method is it's rigidity to an individual agent's estimation errors. Let us assume, for the sake of argument, that agents independently make estimates-$\estt_i$ of the group size required to successfully complete a task. Let us also assume that these estimations come from noisy measurements of environmental parameters such that an independent agent estimate is picked from a normal distribution, $\estt_i = \mathcal{N}(x_i, \tau, \sigma)$, with mean equal to the actual required group size-$\tau$ and some standard deviation-$\sigma$ for a perceived sensor measurement-$x_i$. The agents do not share their independent estimates with each other. For simplicity, we assume all agents have perfect communication and can precisely count the number of other agents sharing the same collaboration site with them. Thus, all agents estimate $\estg_i$ perfectly.
-
-Under these conditions and using the step-function threshold policy from Eq.~\ref{eq:step}, when there are exactly $\tau$ agents at the collaboration site with perfect communication, we expect about half of them to collaborate as they underestimate the actual required group size $\estt_i < \tau$ while the other half will not collaborate as they overestimate the number of required robots, $\estt_j > \tau$. One can see that this is not the desired behavior as about half the required number of agents always attempt the task and fail.
-
-\begin{figure}[!ht]
-\centering\includegraphics[width=\columnwidth]{../figures/sigmoid1.png}
-\centering\caption{}\label{fig:sigmoid}
-\end{figure}
-
-A similar argument can be made in the case where agents have unreliable communication as well as noisy sensor measurements. We instead propose the use of a continuous, sigmoid threshold function for computing collaboration probability as seen in \eqref{eq:sig}.
-
-\begin{equation}\label{eq:sig}
-	\sig(\estg, \estt, \theta) = \frac{1}{1 + e^{\theta(\estt - \estg)}}
-\end{equation}
-
-Here, the term $\theta$ is referred to as the sigmoid slope parameter as it controls the slope of the curve at $\sig(\cdot) = 0.5$, as seen in Fig.~\ref{fig:sigmoid}. When $\theta = 0$, the sigmoid curve becomes the straight line $\sig(\estg, \estt, 0) = 0.5$ and as $\theta \to \infty$, \eqref{eq:sig} begins to resemble the step function seen in \eqref{eq:step}.
-
-\begin{equation}
-	\sig(\estg, \estt, \theta) =  \left\{
-	\begin{array}{ll}
-		0.5 & : \theta = 0\\ 
-		P_{yes}(\estt,\estg) & : \theta \to \infty
-	\end{array}\right.
-\end{equation}
-
-Since we care about the case when half or more of the agents ($n/2$) decide to collaborate, the probability $P(n)$ that half or more agents in a group of $n$ collaborate is the cumulative probability of the above PMF from $k = {n/2}$ to $k = n$. 
-\begin{equation}
-	P(n) = \sum\limits_{i={n/2}}^{n}\binom{n}{i}\sig(n)^{i}\left(1 - \sig(n)\right)^{n - i}\label{eq:cdf}
-\end{equation}
-This equation describes the probability with which a group of size $n$ at a given collaboration site will decide to successfully collaborate. \eqref{eq:cdf} allows us to limit the probability of small group sizes from forming.q 
-
-The continuity of the logistic function ensures that there is always a non-zero probability to collaborate even under noisy conditions. Estimates of the current group size, $\estg$ can be made without explicit communication. Using a combination of sensors and Bayesian inferencing techniques, an agent can estimate the number of other agents that should be at the same collaboration site.
-
-\section{System Level Equilibrium using Threshold Policy}\label{sec:ggames}
-\subsection{Global Games: A Brief Overview}\label{sec:ggoverview}
+\section{Global Games: A Brief Overview}\label{sec:ggoverview}
 Game theory is the study of strategic interactions among multiple agents or players, such as robots, people, firms, etc. where the decision of each party affects the payoff of the rest. A fundamentally important class of games is one with incomplete information where each agent's utility depends not only on the actions of the other agents but also on an underlying fundamental signal that cannot be accurately ordained by the agents. Returning to our previous example of firefighting, this fundamental signal is the difficulty of the task of putting out the fire. The size and intensity of the fire, along with environmental and other site-specific factors all play a major role in determining whether an agent should begin the task or wait for more help to arrive. 
 
 This class of global games with incomplete information was originally introduced in \cite{Carlsson1993} where two players are playing a game and the utility of the two players depends on an underlying fundamental signal-$\tau$ but each agent observes a noisy variation of this signal, $\estt_i$. Note that noisy variation in $\tau$ is not a result of inaccuracy in sensor measurements but represents a culmination of underlying unknown factors of the scenario. We discuss how sensor noise, from agents measuring the fundamental signal, can be modeled in the following section.
 
-\subsection{Concurrent Benefit Task with Incomplete Information}\label{sec:conbenefit}
+\section{Situating Global Game Theory in a Multi-Agent System Setting}\label{sec:ggmas}
+
+
+
+\section{Concurrent Benefit Task with Incomplete Information}\label{sec:conbenefit}
 In this section, we mathematically define a concurrent benefit task which is central to our study. Consider a set of $n$ robots and suppose that each robot has an action set $A_i=\{0,1\}$ where $0$ represents ``not participating'' in the task and $1$ represents ``participating'' in the task.  Another object which plays an important role in our formalism is the \textit{easiness} parameter $\tau$ of the given task. We let $\tau$ be an (often random) real number which simply represents how easy/hard a task is and we further assume that it belongs to an interval $E=[c,d]$ in $\R$.  Finally, we let $u_i:A_1\times\Z^+\times \R\to \R$ be the utility of the $i^{\text{th}}$ robot, where $u_i(a_i,g,\tau)$ is the utility of the $i^{\text{th}}$ robot when $g$ other robots have decided to participate in the task and $\tau$ is the easiness parameter of the task\footnote{In general, the utility of each robot depends on the joint actions of the rest of the robots. However, here we assume that the utility depends only on the number of robots participating in the activity. The following discussions can be substantially generalized to a more general setting but this form of utility serves the purpose of this study.}. 
 
 \begin{figure}[!htb]
@@ -212,7 +163,7 @@ An example of a utility function that would satisfy such conditions is a functio
 
 The main challenge in devising strategies in performing a concurrent benefit task is that the knowledge of the easiness parameter is not easily accessible to the robots. For example consider the firefighting task described above. In this task, how easy/hard the task is not exactly clear for each robot. Rather, each robot, with the help of the sensors on board, has some knowledge of this factor. We model this imperfect knowledge by assuming that robot $i$ observes $x_i=\tau+\nu \eta_i$ where $\eta_i$ is a continuous random variable with finite support and $\nu\geq 0$ is a parameter of the system. 
 
-\subsection{Theorem and Proof}\label{sec:thmproof}
+\section{Theorem and Proof}\label{sec:thmproof}
 Given the above scenario, we say that $s_i:\R\to \{0,1\}$ is a pure strategy if  $s_i$ maps any private measurement $x_i$ to an action in $\{0,1\}$. We say that $s_i$ is a threshold strategy if there exists some $\tau$ such that $s_i(x_i)=1$ for $x_i\geq \tau$ and $s_i(x_i)=0$ if $x_i<\tau$. In other words, $s_i$ prescribes taking part in the task if the private information is small and prescribes not taking part in the activity if the private measurement is large. 
 
 \begin{theorem}
@@ -222,16 +173,6 @@ Let task $T$ be a task satisfying the above conditions and suppose that the easi
 \begin{proof}
 \textbf{To be done by Behrouz\ldots}
 \end{proof}
-
-
-
-
-\section{Simulation and Robot Experiments}\label{sec:exp}
-\subsection{Experiment Setup}\label{sec:expsetup}
-We ran collaborative task completion experiments with the \emph{Droplet} swarm robot platform to validate results presented in the previous section. The experiment employs they robots' overhead RGB sensors to simulate a fire that is projected down onto the arena using a standard off-the-shelf projector. The goal of the experiment is to have the robots collaboratively put out these projected fires by congregating at the perimeter of the fire and turning on their blue LEDs together. The projected fires increase in size and intensity (indicated by changing color from the red to the yellow spectrum) with time.
-
-\subsection{Experimental Results}\label{sec:expresults}
-
 
 
 
@@ -248,5 +189,6 @@ We ran collaborative task completion experiments with the \emph{Droplet} swarm r
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%   The Bibliography, if any   %%%%%%%%%
 \bibliographystyle{IEEEtran}		% or "siam", or "alpha", etc.
+\nocite{*}
 \bibliography{../refworks}
 \end{document}
