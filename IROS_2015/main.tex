@@ -153,27 +153,31 @@ In this section, we mathematically define a concurrent benefit task which is cen
 
 We define a task $T$ to be a \textit{concurrent benefit task} if: 
 \begin{enumerate}[a.]
-	\item $u_i(1,g,\tau)\geq u_i(0,g,\tau)$ for all $g\in[n-1]:=\{0,1,\ldots,n-1\}$ and $\tau \in E$. 
-	\item $u_i(a_i,g,\tau)$ is an increasing and continuous function of $\tau$ for any $a_i$ and $g$. 
-	\item $u_i(1,g,\tau)-u_i(0,g,\tau)\geq u_i(1,g',\tau)-u_i(0,g',\tau)$ for any $g\geq g'$ in $[n-1]$ and any $\tau\in E$. In other words, the more the number of the rest of the robots participating in the task, the more beneficial would be taking part in the activity.
-	\item For any $g$ and any $\tau\geq \tau'$, we have $u_i(1,g,\tau)-u_i(0,g,\tau)\geq \lambda (\tau-\tau')$. 
+	\item $u_i(a_i,g,\tau)$ is a non-decreasing and continuous function of $\tau$ for any $a_i\in A_i$ and $g$. 
 	\item For extreme easiness factors, taking part in the activity has unique trivial equilibrium, i.e. there exists $\underline{\tau},\bar{\tau}\in (c,d)$ with $\underline{\tau}\leq \bar{\tau}$ such that for any $\tau\geq \bar{\tau}$, the only equilibrium of the game is $(1,1,\ldots,1)$ and for $\tau\leq \underline{\tau}$, the only equilibrium of the game is $(0,0,\ldots,0)$.
 \end{enumerate}
 
 Note that in order to have such a task, we need the above conditions to hold for all the robots, i.e. for all $i\in\{1,\ldots,n\}$.
-An example of a utility function that would satisfy such conditions is a function $u_i(a_i,g,\tau)=a_i(\beta_is+\gamma_i\tau)$ with $\beta_i,\gamma_i\geq 0$, and $c<0$.
+An example of a utility function that would satisfy such conditions is a function $u_i(a_i,g,\tau)=a_i(1-e^{-(g+1)}+\tau)$.
 
-The main challenge in devising strategies in performing a concurrent benefit task is that the knowledge of the easiness parameter is not easily accessible to the robots. For example consider the firefighting task described above. In this task, how easy/hard the task is not exactly clear for each robot. Rather, each robot, with the help of the sensors on board, has some knowledge of this factor. We model this imperfect knowledge by assuming that robot $i$ observes $x_i=\tau+\nu \eta_i$ where $\eta_i$ is a continuous random variable with finite support and $\nu\geq 0$ is a parameter of the system. 
+The main challenge in devising strategies in performing a concurrent benefit task is that the knowledge of the easiness parameter is not easily accessible to the robots. For example consider the firefighting scenario described above. In this task, how easy/hard the task is not exactly clear for each robot and they only have access noisy knowledge of the easiness factor $\tau$ through their on-board sensors and their local measurements.  We model this imperfect knowledge by assuming that robot $i$ observes $x_i=\tau+\eta_i$ where $\eta_i$ is a Gaussian $\mathcal{N}(0,\sigma_i^2)$ random variable. Now, the main questions is that given a robot's private measurement $x_i$, what is a \textit{sensible strategy} to follow. 
 
-\section{Theorem and Proof}\label{sec:thmproof}
-Given the above scenario, we say that $s_i:\R\to \{0,1\}$ is a pure strategy if  $s_i$ maps any private measurement $x_i$ to an action in $\{0,1\}$. We say that $s_i$ is a threshold strategy if there exists some $\tau$ such that $s_i(x_i)=1$ for $x_i\geq \tau$ and $s_i(x_i)=0$ if $x_i<\tau$. In other words, $s_i$ prescribes taking part in the task if the private information is small and prescribes not taking part in the activity if the private measurement is large. 
+To define what a \textit{sensible strategy} is, let us first define what we mean by a \textit{strategy}. We call a function that maps measurements (observations) to actions $A_i$ a strategy. Mathematically, a strategy $s_i$ for the $i$th robot is a (measurable) function $s_i:\R\to A_i$. Indeed a strategy $s_i$ prescribes what action the $i$th robot should take given its own measurement $x_i$. Now, consider a set of robots with strategies $s_1,\ldots,s_n$. Let us define the strategies of the robots except the $i$th robot to be the vector $s^{-i}=(s_1,\ldots,s_{i-1},s_{i+1},\ldots,s_n)$. For the $i$th robot, we define the best-response $BR(s^{-i})$ (to the strategies of the other robots) to be a strategy $\tilde{s}$ that for any $x\in \R$: 
+\begin{align}\label{eqn:BR}
+BR(s^{-i})(x)&=\tilde{s}(x)=\argmax_{a_i\in A_i} E(u_i(a_i,g,\tau)\mid x_i=x)\cr 
+&=\argmax_{a_i\in A_i} E(u_i(a_i,\sum_{j\not=i}s_j(x_j),\tau)\mid x_i=x)
+\end{align}
+Note that given $x_i$ and the strategies of the other robots $s^{-i}=(s_1,s_2,\ldots,s_{i-1},s_{i+1},\ldots,s_n)$, $\tau$, and $s_j(x_j)$ will be a random variable. In other words, given the $i$th robot's observation $x_i$, the observation of the other robots and hence, their actions would be still random as the observations of different robots are independent. We say that a strategy $s_i$ is a threshold strategy if $s_i(x)=\text{step}(x-t_i)$ where $\text{step}(x)$ is the step function which is $1$ for $c\geq 0$ and $0$ for $c<0$.
+
+
+\section{Theorem and Proof}
+Now, we are ready to define what we mean by a \textit{sensible strategy}. We say that a strategy profile $s=(s_1,\ldots,s_n)$ is a Bayesian Nash Equilibrium if $s_i=BR(s^{-i})$ for all $i\in \{1,\ldots,n\}$. In other words, with the current strategies of the $n$ robots, no robots has the incentive to deviate from its current strategy.
 
 \begin{theorem}
-Let task $T$ be a task satisfying the above conditions and suppose that the easiness factor $\tau$ is uniformly distributed over $E$. Then, for sufficiently small $\nu>0$, there exists a unique joint strategy $s^*=(s_1^*,s_2^*,\ldots,s_n^*)$ that survives iterative strict dominance. Moreover, the strategy $s^*$ is a threshold equilibrium, i.e.\ each $s_i^*$ is a threshold strategy.
+Let task $T$ be a concurrent benefit task. Suppose that the easiness parameter $\tau$ is a continuous random variable over $\R$ (or a closed and connected subset of $\R$). Also, suppose that $x_i=\tau+\eta_i$ where $\eta_1,\ldots,\eta_n$ are independent Gaussian random variables. Then, there exists a strategy profile $s=(s_1,\ldots,s_n)$ of threshold policies that is a Bayesian Nash Equilibrium. 
 \end{theorem}
-
 \begin{proof}
-\textbf{To be done by Behrouz\ldots}
+First, we show that the best-response to a threshold strategy $s$ profile is a threshold strategy profile $\tilde{s}$. To see this, note that if for some observation $x_i=x$, $BR(s^{-i})(x)=1$, then since $u_i$ is a non-decreasing function of $\tau$ and also, the fact that all other agents are using the same strategy profile, then it follows that $BR(s^{-i})(y)=1$ for $y\geq x$. The same argument holds for an $x$ with $BR(s^{-i})(x)=0$ which implies that $BR(s^{-i})(y)=0$ for $y\leq x$. Therefore, $BR(s^{-i})$  is a threshold policy. Now, consider threshold strategies $s_1,\ldots,s_n$ with thresholds $t_1,t_2,\ldots,t_n$ and let the best response to these strategies have thresholds $\tilde{t}_1,\ldots,\tilde{t}_n$, respectively. If $t_i$ is sufficiently large, then the second property of the concurrent benefit tasks implies that the $\tilde{t}_i\leq t_i$ because large enough measurement $x_i$ implies that agent $i$ himself should take part in the task. Similarly, for sufficiently low threshold $t_i$, we will have $\tilde{t}_i\geq t_i$. Therefore, the best response function would map the set of thresholds in a big enough (convex) box to itself and hence, by the Brouwer's fix point theorem, we have that there exists a threshold strategy $s^*$ that will map to itself through the best response mapping which happens if and only if $s^*$ is a Bayesian Nash equilibrium. 
 \end{proof}
 
 
