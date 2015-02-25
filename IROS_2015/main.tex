@@ -104,7 +104,7 @@ Email: behrouz.touri@colorado.edu}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
-We show that using an agent level threshold strategy for the task assignment problem in swarm robotics results in system level equilibrium for a certain class of collaborative tasks that have the property of \emph{concurrent benefit}. While threshold policies have long been used by swarm roboticists to model task assignment, the justification for their use has always been phenomenological in nature; drawing inspiration from threshold based task assignment models in biological systems such as ant colonies. We, instead, present a proof derived from the theory of global games to show that individual agent threshold response strategies for task assignment do indeed result in system-wide equilibrium (but not necessarily system-wide optimum), under certain conditions.
+We show that using an agent level threshold strategy for the task assignment problem in swarm robotics results in system level equilibrium for a certain class of collaborative tasks that have the property of \emph{concurrent benefit}. While threshold policies have long been used by swarm roboticists to model task assignment, the justification for their use has always been phenomenological in nature; drawing inspiration from threshold based task assignment models in biological systems such as ant colonies. We present a proof derived from the theory of global games to show that individual agent threshold response strategies for task assignment do indeed result in system-wide equilibrium (but not necessarily system-wide optimum), under certain conditions.
 \end{abstract}
 
 \IEEEpeerreviewmaketitle
@@ -113,24 +113,26 @@ We show that using an agent level threshold strategy for the task assignment pro
 \section{Introduction}\label{sec:intro}
 Collaborative tasks such as object transport \cite{Sugawara2012}, oil-spill containment \cite{Beni2005}, firefighting \cite{Krishnanand2006}, pattern recognition \cite{Beni1993}, and cooperative surveillance are often referenced as practical applications for swarm robotics. Multi-robot task assignment for such collaborative tasks forms a core area of research for swarm roboticists \cite{Gerkey2004}. Strategies for task allocation in a multi-agent system (MAS) vary from deterministic leader-follower coalition algorithms \cite{Chen2011} and more complex market-based approaches \cite{Amstutz2008,Vig2007} to simpler probabilistic algorithms for individually simplistic agents \cite{Dantu2012}. These probabilistic strategies are inspired from biological models of insect colonies and provide a phenomenological approach to solving the task assignment problem. While response threshold models have provided good agreement with observed behavior in insect colonies and have proved invaluable in engineering solutions to multi-robot collaboration problems, there has so far been no theoretical analysis of their benefit versus the other strategies mentioned above.
 
-\begin{figure*}[!ht]
-\centering\includegraphics[width=\textwidth]{../figures/dropletfire.png}
-\centering\caption{}\label{fig:dropletfire}
-\end{figure*}
-
 The goal of this paper is to prove that a response threshold strategy for a broad class of task assignment problems seen in biological and artificial MASs results in unique system-wide equilibrium conditions such that no individual agent will receive a better utility by deviating from their strategy to act based on some threshold value-$k$. 
 
 To prove this statement we employ a sub-class of Game Theory called \emph{global games}, first introduced by Carlsson and Van Damme in 1993 \cite{Carlsson1993}. Global games have been substantially generalized over the years to study and model different economical phenomena such as pricing debt, currency crisis, and bank runs, and we strongly believe they can be further applied to the analysis of task assignment in MASs. See \cite{Morris2000} and the references therein for more details on applications of global games.
 
-Collaborative tasks for MASs can be formally defined as global games with the property of \emph{concurrent benefit}. Informally, concurrent benefit is an attribute of a collaborative task wherein the exact number of agents required to successfully complete the task is unknown and varies over time due to numerous, complex physical parameters. Many collaborative tasks---particularly those seen in biological systems---exhibit the property of concurrent benefit ranging from distributed mapping, surveillance and coordinated defense of enclosed areas like termite mounds and honey bee hives \cite{Breed1990} to collective transport of heavy objects and even containment of oil spills and forest fires. The probability of success depends, non-linearly, on the average number of agents assigned to that task. For example, in a firefighting scenario (see Fig.~\ref{fig:dropletfire}), a single robot trying to contain a large fire will likely be unsuccessful on its own (and will waste fire retardant in trying) but a group of robots within a certain group size range may be able to contain the flames to a reasonable level of success. This measure of success is related non-linearly to the group size, i.e. where 5 or even 10 robots have a negligible effect on containing the fire, perhaps 12 or more very quickly become capable of succeeding in the task. It is for tasks with this common property that we propose our novel task-assignment algorithm.
+Collaborative tasks for MASs can be formally defined as global games with the property of \emph{concurrent benefit}. Informally, concurrent benefit is an attribute of a collaborative task wherein the exact number of agents required to successfully complete the task is unknown and varies over time due to numerous, complex physical parameters. Many collaborative tasks---particularly those seen in biological systems---exhibit the property of concurrent benefit ranging from distributed mapping, surveillance and coordinated defense of enclosed areas like termite mounds and honey bee hives \cite{Breed1990} to collective transport of heavy objects and even containment of oil spills and forest fires. The probability of success depends, non-linearly, on the average number of agents assigned to that task. For example, 5-10 ants may be insufficient to lift a heavy object such as a small rock or twig and will waste a considerable amount of energy and time in trying but 12 or more ants can accomplish the task successfully. The proof presented in this paper relates to this aforementioned class of collaborative tasks.
 
-The rest of the paper is laid out as follows. The next section presents related work in the field of multi-robot task assignment. Section \ref{sec:ggames} provides a brief introduction to the theory of global games and then formally defines the property of concurrent benefit tasks. We then use this definition to prove a theorem stating system level equilibrium conditions and further explain what an equilibrium condition means for a swarm robot system. Section \ref{sec:} Finally, the Discussion and Conclusion sections provide an analysis of the proposed method of task-assignment in a robotic swarm as well as avenues for further study while re-iterating the major contribution of this paper.
+The rest of the paper is laid out as follows. The next section presents related work in the field of multi-robot task assignment. Section \ref{sec:ggoverview} provides a brief introduction to the theory of global games and then formally defines the property of concurrent benefit tasks. We proceed to situate this game theory nomenclature into the swarm robotics task-assignment problem using a illustrative example. Section \ref{sec:thmproof} presents the theorem stating system level equilibrium conditions and its complementary proof. It further explains what an equilibrium condition means for a swarm robot system. Finally, the Discussion and Conclusion sections provide an analysis of the existing proposed methods of task-assignment in a robotic swarm as well as avenues for further study while re-iterating the major contribution of this paper.
 
 \section{Related Work}\label{subsec:rw}
-Recruitment of an exact number of robots to a particular task has been extensively studied using the ``Stick Pulling'' experiment \cite{Lerman2001,Martinoli2004}. The problem of distributing a swarm of robots across a discrete number of sites/tasks with a specific desired distribution has been studied in \cite{Berman2009,Correll2008}. The proposed algorithm extends upon the first group of work, and we show how the proposed stochastic task assignment algorithm reduces to the ones described in \cite{Lerman2001,Martinoli2004} when using appropriate parameters.  Mather \cite{Mather2010} instead presents a stochastic approach that is a hybrid between the work in \cite{Berman2009} and \cite{Martinoli2004}, allowing assignment to tasks requiring a varying number of robots.
-While a response threshold function can also be applied to the swarm distribution problem, this problem is complementary to the problem of recruiting teams of varying sizes addressed in this paper. 
+\textbf{To be completed\ldots}
 
-We also prove that using an agent based threshold policy for task assignment results in an equilibrium for the whole swarm system using the theory of global games So far as we are aware, global games have never been used in the context of swarm robotics before and this is a novel approach to proving system-level equilibrium, i.e. no individual agent can perform better by deviating from a threshold based policy.
+A response threshold model for dynamic task-allocation using sigmoid functions\cite{Nouyan2002, Bonabeau1996, Bonabeau1997}. Modification of sigmoid function to logistic function to better expose mean and variance of response threshold seen in \cite{Kanakia2014}.
+
+Recruitment of an exact number of robots to a particular task has been extensively studied using the ``Stick Pulling'' experiment \cite{Lerman2001,Martinoli2004}. 
+
+The problem of distributing a swarm of robots across a discrete number of sites/tasks with a specific desired distribution has been studied in \cite{Berman2009,Correll2008}. 
+
+Mather \cite{Mather2010} instead presents a stochastic approach that is a hybrid between the work in \cite{Berman2009} and \cite{Martinoli2004}, allowing assignment to tasks requiring a varying number of robots.
+
+So far as we are aware, global games have never been used in the context of swarm robotics before and this is a novel approach to proving system-level equilibrium, i.e. no individual agent can perform better by deviating from a threshold based policy.
 
 \section{Global Games: A Brief Overview}\label{sec:ggoverview}
 Game theory is the study of strategic interactions among multiple agents or players, such as robots, people, firms, etc. where the decision of each party affects the payoff of the rest. A fundamentally important class of games is one with incomplete information where each agent's utility depends not only on the actions of the other agents but also on an underlying fundamental signal that cannot be accurately ordained by the agents. Returning to our previous example of firefighting, this fundamental signal is the difficulty of the task of putting out the fire. The size and intensity of the fire, along with environmental and other site-specific factors all play a major role in determining whether an agent should begin the task or wait for more help to arrive. 
@@ -138,7 +140,7 @@ Game theory is the study of strategic interactions among multiple agents or play
 This class of global games with incomplete information was originally introduced in \cite{Carlsson1993} where two players are playing a game and the utility of the two players depends on an underlying fundamental signal-$\tau$ but each agent observes a noisy variation of this signal, $\estt_i$. Note that noisy variation in $\tau$ is not a result of inaccuracy in sensor measurements but represents a culmination of underlying unknown factors of the scenario. We discuss how sensor noise, from agents measuring the fundamental signal, can be modeled in the following section.
 
 \section{Situating Global Game Theory in a Multi-Agent System Setting}\label{sec:ggmas}
-
+\textbf{To be completed\ldots}
 
 
 \section{Concurrent Benefit Task with Incomplete Information}\label{sec:conbenefit}
@@ -177,12 +179,12 @@ Let task $T$ be a task satisfying the above conditions and suppose that the easi
 
 
 \section{Discussion}\label{sec:disc}
-
+\textbf{To be completed\ldots}
 
 
 
 \section{Conclusion}\label{sec:conc}
-
+\textbf{To be completed\ldots}
 
 
 
