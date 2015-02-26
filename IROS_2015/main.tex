@@ -43,6 +43,7 @@
 \usepackage{subcaption}
 \usepackage[table]{xcolor}
 
+
 % Packages for drawing graphs, FSMs, etc.
 \usepackage{pgf}
 \usepackage{tikz}
@@ -165,7 +166,7 @@ Note that given $x_i$ and the strategies of the other robots $s^{-i}=(s_1,s_2,\l
 
 Now, we are ready to define what we mean by a \textit{sensible strategy}. We say that a strategy profile $s=(s_1,\ldots,s_n)$ is a Bayesian Nash Equilibrium if $s_i=BR(s^{-i})$ for all $i\in \{1,\ldots,n\}$. In other words, with the current strategies of the $n$ robots, no robots has the incentive to deviate from its current strategy.
 
-\section{Theorem and Proof}\label{sec:thmproof}
+\subsection{Theorem and Proof}\label{sec:thmproof}
 \begin{theorem}
 Let task $T$ be a concurrent benefit task. Suppose that the difficulty parameter $\tau$ is a continuous random variable over $\R$ (or a closed and connected subset of $\R$). Also, suppose that $x_i=\tau+\eta_i$ where $\eta_1,\ldots,\eta_n$ are independent Gaussian random variables. Then, there exists a strategy profile $s=(s_1,\ldots,s_n)$ of threshold policies that is a Bayesian Nash Equilibrium.
 \end{theorem}
@@ -188,6 +189,6 @@ First, we show that the best-response to a threshold strategy $s$ profile is a t
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%   The Bibliography, if any   %%%%%%%%%
 \bibliographystyle{IEEEtran}		% or "siam", or "alpha", etc.
-\nocite{*}
+%\nocite{*}
 \bibliography{../refworks}
 \end{document}
