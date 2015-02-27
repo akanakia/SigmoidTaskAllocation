@@ -130,22 +130,24 @@ All of the aforementioned work uses continuous sigmoid response-threshold functi
 This review of research on multi-agent task-assignment draws a very clear picture of its evolution from a behavioral model for insect colonies, developed by integrative biologists, to an inspired algorithmic model for adaptive, multi-agent systems \cite{Krieger2000}. While biologists have provided ample empirical evidence to the success of the response-threshold model in predicting and matching observed swarm behavior for task-allocation, there has been no formal argument as to why natural systems gravitate towards this approach compared to previously mentioned task-assignment strategies such as leader-follower algorithms \cite{Chen2011} or market-based approaches \cite{Amstutz2008,Vig2007}. We do not provide comparisons between these approaches here; see \cite{Kalra2006} for a comparative study. Our aim is to show for the first time---using an existing proof from game theory\cite{Carlsson1993}---that agent-level threshold response policies drive a swarm system to some notion of equilibrium, which is why they are an obvious choice for modeling natural systems and engineering artificial ones.
 
 \section{Global Games: A Brief Overview}\label{sec:ggoverview}
-Game theory is the study of strategic interactions among multiple agents or players, such as robots, people, firms, etc. where the decision of each party affects the payoff of the rest. A fundamentally important class of games is one with incomplete or imperfect information where each agent's utility depends not only on the actions of the other agents but also on an underlying fundamental signal that cannot be accurately ordained by the agents. Returning to our previous example of firefighting, this fundamental signal is the \emph{magnitude} of the task of putting out the fire. The size and intensity of the fire, along with environmental and other site-specific factors all play a major role in determining whether an agent should begin the task or wait for more help to arrive. 
+Game theory is the study of strategic interactions among multiple agents or players, such as robots, people, firms, etc. where the decision of each party affects the payoff of the rest. A fundamentally important class of games is one with incomplete or imperfect information where each agent's utility depends not only on the actions of the other agents but also on an underlying fundamental signal that cannot be accurately ordained by the agents. The class of global games with incomplete information was originally introduced in \cite{Carlsson1993} where two players are playing a game and the utility of the two players depends on an underlying fundamental signal-$\tau$ but each agent observes a noisy variation of this signal, $x_i$. Returning to our previous example of firefighting, this fundamental signal-$\tau$ is the \emph{magnitude} of the task of putting out the fire. The size and intensity of the fire, along with environmental and other site-specific factors all play a major role in determining whether an agent should begin the task or wait for more help to arrive.
 
-The class of global games with incomplete information was originally introduced in \cite{Carlsson1993} where two players are playing a game and the utility of the two players depends on an underlying fundamental signal-$\tau$ but each agent observes a noisy variation of this signal, $x_i$. 
+While we use the term \emph{magnitude} to describe $\tau$, it is in reality a simplified representation of a more abstract quality of any task. All tasks demand completion and the act of completion requires resources, be it time and/or energy of some form. In swarms of minimalist agents with limited capabilities, the resource required to collaboratively complete a task is invariably quantized into the number of agents attempting to complete that task. In bee hives and ant colonies the drive to complete a task is regulated by hormone levels. The concentration of hormones represents how difficult a task is, which indirectly maps to how many agents will be required to complete that task. In engineered swarm systems, more direct measurements of the environment through the use of on-board sensors allow a robot to independently estimate $\tau$, however imperfectly. In either case, $\tau$ is an inherent \emph{truth} about the task that can never be discerned accurately but is always indirectly estimated by all agents. It is important to highlight that agents never share their independent estimates of $\tau$ with each other in our proposed formulation of the task-assignment problem. While this may seem like a weakness in our argument, most of the research cited in our previous Related Works section mentions limited to no communication requirements for response-threshold based task-allocation as a major advantage of this approach versus other methods since even limited information propagation through a $>1000$ agent system quickly becomes the bottleneck for any distributed swarm algorithm.
 
-\begin{table}[!h]
-\centering\begin{tabular}{ r|c|c| }
-\multicolumn{1}{r}{}
- & \multicolumn{1}{c}{safe  }
- & \multicolumn{1}{c}{unsafe} \\
-\cline{2-3}
-safe & $0, 0$ & $0, \tau - 1$ \\
-\cline{2-3}
-unsafe & $\tau - 1, 0$ & $\tau, \tau$ \\
-\cline{2-3}
-\end{tabular}
-\end{table}
+
+
+%\begin{table}[!h]
+%\centering\begin{tabular}{ r|c|c| }
+%\multicolumn{1}{r}{}
+% & \multicolumn{1}{c}{safe  }
+% & \multicolumn{1}{c}{unsafe} \\
+%\cline{2-3}
+%safe & $0, 0$ & $0, \tau - 1$ \\
+%\cline{2-3}
+%unsafe & $\tau - 1, 0$ & $\tau, \tau$ \\
+%\cline{2-3}
+%\end{tabular}
+%\end{table}
 
 
 
@@ -189,9 +191,17 @@ First, we show that the best-response to a threshold strategy $s$ profile is a t
 
 
 \section{Discussion}\label{sec:disc}
-\textbf{To be completed\ldots}
+1. The proof uses a step-function as the threshold function. In biological insect colony models and some swarm task-allocation models (including our own) we use continuous threshold functions (like sigmoid). I would like to address this in the Discussion section and bridge the gap between step-functions and sigmoid functions by saying that a step-function is just an extreme case of a continuous sigmoid function as it's slope goes to infinity. Do you see this causing any logical issue with your proof? I can see that this makes the analysis of the pure-thershold strategy $s_i$ more difficult. Can we somehow fold in continuous threshold functions into the global games setting, as part of the proof?
 
+There is a story there, we can tell that we are considering the ideal case where each agent knows how many other agents are in the field as well as information sharing. Then we can say, this is the prescription for the ideal case, for the non-ideal scenario of not knowing how many agents are in the field and also information sharing, sigmoid function is an engineering solution. Perhaps you wanna discuss it as future direction. 
 
+2. I will talk about the restriction of no information sharing between agents in the Discussion section as well. There has been some work done in analysing global games with sharing of information between agents, right? I'd like to reference that work if possible as an avenue for future research.
+
+Regarding information sharing, there is one work of mine and Jeff which is on this topic \cite{Touri2014}.
+
+3. Coming back to the discussion of "system equilibrium" vs. "system optimum". Can we say anything about an optimal task-allocation strategy in this paper? I'd like to draw a clear separation between these two concepts in the discussion section as well. 
+
+This is definitely very interesting but it is hard to say anything mathematically. The system optimum is something that one should define. One definition would be the optimal task allocation once a central agent knows all the information (sensor measurements, number of agents,…) in the system. It’s performance would be definitely much better than none central allocation and this setting of global games where the information is shared globally. 
 
 \section{Conclusion}\label{sec:conc}
 We have formulated robotic task allocation in the context of game theory, and showed how a common class of tasks can be reduced to a global game. Using this framework, we have shown that a threshold-based policy, which is commonly observed in social insects and successfully used in swarm robotics, can indeed be considered an optimal policy if the robots cannot communicate. 
