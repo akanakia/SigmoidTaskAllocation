@@ -179,10 +179,10 @@ To define what a \textit{sensible strategy} is, let us first define what we mean
 
 
 For the $i$th robot, we define the best-response $BR(s^{-i})$ (to the strategies of the other robots) to be a strategy $\tilde{s}$ that for any $x\in \R$: 
-\begin{align*}\label{eqn:BR}
+\begin{align}\label{eqn:BR}
 BR(s^{-i})(x)&=\tilde{s}(x)=\argmax_{a_i\in A_i} E(u_i(a_i,g,\tau)\mid x_i=x)\cr 
 &=\argmax_{a_i\in A_i} E(u_i(a_i,\sum_{j\not=i}s_j(x_j),\tau)\mid x_i=x),
-\end{align*}
+\end{align}
 where $E(\cdot \mid x_i)$ is the conditional probability of $u_i$ given the $i$th agent's observation. Note that given $x_i$ and the strategies of the other robots $s^{-i}=(s_1,s_2,\ldots,s_{i-1},s_{i+1},\ldots,s_n)$, $\tau$, and $s_j(x_j)$ will be a random variable. In other words, given the $i$th robot's observation $x_i$, the observation of the other robots and hence, their actions would be random from the $i$th robot perspective.
 
 
@@ -201,12 +201,12 @@ Let $s=(s_1,\ldots,s_n)$ is a strategy profile consisting of threshold strategie
 \end{lemma}
 \begin{proof}
 We first show that if for some observation $x_i=x$, we have $BR(s^{-i})(x)=\tilde{s}_i(x)=1$, then $\tilde{s}_i(y)=1$ for $y\geq x$. To show this,  we note that $P(x_j\geq \tau_j\mid x_i=x)$ is an increasing function of $x$ as $x_j-x_i$ is a normally distributed random variable. Therefore, using the monotone property of concurrent tasks and the fact that $x_i=\tau+\eta_i$, we conclude that 
-\begin{align*}
+\begin{align}
 &E(u_i(1,\sum_{j\not=i}s_j(x_j),\tau)\mid x_i=y)\cr 
 &\qquad-E(u_i(0,\sum_{j\not=i}s_j(x_j),\tau)\mid x_i=y)\cr 
 &>E(u_i(1,\sum_{j\not=i}s_j(x_j),\tau)\mid x_i=x)\cr
-&\qquad-E(u_i(1,\sum_{j\not=i}s_j(x_j),\tau)\mid x_i=x)\geq 0.
-\end{align*}
+&\qquad-E(u_i(0,\sum_{j\not=i}s_j(x_j),\tau)\mid x_i=x)\geq 0.
+\end{align}
 Therefore $\tilde{s}_i(y)=1$. Similarly, if for some value of $x$, we have $\tilde{s}_i(x)=0$, then it follows that $\tilde{s}_i(y)=0$ for $y\leq x$. Therefore, $\tilde{s}_i$ would be a threshold policy.  
 \end{proof}
 
@@ -216,15 +216,15 @@ The mapping $L$ described above is a continuous mapping.
 \end{lemma}
 \begin{proof}
 Let $x^{(-i)}=(x_1,\ldots,x_{i-1},x_{i+1},\ldots,x_n)$ be the vector of observations of $n-1$ robots except the $i$th robot. Note that the vector $(x^{-i},\tau)$ given $x_i=x$ is a normally distributed random vector which we denote its distribution by $f_{x}(x^{-i},\tau)$. Now, let $\{\alpha(k)\}$ be a sequence in $\R^n$ that is converging to $\alpha\in\R^n$. Let $\{\beta(k)\}$ be the sequence of thresholds corresponding to best-response strategy of a strategy with threshold vector $\alpha(k)$. Let $s$ be the threshold strategy corresponding to the threshold vector $\alpha$ and let $\alpha^*$ be the threshold policy corresponding to the $BR(\alpha)$. By the definition of the best-response strategy, $\beta_i(k)$ is a point where 
-\begin{align*}
+\begin{align}
 &\int_{\R^{n}}f_{\beta(k)}(z,t)(u_i(1,\sum_{j\not=i}u^{\alpha_j(k)}(x_j),\tau)\cr 
 &\qquad-u_i(1,\sum_{j\not=i}u^{\alpha_j(k)}(x_j),\tau))d(z\times t)=0.
-\end{align*}
+\end{align}
 Using the fact that $f$ has a Gaussian distribution and is continuous on all its arguments and the fact that $|u_i(\cdot,\cdot,\tau)|\leq \tau^p$, by taking the limit $k\to\infty$ and the dominated convergence theorem:
-\begin{align*}
+\begin{align}
 &\int_{\R^{n}}f_{\beta}(z,t)(u_i(1,\sum_{j\not=i}u^{\alpha_j}(x_j),\tau)\cr 
 &\qquad-u_i(1,\sum_{j\not=i}u^{\alpha(k)}(x_j),\tau))d(z\times t)=0,
-\end{align*}
+\end{align}
 where $u^{r}$ is a threshold strategy with threshold $r$. Therefore, the $\lim_{k\to\infty}L(\alpha(k))=L(\alpha)$ for a sequence $\alpha(k)$ that is converging to $\alpha$.
 \end{proof}
 Finally, we are ready to prove our main result. 
@@ -233,32 +233,40 @@ Finally, we are ready to prove our main result.
 For a concurrent task $T$, suppose that the magnitude parameter $\tau$ is a Gaussian random variable. Also, suppose that $x_i=\tau+\eta_i$ where $\eta_1,\ldots,\eta_n$ are independent Gaussian random variables. Then, there exists a strategy profile $s=(s_1,\ldots,s_n)$ of threshold policies that is a Bayesian Nash Equilibrium.
 \end{theorem}
 \begin{proof}
-By Lemma~\ref{thresholdBR}, the best response of a threshold policy is a threshold policy and hence, it induced the mapping $L$ from the space of thresholds ($\R^n$)to itself. Also, by Lemma~\ref{lemma:continuous}, this mapping is a continuous mapping. Now, if $t_i$ is sufficiently large threshold, then the second property of the concurrent benefit tasks implies that the $\tilde{t}_i\leq t_i$ because large enough measurement $x_i$ implies that agent $i$ itself should take part in the task. Similarly, for sufficiently low threshold $t_i$, we will have $\tilde{t}_i\geq t_i$. Therefore, the mapping $L$ maps a box $[a,b]^n$ to itself, where $a$ is a sufficiently small scalar and $b>a$ is a sufficiently large scalar. Since, a box $[a,b]^n$ is a convex set, by the Brouwer's fix point theorem \cite{border1990fixed}, we have that there exists a vector of threshold values $\alpha^*$ such that $L(\alpha^*)=L(\alpha^*)$ and hence, there exists a Bayesian Nash Equilibrium for a concurrent task $T$.
+By Lemma~\ref{lemma:thresholdBR}, the best response of a threshold policy is a threshold policy and hence, it induced the mapping $L$ from the space of thresholds ($\R^n$)to itself. Also, by Lemma~\ref{lemma:continuous}, this mapping is a continuous mapping. Now, if $t_i$ is sufficiently large threshold, then the second property of the concurrent benefit tasks implies that the $\tilde{t}_i\leq t_i$ because large enough measurement $x_i$ implies that agent $i$ itself should take part in the task. Similarly, for sufficiently low threshold $t_i$, we will have $\tilde{t}_i\geq t_i$. Therefore, the mapping $L$ maps a box $[a,b]^n$ to itself, where $a$ is a sufficiently small scalar and $b>a$ is a sufficiently large scalar. Since, a box $[a,b]^n$ is a convex set, by the Brouwer's fix point theorem \cite{border1990fixed}, we have that there exists a vector of threshold values $\alpha^*$ such that $L(\alpha^*)=L(\alpha^*)$ and hence, there exists a Bayesian Nash Equilibrium for a concurrent task $T$.
 \end{proof}
 
-\section{Why Sigmoid functions?}
+
+
+\section{Why Sigmoid functions?}\label{sec:sigfun}
 Sigmoid functions and decision making based on sigmoidal functions has been observed in many different settings in nature. [ANSHUL: please add some references and make the story more appealing here.] But the above discussion, seemingly, provides a different explanations to such observations. Here, we argue that not only Theorem~\ref{thrm:mainthrm} does not contradict such observations but also, provides a serious argument for prevalence of such phenomena. 
 
-To explain this suppose that all the agents share the same utility function $u$ and also, assume that the observation noise of the $n$ agents ($\eta_1,\ldots,\eta_n$) are i.i.d.\ $\mathcal{N}(0,\sigma^2)$ Gaussian random variable. Many examples of multiagent systems in nature as well as swarm robotics satisfy such condition. Then, it is not hard to see that there exists a BNE with threshold strategies that have the same threshold value $\tau^*$ (see e.g.\ \cite{Morris2000}). Now, consider a realization of $\tau=\hat{\tau}$ and suppose that we have a large number of agents $n$ observing a noisy variation of $\hat{\tau}$. Take for example the case of an ant colony, and let $\hat{\tau}$ be a specific amount of pheromone. Then, since the observations of the $n$ agents are independent given the value of $\tau$, they will be distributed according to $\mathcal{N}(\hat{\tau},\sigma^2)$ (given the value of $\tau$). Now consider the relative number of agents taking part in the activity given the magnitude parameter $\hat{\tau}$
-\[p_n(\hat{\tau})=\frac{\#\text{agents with }x_i\geq \tau^*}{n}.\]
+To explain this suppose that all the agents share the same utility function $u$ and also, assume that the observation noise of the $n$ agents ($\eta_1,\ldots,\eta_n$) are i.i.d.\ $\mathcal{N}(0,\sigma^2)$ Gaussian random variable. Many examples of multiagent systems in nature as well as swarm robotics satisfy such condition. Then, it is not hard to see that there exists a BNE with threshold strategies that have the same threshold value $\tau^*$ (see e.g.\ \cite{Morris2000}). Now, consider a realization of $\tau=\hat{\tau}$ and suppose that we have a large number of agents $n$ observing a noisy variation of $\hat{\tau}$. Take for example the case of an ant colony, and let $\hat{\tau}$ be a specific amount of pheromone. Then, since the observations of the $n$ agents are independent given the value of $\tau$, they will be distributed according to $\mathcal{N}(\hat{\tau},\sigma^2)$ (given the value of $\tau$). Now consider the relative number of agents taking part in the activity given the magnitude parameter $\hat{\tau}$.
+\begin{equation}
+	p_n(\hat{\tau})=\frac{\#\text{agents with }x_i\geq \tau^*}{n}
+\end{equation}
+
 Then, we have the following theorem.
 \begin{theorem}\label{thrm:relativefrequency}
 For the relative number of agents $p_n(\hat{\tau})$, we have
-\begin{align*}
-\lim_{n\to\infty}p_n(\hat{\tau})=1-\Phi(\frac{\hat{\tau}-\tau^*}{\sigma^2}),
-\end{align*}
+\begin{align}
+\lim_{n\to\infty}p_n(\hat{\tau})=1-\Phi(\frac{\hat{\tau}-\tau^*}{\sigma^2})
+\end{align}
 where $\Phi$ is the cumulative distribution function (cdf) of a standard Gaussian. 
 \end{theorem}
 \begin{proof}
-Note that $p_n(\hat{\tau})=\frac{1_{x_i\geq \tau^*}}{n}$ where $1_{\alpha\geq \beta}$ is the indicator function for $\alpha\geq \beta$. But note that for a given $\hat{\tau}$, $x_i$s are i.i.d.\ $\mathcal{N}(\hat{\tau},\sigma^2)$ random variables. Therefore, by the Gilvenko-Cantelli theorem \cite{durrett2010}, it follows that 
-\[\lim_{n\to\infty}p_n(\hat{\tau})=1-F(\frac{\hat{\tau}-\tau^*}{\sigma^2}).\]
+Note that $p_n(\hat{\tau})=\frac{1_{x_i\geq \tau^*}}{n}$ where $1_{\alpha\geq \beta}$ is the indicator function for $\alpha\geq \beta$. But note that for a given $\hat{\tau}$, $x_i$s are i.i.d.\ $\mathcal{N}(\hat{\tau},\sigma^2)$ random variables. Therefore, by the Gilvenko-Cantelli theorem \cite{durrett2010}, it follows that:
+\begin{equation}
+\lim_{n\to\infty}p_n(\hat{\tau})=1-F(\frac{\hat{\tau}-\tau^*}{\sigma^2})
+\end{equation}
+
 \end{proof}
 Therefore, for large $n$, the relative frequency of agents taking part into the activity has a shape that follows the shape of the cdf of a standard Gaussian random variable and a frequentist interpretation of ant colony activity in such a setting is that the probability of an ant taking part in the activity roughly follows the curve of this function. 
 
 The final step to explain the prevalence of sigmoidal functions in multiagent settings is to note that:
-\begin{align*}
+\begin{align}
 |\Phi(x)-\frac{1}{1+e^{-1.702x}}|\leq 0.01,
-\end{align*}
+\end{align}
 for all $x\in\R$ (see \cite{camilli1994} and the references therein). Note that $\frac{1}{1+e^{-dx}}$ is the standard sigmoid function. 
 
 
