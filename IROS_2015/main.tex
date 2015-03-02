@@ -202,12 +202,12 @@ The mapping $L$ described above is a continuous mapping.
 Let $x^{(-i)}=(x_1,\ldots,x_{i-1},x_{i+1},\ldots,x_n)$ be the vector of observations of $n-1$ robots except the $i$th robot. Note that the vector $(x^{-i},\tau)$ given $x_i=x$ is a normally distributed random vector which we denote its distribution by $f_{x}(x^{-i},\tau)$. Now, let $\{\alpha(k)\}$ be a sequence in $\R^n$ that is converging to $\alpha\in\R^n$. Let $\{\beta(k)\}$ be the sequence of thresholds corresponding to best-response strategy of a strategy with threshold vector $\alpha(k)$. Let $s$ be the threshold strategy corresponding to the threshold vector $\alpha$ and let $\alpha^*$ be the threshold policy corresponding to the $BR(\alpha)$. By the definition of the best-response strategy, $\beta_i(k)$ is a point where 
 \begin{align}
 &\int_{\R^{n}}f_{\beta(k)}(z,t)(u_i(1,\sum_{j\not=i}u^{\alpha_j(k)}(x_j),\tau)\cr 
-&\qquad-u_i(1,\sum_{j\not=i}u^{\alpha_j(k)}(x_j),\tau))d(z\times t)=0.
+&\qquad-u_i(0,\sum_{j\not=i}u^{\alpha_j(k)}(x_j),\tau))d(z\times t)=0.
 \end{align}
 Using the fact that $f$ has a Gaussian distribution and is continuous on all its arguments and the fact that $|u_i(\cdot,\cdot,\tau)|\leq \tau^p$, by taking the limit $k\to\infty$ and the dominated convergence theorem:
 \begin{align}
 &\int_{\R^{n}}f_{\beta}(z,t)(u_i(1,\sum_{j\not=i}u^{\alpha_j}(x_j),\tau)\cr 
-&\qquad-u_i(1,\sum_{j\not=i}u^{\alpha(k)}(x_j),\tau))d(z\times t)=0,
+&\qquad-u_i(0,\sum_{j\not=i}u^{\alpha(k)}(x_j),\tau))d(z\times t)=0,
 \end{align}
 where $u^{r}$ is a threshold strategy with threshold $r$. Therefore, the $\lim_{k\to\infty}L(\alpha(k))=L(\alpha)$ for a sequence $\alpha(k)$ that is converging to $\alpha$.
 \end{proof}
@@ -222,7 +222,8 @@ By Lemma~\ref{lemma:thresholdBR}, the best response of a threshold policy is a t
 
 
 
-\section{Why Sigmoid functions?}\label{sec:sigfun}
+\section{Discussion}\label{sec:disc}
+\subsection{Why Sigmoid functions?}\label{sec:sigfun}
 Sigmoid functions and decision making based on sigmoidal functions has been observed in many different settings in nature. [ANSHUL: please add some references and make the story more appealing here.] But the above discussion, seemingly, provides a different explanations to such observations. Here, we argue that not only Theorem~\ref{thrm:mainthrm} does not contradict such observations but also, provides a serious argument for prevalence of such phenomena. 
 
 To explain this suppose that all the agents share the same utility function $u$ and also, assume that the observation noise of the $n$ agents ($\eta_1,\ldots,\eta_n$) are i.i.d.\ $\mathcal{N}(0,\sigma^2)$ Gaussian random variable. Many examples of multiagent systems in nature as well as swarm robotics satisfy such condition. Then, it is not hard to see that there exists a BNE with threshold strategies that have the same threshold value $\tau^*$ (see e.g.\ \cite{Morris2000}). Now, consider a realization of $\tau=\hat{\tau}$ and suppose that we have a large number of agents $n$ observing a noisy variation of $\hat{\tau}$. Take for example the case of an ant colony, and let $\hat{\tau}$ be a specific amount of pheromone. Then, since the observations of the $n$ agents are independent given the value of $\tau$, they will be distributed according to $\mathcal{N}(\hat{\tau},\sigma^2)$ (given the value of $\tau$). Now consider the relative number of agents taking part in the activity given the magnitude parameter $\hat{\tau}$.
@@ -253,20 +254,14 @@ The final step to explain the prevalence of sigmoidal functions in multiagent se
 \end{align}
 for all $x\in\R$ (see \cite{camilli1994} and the references therein). Note that $\frac{1}{1+e^{-dx}}$ is the standard, logistic sigmoid function. 
 
+\subsection{System Equilibrium vs. System Optimum}
+Theorem \ref{thrm:mainthrm} states that there exists a unique strategy profile $s$ such that it is a system-level Bayesian Nash Equilibrium for all agents performing a concurrent benefit task. Notice that this theorem makes no claims towards an \emph{optimal} strategy for task-assignment, just an equilibrium strategy. It is important to distinguish between these two properties of the swarm system.
 
+When representing the task-allocation problem as a global game, an equilibrium is said to be achieved when all agents use a threshold strategy based on their incomplete knowledge of the task's magnitude, $\tau$. No agent can deviate from this strategy to receive a better payoff, defined by $u_i$---hence the term \emph{Best Response} strategy. The terms \emph{payoff} and \emph{utility} are often used interchangeably in game theory literature\ldots
 
-\section{Discussion}\label{sec:disc}
-1. The proof uses a step-function as the threshold function. In biological insect colony models and some swarm task-allocation models (including our own) we use continuous threshold functions (like sigmoid). I would like to address this in the Discussion section and bridge the gap between step-functions and sigmoid functions by saying that a step-function is just an extreme case of a continuous sigmoid function as it's slope goes to infinity. Do you see this causing any logical issue with your proof? I can see that this makes the analysis of the pure-thershold strategy $s_i$ more difficult. Can we somehow fold in continuous threshold functions into the global games setting, as part of the proof?
+This is definitely very interesting but it is hard to say anything mathematically. The system optimum is something that one should define. One definition would be the optimal task-allocation once a central agent knows all the information (sensor measurements, number of agents,…) in the system. Its performance would be definitely much better than none central allocation and this setting of global games where the information is shared globally\ldots
 
-There is a story there, we can tell that we are considering the ideal case where each agent knows how many other agents are in the field as well as information sharing. Then we can say, this is the prescription for the ideal case, for the non-ideal scenario of not knowing how many agents are in the field and also information sharing, sigmoid function is an engineering solution. Perhaps you wanna discuss it as future direction. 
-
-2. I will talk about the restriction of no information sharing between agents in the Discussion section as well. There has been some work done in analysing global games with sharing of information between agents, right? I'd like to reference that work if possible as an avenue for future research.
-
-Regarding information sharing, there is one work of mine and Jeff which is on this topic \cite{Touri2014}.
-
-3. Coming back to the discussion of "system equilibrium" vs. "system optimum". Can we say anything about an optimal task-allocation strategy in this paper? I'd like to draw a clear separation between these two concepts in the discussion section as well. 
-
-This is definitely very interesting but it is hard to say anything mathematically. The system optimum is something that one should define. One definition would be the optimal task-allocation once a central agent knows all the information (sensor measurements, number of agents,…) in the system. It’s performance would be definitely much better than none central allocation and this setting of global games where the information is shared globally. 
+We also wish to briefly discuss the effects of information sharing between agents\cite{Touri2014}.
 
 \section{Conclusion}\label{sec:conc}
 We have formulated robotic task-allocation in the context of game theory, and showed how a common class of tasks can be reduced to a global game. Using this framework, we have shown that a threshold-based policy, which is commonly observed in social insects and successfully used in swarm robotics, can indeed be considered an optimal policy if the robots cannot communicate. 
