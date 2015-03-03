@@ -117,9 +117,15 @@ We show that using an agent level threshold strategy for the task assignment pro
 \section{Introduction}\label{sec:intro}
 Collaborative tasks such as object transport \cite{Sugawara2012}, oil-spill containment \cite{Beni2005}, firefighting \cite{Kanakia2014}, inspection \cite{Correll2008}, pattern recognition \cite{Beni1993}, and cooperative surveillance are often referenced as practical applications for swarm robotics. Strategies for task allocation \cite{Gerkey2004} in a multi-agent system (MAS) vary from deterministic leader-follower coalition algorithms \cite{Chen2011} and more complex market-based approaches \cite{Amstutz2008} to simpler probabilistic algorithms for individually simplistic agents \cite{Dantu2012}. These probabilistic strategies are inspired from biological models of insect colonies, do not require communication among agents, and provide a phenomenological approach to solving the task assignment problem. Indeed, response-threshold models have provided good agreement with observed behavior in insect colonies and have proved invaluable in engineering solutions to multi-robot collaboration problems. Yet, there has so far been no theoretical backing of why threshold-based approaches are indeed the best choice in teams that cannot exchange information.
 
+\begin{figure}[!htb]
+\centering\includegraphics[width=0.9\columnwidth]{../figures/globalgamesetup.png}
+\centering\caption{A multi-robot firefighting scenario set up as a global game. Each player's imperfect estimate of the task is represented by $x_i$, a sum of the global magnitude parameter-$\tau$ and noisy sensor measurements-$\eta_i$.}\label{fig:ggsetup}
+\end{figure}
+
 We show in this paper that a response-threshold strategy for a broad class of task assignment problems, under communication constraints  and noisy sensing, results in unique system-wide equilibrium conditions such that no individual agent will receive a better utility by deviating from their strategy to act based on some threshold value $k$. To prove this statement we employ a sub-class of Game Theory called \emph{global games}, first introduced by Carlsson and Van Damme in 1993 \cite{Carlsson1993}. Global games have been substantially generalized over the years to study and model different economical phenomena such as pricing debt, currency crisis, and bank runs, and we strongly believe they can be further applied to the analysis of task assignment in MASs. See \cite{Morris2000} and the references therein for more details on applications of global games.
 
 Collaborative tasks for MASs can be formally defined as global games with the property of \emph{concurrent benefit}. Informally, concurrent benefit is an attribute of a collaborative task where a certain minimum number of agents is needed to solve a task; if this number is not reached, agents which try nevertheless waste their efforts. In addition, the exact number of agents required to successfully complete the task is unknown and varies over time due to numerous, complex physical parameters. Many collaborative tasks---particularly those seen in biological systems---exhibit the property of concurrent benefit ranging from surveillance and coordinated defense of enclosed areas like termite mounds and honey bee hives \cite{Breed1990} to collective transport of heavy objects and even containment of oil spills and forest fires. The probability of success depends, non-linearly, on the average number of agents assigned to that task. For example, 5--10 ants may be insufficient to lift a heavy object such as a small rock or twig and will waste a considerable amount of energy and time in trying, but 12 or more ants might accomplish the task successfully. Similarly, in a MAS setting, consider the task of collaborative firefighting. To contain a large fire, it is insufficient (and inefficient) for a single agent to start putting out the fire without waiting for backup. But the rate of fire containment increases quickly by adding just a few more agents to the group, which illustrates the property of concurrent benefit well. The proof presented in this paper relates to this aforementioned class of collaborative tasks.
+
 
 The rest of the paper is laid out as follows. The next section presents related work in the field of multi-robot task-allocation. Section \ref{sec:ggoverview} provides a brief introduction to the theory of global games and then formally defines the property of concurrent benefit tasks. We proceed to situate this game theory nomenclature into the swarm robotics task-assignment problem using a illustrative example in Section \ref{sec:ggmas}. Sections \ref{sec:conbenefit} and \ref{sec:thmproof} formally define concurrent benefit tasks and present a theorem stating system level equilibrium conditions with the related proof, respectively. We further explain what an equilibrium condition means for a swarm robot system. Finally, the Discussion and Conclusion sections provide an analysis of the existing proposed methods of task-assignment in a robotic swarm as well as avenues for further study.
 
@@ -142,10 +148,12 @@ While we use the term \emph{magnitude} to describe $\tau$, it is a stand-in for 
 \section{Concurrent Benefit Task with Imperfect Information}\label{sec:conbenefit}
 In this section, we mathematically define a concurrent benefit task which is central to our study. Consider a set of $n$ robots and suppose that each robot has an action set $A_i=\{0,1\}$ where $0$ represents \emph{not participating} in the task and $1$ represents \emph{participating} in the task.  The \emph{magnitude} parameter $\tau$ of the given task also plays an important role in our formalism. We let $\tau$ be an (often random) real number which represents how many agents are required to complete a task. We further assume that it belongs to an interval $E=[c,d]$ in $\R$.  Finally, we let $u_i:A_i\times\Z^+\times \R\to \R$ be the utility of the $i^{\text{th}}$ robot, where $u_i(a_i,g,\tau)$ is the utility of the $i^{\text{th}}$ robot when $g$ other robots have decided to participate in the task of magnitude-$\tau$\footnote{In general, the utility of each robot depends on the joint actions of the rest of the robots. However, here we assume that the utility depends only on the number of robots participating in the activity. The following discussions can be substantially generalized to a more general setting but this form of utility serves the purpose of this study.}. 
 
-\begin{figure*}[!tb]
-\centering\includegraphics[width=\textwidth]{../figures/dropletfire.png}
-\centering\caption{\textbf{Left:} A multi-robot firefighting scenario set up as a global game. Each player's imperfect estimate of the task is represented by $x_i$, a sum of the global magnitude parameter-$\tau$ and noisy sensor measurements-$\eta_i$. \textbf{Center:} The same scenario set up using actual robots and a projected fire, inspired from real forest fire containment (\textbf{Right}).}\label{fig:ggsetup}
-\end{figure*}
+
+
+%\begin{figure*}[!tb]
+%\centering\includegraphics[width=\textwidth]{../figures/dropletfire.png}
+%\centering\caption{\textbf{Left:} A multi-robot firefighting scenario set up as a global game. Each player's imperfect estimate of the task is represented by $x_i$, a sum of the global magnitude parameter-$\tau$ and noisy sensor measurements-$\eta_i$. \textbf{Center:} The same scenario set up using actual robots and a projected fire, inspired from real forest fire containment (\textbf{Right}).}\label{fig:ggsetup}
+%\end{figure*}
 
 \subsection{Formal Definition of a Concurrent Benefit Task}\label{subsec:conbenefitdef}
 We define a task $T$ to be a \emph{concurrent benefit task} if: 
@@ -172,7 +180,7 @@ where $E(\cdot \mid x_i)$ is the conditional probability of $u_i$ given the $i$t
 
 Now, we are ready to define what we mean by a \emph{sensible strategy}. We say that a strategy profile $s=(s_1,\ldots,s_n)$ is a \emph{Bayesian Nash Equilibrium} (BNE) \cite{fudenberg1998theory} if $s_i=BR(s_{-i})$ for all $i\in \{1,\ldots,n\}$. In other words, with the current strategies of the $n$ robots, no robot has the incentive to deviate from its current strategy.
 
-\subsection{Main Theorem and Proof}\label{subsec:thmproof}
+\subsection{Threshold-based Bayesian Nash Equilibrium}\label{subsec:thmproof}
 Here, we show that any task with concurrent benefits, admits a threshold strategy BNE. In other words, it is sufficient for the robots to follow a simple rule/algorithm: 
 \begin{enumerate}[(i)]
 \item Compare the measurements to a threshold value $\tau_i$,
@@ -221,16 +229,8 @@ By Lemma~\ref{lemma:thresholdBR}, the best response of a threshold policy is a t
 \end{proof}
 
 
-
-\section{Discussion}\label{sec:disc}
-Theorem~\ref{thrm:mainthrm} states that a communication-free agent-level threshold strategy is sufficient and necessary (from Lemma~\ref{lemma:thresholdBR}) to achieve a task-allocation resulting in system-level equilibrium for concurrent benefit tasks. This is a powerful result for the distributed multi-agent task-assignment problem but there are a few issues to consider before its practical application to all prior works.
-
-First and foremost is the issue of applying this theory to continuous response-threshold functions such as sigmoid functions. Continuous response-threshold functions are an indispensable solution to the task-assignment problem in both natural and artificial systems, as is evident from the body of work referenced at the beginning of Section \ref{sec:rw}. The major benefit of using sigmoid vs. step functions is their flexibility, allowing swarm systems to quickly adapt to changes in task and environment parameters \cite{Bonabeau1997}. We provide a brief semi-formal argument to encompass them within our theorem.
-
-Secondly, we wish to draw a clear distinction between system equilibrium policies versus optimum strategies. It is obvious that a fully distributed strategy for task-allocation with no communication between agents performs poorly for many optimality metrics when compared to a centralized approach where all information about the state of the system is known to the task-assignment controller. System optimality metrics could be allocation convergence speed or the rate of completion of assigned tasks. Somewhere between a centralized approach and a communication-free distributed one lies a strategy where some information (such as their noisy estimates, $x_i$) is shared between agents. We briefly discuss the work that has been done as well as the possibility of future research in this area.
-
-\subsection{Why Sigmoid functions?}\label{subsec:sigfun}
-Here, we argue that Theorem~\ref{thrm:mainthrm} does not contradict the continuous response-threshold model for MAS task-allocation but instead provides a serious argument for prevalence of such phenomena. 
+\subsection{From discrete to continuous thresholds}\label{subsec:sigfun}
+After showing that discrete thresholds indeed result in a BNE for systems in which agents do not directly communicate, we will now show how how sensor noise at the individual level result in a continuous response treshold model that is prevalent in MAS and social insects. 
 
 To explain this suppose that all the agents share the same utility function $u(a_i,g,\tau)$ and also, assume that the observation noise of the $n$ agents ($\eta_1,\ldots,\eta_n$) are independent and identically distributed (i.i.d, $\mathcal{N}(0,\sigma^2)$) Gaussian random variables. Any agent with imperfect sensing and imperfect response to stimulus satisfies this condition. Then, it is not hard to see that there exists a BNE with threshold strategies that have the same threshold value $\tau^*$ (see  \cite{Morris2000}). Now, consider a realization of $\tau=\hat{\tau}$ and suppose that we have a large number of agents $n$ observing a noisy variation of $\hat{\tau}$. Take for example the case of fire-fighting robots, and let $\hat{\tau}$ be the magnitude (including type, intensity, area, etc.) of the fire. Then, since the observations of the $n$ agents are independent given the value of $\tau$, they will be distributed according to $\mathcal{N}(\hat{\tau},\sigma^2)$ (given the value of $\tau$). Now consider the relative number of agents taking part in the activity given the magnitude parameter, $\hat{\tau}$.
 \begin{equation}
@@ -258,9 +258,18 @@ The final step to explain the prevalence of sigmoidal functions in multiagent se
 \begin{align}
 |\Phi(x)-\frac{1}{1+e^{-1.702x}}|\leq 0.01,
 \end{align}
-for all $x\in\R$ (see \cite{camilli1994} and the references therein). Note that $\frac{1}{1+e^{-dx}}$ is the standard, logistic sigmoid function. 
+for all $x\in\R$, see \cite{camilli1994} and the references therein. The scaling constant $d = 1.702$ used in item response theory has been shown to minimize the
+maximum difference between the normal and logistic distribution functions, and $\frac{1}{1+e^{-dx}}$ is the standard, logistic sigmoid function. 
 
-\subsection{System Equilibrium vs. System Optimum}
+
+
+\section{Discussion}\label{sec:disc}
+Theorem~\ref{thrm:mainthrm} states that a communication-free agent-level threshold strategy is sufficient and necessary (from Lemma~\ref{lemma:thresholdBR}) to achieve a task-allocation resulting in system-level equilibrium for concurrent benefit tasks. This is a powerful result for the distributed multi-agent task-assignment problem but there are a few issues to consider before its practical application to all prior works.
+
+First and foremost is the issue of applying this theory to continuous response-threshold functions such as sigmoid functions. Continuous response-threshold functions are an indispensable solution to the task-assignment problem in both natural and artificial systems, as is evident from the body of work referenced at the beginning of Section \ref{sec:rw}. The major benefit of using sigmoid vs. step functions is their flexibility, allowing swarm systems to quickly adapt to changes in task and environment parameters \cite{Bonabeau1997}. We provide a brief semi-formal argument to encompass them within our theorem.
+
+Secondly, we wish to draw a clear distinction between system equilibrium policies versus optimum strategies. It is obvious that a fully distributed strategy for task-allocation with no communication between agents performs poorly for many optimality metrics when compared to a centralized approach where all information about the state of the system is known to the task-assignment controller. System optimality metrics could be allocation convergence speed or the rate of completion of assigned tasks. Somewhere between a centralized approach and a communication-free distributed one lies a strategy where some information (such as their noisy estimates, $x_i$) is shared between agents. We briefly discuss the work that has been done as well as the possibility of future research in this area.
+
 Theorem~\ref{thrm:mainthrm} states that there exists a unique strategy profile $s$ such that it is a system-level Bayesian Nash Equilibrium for all agents performing a concurrent benefit task. Notice that this theorem makes no claims towards an \emph{optimal} strategy for task-assignment, just an equilibrium strategy. It is important to distinguish between these two properties of the swarm system.
 
 When representing the task-allocation problem as a global game, an equilibrium is said to be achieved when all agents use a threshold strategy based on their incomplete knowledge of the task's magnitude, $\tau$. No agent can deviate from this strategy to receive a better payoff, defined by $u_i$---hence the term \emph{Best Response} strategy. The terms \emph{payoff} and \emph{utility} are often used interchangeably in game theory literature\ldots
@@ -272,7 +281,7 @@ We also wish to briefly discuss the effects of information sharing between agent
 \section{Conclusion}\label{sec:conc}
 We have formulated robotic task-allocation in the context of game theory, and showed how a common class of tasks can be reduced to a global game. Using this framework, we have shown that a threshold-based policy, which is commonly observed in social insects and successfully used in swarm robotics, can indeed be considered an optimal policy if the robots cannot communicate. 
 
-
+\section*{Acknowledgements}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%   The Bibliography, if any   %%%%%%%%%
