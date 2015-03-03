@@ -74,7 +74,7 @@
 
 \DeclareMathOperator*{\argmin}{\arg\!\min\>}
 \newcommand{\amin}[1]{\underset{#1}\argmin}
-\DeclareMathOperator*{\argmax}{\arg\!\min\>}
+\DeclareMathOperator*{\argmax}{\arg\!\max\>}
 \newcommand{\amax}[1]{\underset{#1}\argmax}
 
 \def\a{\mathbf{a}}
@@ -123,7 +123,7 @@ Collaborative tasks for MASs can be formally defined as global games with the pr
 
 The rest of the paper is laid out as follows. The next section presents related work in the field of multi-robot task-allocation. Section \ref{sec:ggoverview} provides a brief introduction to the theory of global games and then formally defines the property of concurrent benefit tasks. We proceed to situate this game theory nomenclature into the swarm robotics task-assignment problem using a illustrative example in Section \ref{sec:ggmas}. Sections \ref{sec:conbenefit} and \ref{sec:thmproof} formally define concurrent benefit tasks and present a theorem stating system level equilibrium conditions with the related proof, respectively. We further explain what an equilibrium condition means for a swarm robot system. Finally, the Discussion and Conclusion sections provide an analysis of the existing proposed methods of task-assignment in a robotic swarm as well as avenues for further study.
 
-\section{Related Work}\label{subsec:rw}
+\section{Related Work}\label{sec:rw}
 Using response-threshold functions to model social behavior in insects such as ant colonies \cite{Bonabeau1996, Bonabeau1997} and bee hives \cite{Robinson1987, Robinson1992, PageJr1990} has been proposed, analyzed and verified by biologists since the 1980's \cite{Theraulaz1998}. Only in the past two decades have swarm roboticists begun to engineer multi-agent systems using these models. Jones and Matari\'c \cite{Jones2004} describe an adaptive method of task allocation for a large scale minimalist robot system where agents independently switch between picking up different colored pucks to maintain a consistent rate of foraging for each type of colored puck. While the authors do not directly reference threshold functions, their switching algorithm simply assigns probabilities of picking up a certain colored puck versus another by accounting for the number of colored sticks observed by a robot around it, which is a form of probabilistic threshold policy. Such dynamic, probabilistic threshold policies are also studied in \cite{Nouyan2002}. A modification of such strategies instead use the logistic sigmoid function \cite{Kanakia2014}. Using a logistic function better exposes mean and variance parameters of the resulting team sizes for continuous response-threshold functions. These parameters, along with the number of workers available and the manner in which they acquire information, are the building blocks governing task-assignment behavior of an agent in the collective swarm (see section titled, ``Division of Labor as a Self-Organizing Process'' in \cite{Robinson1992}). 
 
 All of the aforementioned work uses continuous sigmoid response-threshold functions. In contrast to this, discrete step-function thresholds for task-assignment and recruitment have been studied by a number of research groups utilizing the ``Stick Pulling'' experiment \cite{Martinoli1995, Martinoli1998, Lerman2001, Martinoli2004}. The problem of distributing a swarm of robots across multiple sites with a specific desired distribution has been studied in \cite{Berman2009, Correll2008} and is extended by Mather \cite{Mather2010} allowing assignment to tasks requiring a varying number of robots. The benefits of using a task-allocation algorithm versus just allowing agents to attempt a collaborative task, such as aggregation, without a response-threshold is analyzed in \cite{Agassounon2001}. The authors show that threshold based task-allocation results in increasing aggregation of seeds while no task-allocation results in stagnation of seed collection after a little while. 
@@ -140,15 +140,15 @@ While we use the term \emph{magnitude} to describe $\tau$, it is a stand-in for 
 
 
 \section{Concurrent Benefit Task with Imperfect Information}\label{sec:conbenefit}
-In this section, we mathematically define a concurrent benefit task which is central to our study. Consider a set of $n$ robots and suppose that each robot has an action set $A_i=\{0,1\}$ where $0$ represents ``not participating'' in the task and $1$ represents ``participating'' in the task.  The \textit{magnitude} parameter $\tau$ of the given task also plays an important role in our formalism. We let $\tau$ be an (often random) real number which represents how many agents are required to complete a task. We further assume that it belongs to an interval $E=[c,d]$ in $\R$.  Finally, we let $u_i:A_1\times\Z^+\times \R\to \R$ be the utility of the $i^{\text{th}}$ robot, where $u_i(a_i,g,\tau)$ is the utility of the $i^{\text{th}}$ robot when $g$ other robots have decided to participate in the task of magnitude-$\tau$\footnote{In general, the utility of each robot depends on the joint actions of the rest of the robots. However, here we assume that the utility depends only on the number of robots participating in the activity. The following discussions can be substantially generalized to a more general setting but this form of utility serves the purpose of this study.}. 
+In this section, we mathematically define a concurrent benefit task which is central to our study. Consider a set of $n$ robots and suppose that each robot has an action set $A_i=\{0,1\}$ where $0$ represents \emph{not participating} in the task and $1$ represents \emph{participating} in the task.  The \emph{magnitude} parameter $\tau$ of the given task also plays an important role in our formalism. We let $\tau$ be an (often random) real number which represents how many agents are required to complete a task. We further assume that it belongs to an interval $E=[c,d]$ in $\R$.  Finally, we let $u_i:A_i\times\Z^+\times \R\to \R$ be the utility of the $i^{\text{th}}$ robot, where $u_i(a_i,g,\tau)$ is the utility of the $i^{\text{th}}$ robot when $g$ other robots have decided to participate in the task of magnitude-$\tau$\footnote{In general, the utility of each robot depends on the joint actions of the rest of the robots. However, here we assume that the utility depends only on the number of robots participating in the activity. The following discussions can be substantially generalized to a more general setting but this form of utility serves the purpose of this study.}. 
 
 \begin{figure*}[!tb]
 \centering\includegraphics[width=\textwidth]{../figures/dropletfire.png}
 \centering\caption{\textbf{Left:} A multi-robot firefighting scenario set up as a global game. Each player's imperfect estimate of the task is represented by $x_i$, a sum of the global magnitude parameter-$\tau$ and noisy sensor measurements-$\eta_i$. \textbf{Center:} The same scenario set up using actual robots and a projected fire, inspired from real forest fire containment (\textbf{Right}).}\label{fig:ggsetup}
 \end{figure*}
 
-\subsection{Formal Definition of a Concurrent Benefit Task}
-We define a task $T$ to be a \textit{concurrent benefit task} if: 
+\subsection{Formal Definition of a Concurrent Benefit Task}\label{subsec:conbenefitdef}
+We define a task $T$ to be a \emph{concurrent benefit task} if: 
 \begin{enumerate}[a.]
 	\item $u_i(1,g,\tau)-u_i(0,g,\tau)$ is an increasing and continuous function of $\tau$ for any $a_i\in A_i$ and $g$. We further assume that $|u_i(1,g,\tau)-u_i(0,g,\tau)|\leq \tau^p$ for some $p\geq 1$. 
 	\item For extreme magnitude ranges, taking part in the activity is either appealing or repelling, i.e.\ there exists $\underline{\tau},\bar{\tau}\in (c,d)$ with $\underline{\tau}\leq \bar{\tau}$ such that for any $\tau\geq \bar{\tau}$, we have $u_i(1,g,\tau)>u_i(0,g,\tau)$ and for $\tau\leq \underline{\tau}$, the only equilibrium of the game is $(0,0,\ldots,0)$. 
@@ -157,22 +157,22 @@ We define a task $T$ to be a \textit{concurrent benefit task} if:
 Note that in order to have such a task, we need the above conditions to hold for all the robots, i.e.\ for all $i\in\{1,\ldots,n\}$.
 An example of a utility function that would satisfy such conditions is a function $u_i(a_i,g,\tau)=a_i(1-e^{-(g+1)}+\tau)$. Also, note that in a typical robotics scenario, the robots have a common utility function which is aligned with the system's objective. But in general, they may have different utility functions that need to satisfy the above conditions. 
 
-The main challenge in devising strategies in performing a concurrent benefit task is that the knowledge of the magnitude parameter is not easily accessible to the robots. For example, consider the firefighting scenario described above. The magnitude of the task is not easily estimated by each robot and they only have noisy, imperfect information through their on-board sensors and their local measurements.  We model this imperfect knowledge by assuming that robot $i$ observes $x_i=\tau+\eta_i$ where $\eta_i$ is a Gaussian $\mathcal{N}(0,\sigma_i^2)$ random variable, as seen in Fig.~\ref{fig:ggsetup}. Throughout our discussion, we assume that the task magnitude $\tau$ is a Gaussian random variable\footnote{This analysis is extendable to a larger class of random variables but for the simplicity of the discussion, we consider Gaussian random variables here.} and it is independent of $\eta_1,\ldots,\eta_n$. Now, the main question is that given a robot's private measurement $x_i$, what is a \textit{sensible strategy} to follow. 
+The main challenge in devising strategies in performing a concurrent benefit task is that the knowledge of the magnitude parameter is not easily accessible to the robots. For example, consider the firefighting scenario described above. The magnitude of the task is not easily estimated by each robot and they only have noisy, imperfect information through their on-board sensors and their local measurements.  We model this imperfect knowledge by assuming that robot $i$ observes $x_i=\tau+\eta_i$ where $\eta_i$ is a Gaussian $\mathcal{N}(0,\sigma_i^2)$ random variable, as seen in Fig.~\ref{fig:ggsetup}. Throughout our discussion, we assume that the task magnitude $\tau$ is a Gaussian random variable\footnote{This analysis is extendable to a larger class of random variables but for the simplicity of the discussion, we consider Gaussian random variables here.} and it is independent of $\eta_1,\ldots,\eta_n$. Now, the main question is that given a robot's private measurement $x_i$, what is a \emph{sensible strategy} to follow. 
 
-To define what a \textit{sensible strategy} is, let us first define what we mean by a \textit{strategy}. We refer to a function that maps measurements (observations) to actions $A_i$ as a strategy. Mathematically, a strategy $s_i$ for the $i$th robot is a (measurable) function $s_i:\R\to A_i$. Indeed a strategy $s_i$ prescribes what action the $i$th robot should take given its own measurement $x_i$. Given this, consider a set of robots with strategies $s_1,\ldots,s_n$. Let us denote the strategies of the $n-1$ robots other than the $i$th robot by the vector $s^{-i}=(s_1,\ldots,s_{i-1},s_{i+1},\ldots,s_n)$.  We say that a strategy $s_i$ is a threshold strategy if $s_i(x)=\text{step}(x-t_i)$ where $\text{step}(x)$ is the step function which is $1$ for $c\geq 0$ and $0$ for $c<0$.
+To define what a \emph{sensible strategy} is, let us first define what we mean by a \emph{strategy}. We refer to a function that maps measurements (observations) to actions $A_i$ as a strategy. Mathematically, a strategy $s_i$ for the $i$th robot is a (measurable) function $s_i:\R\to A_i$. Indeed a strategy $s_i$ prescribes what action the $i$th robot should take given its own measurement $x_i$. Given this, consider a set of robots with strategies $s_1,\ldots,s_n$. Let us denote the strategies of the $n-1$ robots other than the $i$th robot by the vector $s_{-i}=(s_1,\ldots,s_{i-1},s_{i+1},\ldots,s_n)$.  We say that a strategy $s_i$ is a threshold strategy if $s_i(x)=\text{step}(x, t_i)$, i.e. the step function with a jump from 0 to 1 at $t_i$.
 
 
-For the $i$th robot, we define the best-response $BR(s^{-i})$ (to the strategies of the other robots) to be a strategy $\tilde{s}$ that for any $x\in \R$: 
+For the $i$th robot, we define the best-response $BR(s_{-i})$ (to the strategies of the other robots) to be a strategy $\tilde{s}$ that for any $x\in \R$: 
 \begin{align}\label{eqn:BR}
-BR(s^{-i})(x)&=\tilde{s}(x)=\argmax_{a_i\in A_i} E(u_i(a_i,g,\tau)\mid x_i=x)\cr 
-&=\argmax_{a_i\in A_i} E(u_i(a_i,\sum_{j\not=i}s_j(x_j),\tau)\mid x_i=x),
+BR(s_{-i})(x)&=\tilde{s}(x)=\amax{a_i\in A_i} E(u_i(a_i,g,\tau)\mid x_i=x)\cr 
+&=\amax{a_i\in A_i} E(u_i(a_i,\sum_{j\not=i}s_j(x_j),\tau)\mid x_i=x),
 \end{align}
-where $E(\cdot \mid x_i)$ is the conditional probability of $u_i$ given the $i$th agent's observation. Note that given $x_i$ and the strategies of the other robots $s^{-i}=(s_1,s_2,\ldots,s_{i-1},s_{i+1},\ldots,s_n)$, $\tau$, and $s_j(x_j)$ will be a random variable. In other words, given the $i$th robot's observation $x_i$, the observation of the other robots and hence, their actions would be random from the $i$th robot perspective.
+where $E(\cdot \mid x_i)$ is the conditional probability of $u_i$ given the $i$th agent's observation. Note that given $x_i$ and the strategies of the other robots $s_{-i}=(s_1,s_2,\ldots,s_{i-1},s_{i+1},\ldots,s_n)$, $\tau$, and $s_j(x_j)$ will be a random variable. In other words, given the $i$th robot's observation $x_i$, the observation of the other robots and hence, their actions would be random from the $i$th robot perspective.
 
 
-Now, we are ready to define what we mean by a \textit{sensible strategy}. We say that a strategy profile $s=(s_1,\ldots,s_n)$ is a \textit{Bayesian Nash Equilibrium} (BNE) \cite{fudenberg1998theory} if $s_i=BR(s^{-i})$ for all $i\in \{1,\ldots,n\}$. In other words, with the current strategies of the $n$ robots, no robot has the incentive to deviate from its current strategy.
+Now, we are ready to define what we mean by a \emph{sensible strategy}. We say that a strategy profile $s=(s_1,\ldots,s_n)$ is a \emph{Bayesian Nash Equilibrium} (BNE) \cite{fudenberg1998theory} if $s_i=BR(s_{-i})$ for all $i\in \{1,\ldots,n\}$. In other words, with the current strategies of the $n$ robots, no robot has the incentive to deviate from its current strategy.
 
-\subsection{Main Theorem and Proof}\label{sec:thmproof}
+\subsection{Main Theorem and Proof}\label{subsec:thmproof}
 Here, we show that any task with concurrent benefits, admits a threshold strategy BNE. In other words, it is sufficient for the robots to follow a simple rule/algorithm: 
 \begin{enumerate}[(i)]
 \item Compare the measurements to a threshold value $\tau_i$,
@@ -181,10 +181,10 @@ Here, we show that any task with concurrent benefits, admits a threshold strateg
 
 In general, the existence of a BNE for a game is a questionable fact. Especially, once we impose additional constraints on the structure of strategies. However, in this case, we can show that there exists a sensible threshold policy for the class of tasks with concurrent benefits. To prove this, we show some intermediate results. 
 \begin{lemma}\label{lemma:thresholdBR}
-Let $s=(s_1,\ldots,s_n)$ is a strategy profile consisting of threshold strategies for a task with concurrent benefit. Let $\tilde{s}_i=BR(s^{-i})$. Then $\tilde{s}_i$ is a threshold policy. 
+Let $s=(s_1,\ldots,s_n)$ is a strategy profile consisting of threshold strategies for a task with concurrent benefit. Let $\tilde{s}_i=BR(s_{-i})$. Then $\tilde{s}_i$ is a threshold policy. 
 \end{lemma}
 \begin{proof}
-We first show that if for some observation $x_i=x$, we have $BR(s^{-i})(x)=\tilde{s}_i(x)=1$, then $\tilde{s}_i(y)=1$ for $y\geq x$. To show this,  we note that $P(x_j\geq \tau_j\mid x_i=x)$ is an increasing function of $x$ as $x_j-x_i$ is a normally distributed random variable. Therefore, using the monotone property of concurrent tasks and the fact that $x_i=\tau+\eta_i$, we conclude that 
+We first show that if for some observation $x_i=x$, we have $BR(s_{-i})(x)=\tilde{s}_i(x)=1$, then $\tilde{s}_i(y)=1$ for $y\geq x$. To show this,  we note that $P(x_j\geq \tau_j\mid x_i=x)$ is an increasing function of $x$ as $x_j-x_i$ is a normally distributed random variable. Therefore, using the monotone property of concurrent tasks and the fact that $x_i=\tau+\eta_i$, we conclude that 
 \begin{align}
 &E(u_i(1,\sum_{j\not=i}s_j(x_j),\tau)\mid x_i=y)\cr 
 &\qquad-E(u_i(0,\sum_{j\not=i}s_j(x_j),\tau)\mid x_i=y)\cr 
@@ -217,32 +217,38 @@ Finally, we are ready to prove our main result.
 For a concurrent task $T$, suppose that the magnitude parameter $\tau$ is a Gaussian random variable. Also, suppose that $x_i=\tau+\eta_i$ where $\eta_1,\ldots,\eta_n$ are independent Gaussian random variables. Then, there exists a strategy profile $s=(s_1,\ldots,s_n)$ of threshold policies that is a Bayesian Nash Equilibrium.
 \end{theorem}
 \begin{proof}
-By Lemma~\ref{lemma:thresholdBR}, the best response of a threshold policy is a threshold policy and hence, it induced the mapping $L$ from the space of thresholds ($\R^n$)to itself. Also, by Lemma~\ref{lemma:continuous}, this mapping is a continuous mapping. Now, if $t_i$ is sufficiently large threshold, then the second property of the concurrent benefit tasks implies that the $\tilde{t}_i\leq t_i$ because large enough measurement $x_i$ implies that agent $i$ itself should take part in the task. Similarly, for sufficiently low threshold $t_i$, we will have $\tilde{t}_i\geq t_i$. Therefore, the mapping $L$ maps a box $[a,b]^n$ to itself, where $a$ is a sufficiently small scalar and $b>a$ is a sufficiently large scalar. Since, a box $[a,b]^n$ is a convex set, by the Brouwer's fix point theorem \cite{border1990fixed}, we have that there exists a vector of threshold values $\alpha^*$ such that $L(\alpha^*)=L(\alpha^*)$ and hence, there exists a Bayesian Nash Equilibrium for a concurrent task $T$.
+By Lemma~\ref{lemma:thresholdBR}, the best response of a threshold policy is a threshold policy and hence, it induced the mapping $L$ from the space of thresholds ($\R^n$) to itself. Also, by Lemma~\ref{lemma:continuous}, this mapping is a continuous mapping. Now, if $t_i$ is sufficiently large threshold, then the second property of the concurrent benefit tasks implies that the $\tilde{t}_i\leq t_i$ because large enough measurement $x_i$ implies that agent $i$ itself should take part in the task. Similarly, for sufficiently low threshold $t_i$, we will have $\tilde{t}_i\geq t_i$. Therefore, the mapping $L$ maps a box $[a,b]^n$ to itself, where $a$ is a sufficiently small scalar and $b>a$ is a sufficiently large scalar. Since, a box $[a,b]^n$ is a convex set, by the Brouwer's fix point theorem \cite{border1990fixed}, we have that there exists a vector of threshold values $\alpha^*$ such that $L(\alpha^*)=L(\alpha^*)$ and hence, there exists a Bayesian Nash Equilibrium for a concurrent task $T$.
 \end{proof}
 
 
 
 \section{Discussion}\label{sec:disc}
-\subsection{Why Sigmoid functions?}\label{sec:sigfun}
-Sigmoid functions and decision making based on sigmoidal functions has been observed in many different settings in nature. [ANSHUL: please add some references and make the story more appealing here.] But the above discussion, seemingly, provides a different explanations to such observations. Here, we argue that not only Theorem~\ref{thrm:mainthrm} does not contradict such observations but also, provides a serious argument for prevalence of such phenomena. 
+Theorem~\ref{thrm:mainthrm} states that a communication-free agent-level threshold strategy is sufficient and necessary (from Lemma~\ref{lemma:thresholdBR}) to achieve a task-allocation resulting in system-level equilibrium for concurrent benefit tasks. This is a powerful result for the distributed multi-agent task-assignment problem but there are a few issues to consider before its practical application to all prior works.
 
-To explain this suppose that all the agents share the same utility function $u$ and also, assume that the observation noise of the $n$ agents ($\eta_1,\ldots,\eta_n$) are i.i.d.\ $\mathcal{N}(0,\sigma^2)$ Gaussian random variable. Many examples of multiagent systems in nature as well as swarm robotics satisfy such condition. Then, it is not hard to see that there exists a BNE with threshold strategies that have the same threshold value $\tau^*$ (see e.g.\ \cite{Morris2000}). Now, consider a realization of $\tau=\hat{\tau}$ and suppose that we have a large number of agents $n$ observing a noisy variation of $\hat{\tau}$. Take for example the case of an ant colony, and let $\hat{\tau}$ be a specific amount of pheromone. Then, since the observations of the $n$ agents are independent given the value of $\tau$, they will be distributed according to $\mathcal{N}(\hat{\tau},\sigma^2)$ (given the value of $\tau$). Now consider the relative number of agents taking part in the activity given the magnitude parameter $\hat{\tau}$.
+First and foremost is the issue of applying this theory to continuous response-threshold functions such as sigmoid functions. Continuous response-threshold functions are an indispensable solution to the task-assignment problem in both natural and artificial systems, as is evident from the body of work referenced at the beginning of Section \ref{sec:rw}. The major benefit of using sigmoid vs. step functions is their flexibility, allowing swarm systems to quickly adapt to changes in task and environment parameters \cite{Bonabeau1997}. We provide a brief semi-formal argument to encompass them within our theorem.
+
+Secondly, we wish to draw a clear distinction between system equilibrium policies versus optimum strategies. It is obvious that a fully distributed strategy for task-allocation with no communication between agents performs poorly for many optimality metrics when compared to a centralized approach where all information about the state of the system is known to the task-assignment controller. System optimality metrics could be allocation convergence speed or the rate of completion of assigned tasks. Somewhere between a centralized approach and a communication-free distributed one lies a strategy where some information (such as their noisy estimates, $x_i$) is shared between agents. We briefly discuss the work that has been done as well as the possibility of future research in this area.
+
+\subsection{Why Sigmoid functions?}\label{subsec:sigfun}
+Here, we argue that Theorem~\ref{thrm:mainthrm} does not contradict the continuous response-threshold model for MAS task-allocation but instead provides a serious argument for prevalence of such phenomena. 
+
+To explain this suppose that all the agents share the same utility function $u(a_i,g,\tau)$ and also, assume that the observation noise of the $n$ agents ($\eta_1,\ldots,\eta_n$) are independent and identically distributed (i.i.d, $\mathcal{N}(0,\sigma^2)$) Gaussian random variables. Any agent with imperfect sensing and imperfect response to stimulus satisfies this condition. Then, it is not hard to see that there exists a BNE with threshold strategies that have the same threshold value $\tau^*$ (see  \cite{Morris2000}). Now, consider a realization of $\tau=\hat{\tau}$ and suppose that we have a large number of agents $n$ observing a noisy variation of $\hat{\tau}$. Take for example the case of fire-fighting robots, and let $\hat{\tau}$ be the magnitude (including type, intensity, area, etc.) of the fire. Then, since the observations of the $n$ agents are independent given the value of $\tau$, they will be distributed according to $\mathcal{N}(\hat{\tau},\sigma^2)$ (given the value of $\tau$). Now consider the relative number of agents taking part in the activity given the magnitude parameter, $\hat{\tau}$.
 \begin{equation}
-	p_n(\hat{\tau})=\frac{\#\text{agents with }x_i\geq \tau^*}{n}
+	N_{rel}(\hat{\tau})=\frac{\#\text{agents with }x_i\geq \tau^*}{n}
 \end{equation}
 
 Then, we have the following theorem.
 \begin{theorem}\label{thrm:relativefrequency}
-For the relative number of agents $p_n(\hat{\tau})$, we have
+For the relative number of agents $N_{rel}(\hat{\tau})$, we have
 \begin{align}
-\lim_{n\to\infty}p_n(\hat{\tau})=1-\Phi(\frac{\hat{\tau}-\tau^*}{\sigma^2})
+\lim_{n\to\infty}N_{rel}(\hat{\tau})=1-\Phi(\frac{\hat{\tau}-\tau^*}{\sigma^2})
 \end{align}
 where $\Phi$ is the cumulative distribution function (cdf) of a standard Gaussian. 
 \end{theorem}
 \begin{proof}
-Note that $p_n(\hat{\tau})=\frac{1_{x_i\geq \tau^*}}{n}$ where $1_{\alpha\geq \beta}$ is the indicator function for $\alpha\geq \beta$. But note that for a given $\hat{\tau}$, $x_i$s are i.i.d.\ $\mathcal{N}(\hat{\tau},\sigma^2)$ random variables. Therefore, by the Gilvenko-Cantelli theorem \cite{durrett2010}, it follows that:
+Note that $N_{rel}(\hat{\tau})=\frac{1_{x_i\geq \tau^*}}{n}$ where $1_{\alpha\geq \beta}$ is the indicator function for $\alpha\geq \beta$. But note that for a given $\hat{\tau}$, $x_i$s are i.i.d.\ $\mathcal{N}(\hat{\tau},\sigma^2)$ random variables. Therefore, by the Gilvenko-Cantelli theorem \cite{durrett2010}, it follows that:
 \begin{equation}
-\lim_{n\to\infty}p_n(\hat{\tau})=1-F(\frac{\hat{\tau}-\tau^*}{\sigma^2})
+\lim_{n\to\infty}N_{rel}(\hat{\tau})=1-F(\frac{\hat{\tau}-\tau^*}{\sigma^2})
 \end{equation}
 
 \end{proof}
@@ -255,7 +261,7 @@ The final step to explain the prevalence of sigmoidal functions in multiagent se
 for all $x\in\R$ (see \cite{camilli1994} and the references therein). Note that $\frac{1}{1+e^{-dx}}$ is the standard, logistic sigmoid function. 
 
 \subsection{System Equilibrium vs. System Optimum}
-Theorem \ref{thrm:mainthrm} states that there exists a unique strategy profile $s$ such that it is a system-level Bayesian Nash Equilibrium for all agents performing a concurrent benefit task. Notice that this theorem makes no claims towards an \emph{optimal} strategy for task-assignment, just an equilibrium strategy. It is important to distinguish between these two properties of the swarm system.
+Theorem~\ref{thrm:mainthrm} states that there exists a unique strategy profile $s$ such that it is a system-level Bayesian Nash Equilibrium for all agents performing a concurrent benefit task. Notice that this theorem makes no claims towards an \emph{optimal} strategy for task-assignment, just an equilibrium strategy. It is important to distinguish between these two properties of the swarm system.
 
 When representing the task-allocation problem as a global game, an equilibrium is said to be achieved when all agents use a threshold strategy based on their incomplete knowledge of the task's magnitude, $\tau$. No agent can deviate from this strategy to receive a better payoff, defined by $u_i$---hence the term \emph{Best Response} strategy. The terms \emph{payoff} and \emph{utility} are often used interchangeably in game theory literature\ldots
 
