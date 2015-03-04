@@ -175,7 +175,7 @@ BR(s_{-i})(x)&=\tilde{s}(x)=\amax{a_i\in A_i} E(u_i(a_i,g,\tau)\mid x_i=x)\cr
 where $E(\cdot \mid x_i)$ is the conditional probability of $u_i$ given the $i$th agent's observation. Note that given $x_i$ and the strategies of the other robots $s_{-i}=(s_1,s_2,\ldots,s_{i-1},s_{i+1},\ldots,s_n)$, $\tau$, and $s_j(x_j)$ will be a random variable. In other words, given the $i$th robot's observation $x_i$, the observation of the other robots and hence, their actions would be random from the $i$th robot perspective.
 
 
-Now, we are ready to define what we mean by a \emph{sensible strategy}. We say that a strategy profile $s=(s_1,\ldots,s_n)$ is a \emph{Bayesian Nash Equilibrium} (BNE) \cite{fudenberg1998theory} if $s_i=BR(s_{-i})$ for all $i\in \{1,\ldots,n\}$. In other words, with the current strategies of the $n$ robots, no robot has the incentive to deviate from its current strategy.
+Now, we are ready to define what we mean by a \emph{sensible strategy}. We say that a strategy profile $s=(s_1,\ldots,s_n)$ is sensible strategy, if it leads to a \emph{Bayesian Nash Equilibrium} (BNE) \cite{fudenberg1998theory} $s_i=BR(s_{-i})$ for all $i\in \{1,\ldots,n\}$. In other words, with the current strategies of the $n$ robots, no robot has the incentive to deviate from its current strategy.
 
 \subsection{Threshold-based Bayesian Nash Equilibrium}\label{subsec:thmproof}
 We now show that any task with concurrent benefits, admits a threshold strategy BNE. In other words, it is sufficient for the robots to follow a simple rule/algorithm: 
