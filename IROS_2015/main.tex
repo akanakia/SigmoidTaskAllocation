@@ -86,6 +86,7 @@
 \newcommand{\sig}{\mathcal{S}}
 \newcommand{\ceil}[1]{\lceil#1\rceil}
 \newcommand{\xm}{x_{\hat{m}}}
+\newcommand{\td}{\mathbf{t}}
 
 \begin{document}
 \title{Communication-Free Multi-Robot Task-Assignment as a Global Game}
@@ -122,7 +123,7 @@ Collaborative tasks such as object transport \cite{Sugawara2012}, oil-spill cont
 \centering\caption{A multi-robot firefighting scenario set up as a global game. Each player's imperfect estimate of the task is represented by $x_i$, a sum of the global magnitude parameter-$\tau$ and noisy sensor measurements-$\eta_i$.}\label{fig:ggsetup}
 \end{figure}
 
-We show in this paper that a response-threshold strategy for a broad class of task assignment problems, under communication constraints  and noisy sensing, results in unique system-wide equilibrium conditions such that no individual agent will receive a better utility by deviating from their strategy to act based on some threshold value $k$. To prove this statement we employ a sub-class of Game Theory called \emph{global games}, first introduced by Carlsson and Van Damme in 1993 \cite{Carlsson1993}. Global games have been substantially generalized over the years to study and model different economical phenomena such as pricing debt, currency crisis, and bank runs, and we strongly believe they can be further applied to the analysis of task assignment in MASs. See \cite{Morris2000} and the references therein for more details on applications of global games.
+We show in this paper that a response-threshold strategy for a broad class of task assignment problems, under communication constraints  and noisy sensing, results in unique system-wide equilibrium conditions such that no individual agent will receive a better utility by deviating from their strategy to act based on some threshold value $\td$. To prove this statement we employ a sub-class of Game Theory called \emph{global games}, first introduced by Carlsson and Van Damme in 1993 \cite{Carlsson1993}. Global games have been substantially generalized over the years to study and model different economical phenomena such as pricing debt, currency crisis, and bank runs, and we strongly believe they can be further applied to the analysis of task assignment in MASs. See \cite{Morris2000} and the references therein for more details on applications of global games.
 
 Collaborative tasks for MASs can be formally defined as global games with the property of \emph{concurrent benefit}. Informally, concurrent benefit is an attribute of a collaborative task where a certain minimum number of agents is needed to solve a task; if this number is not reached, agents which try nevertheless waste their efforts. In addition, the exact number of agents required to successfully complete the task is unknown and varies over time due to numerous, complex physical parameters. Many collaborative tasks---particularly those seen in biological systems---exhibit the property of concurrent benefit ranging from surveillance and coordinated defense of enclosed areas like termite mounds and honey bee hives \cite{Breed1990} to collective transport of heavy objects and even containment of oil spills and forest fires. The probability of success depends, non-linearly, on the average number of agents assigned to that task. For example, 5--10 ants may be insufficient to lift a heavy object such as a small rock or twig and will waste a considerable amount of energy and time in trying, but 12 or more ants might accomplish the task successfully. Similarly, in a MAS setting, consider the task of collaborative firefighting. To contain a large fire, it is insufficient (and inefficient) for a single agent to start putting out the fire without waiting for backup. But the rate of fire containment increases quickly by adding just a few more agents to the group, which illustrates the property of concurrent benefit well. The proof presented in this paper relates to this aforementioned class of collaborative tasks.
 
@@ -229,34 +230,39 @@ By Lemma~\ref{lemma:thresholdBR}, the best response of a threshold policy is a t
 \subsection{From discrete to continuous thresholds}\label{subsec:sigfun}
 After showing that discrete thresholds indeed result in a BNE for systems in which agents do not directly communicate, we will now show how how sensor noise at the individual level result in a continuous response treshold model that is prevalent in MAS and social insects. 
 
-To explain this suppose that all the agents share the same utility function $u(a_i,g,\tau)$ and also, assume that the observation noise of the $n$ agents ($\eta_1,\ldots,\eta_n$) are independent and identically distributed (i.i.d, $\mathcal{N}(0,\sigma^2)$) Gaussian random variables. Any agent with imperfect sensing and imperfect response to stimulus satisfies this condition. Then, it is not hard to see that there exists a BNE with threshold strategies that have the same threshold value $\tau^*$ (see  \cite{Morris2000}). Now, consider a realization of $\tau=\hat{\tau}$ and suppose that we have a large number of agents $n$ observing a noisy variation of $\hat{\tau}$. Take for example the case of fire-fighting robots, and let $\hat{\tau}$ be the magnitude (including type, intensity, area, etc.) of the fire. Then, since the observations of the $n$ agents are independent given the value of $\tau$, they will be distributed according to $\mathcal{N}(\hat{\tau},\sigma^2)$ (given the value of $\tau$). Now consider the relative number of agents taking part in the activity given the magnitude parameter, $\hat{\tau}$.
-\begin{equation}
-	N_{rel}(\hat{\tau})=\frac{\#\text{agents with }x_i\geq \tau^*}{n}
+To explain this suppose that all the agents share the same utility function $u(a_i,g,\tau)$ and also, assume that the observation noise of the $n$ agents ($\eta_1,\ldots,\eta_n$) are independent and identically distributed (i.i.d, $\mathcal{N}(0,\sigma^2)$) Gaussian random variables. Any agent with imperfect sensing and imperfect response to stimulus satisfies this condition. Then, it is not hard to see that there exists a BNE with threshold strategies that have the same threshold value $\td$ (see  \cite{Morris2000}). Now, consider a realization of $\tau=\hat{\tau}$ and suppose that we have a large number of agents $n$ observing a noisy variation of $\hat{\tau}$. Take for example the case of fire-fighting robots, and let $\hat{\tau}$ be the magnitude (including type, intensity, area, etc.) of the fire. Then, since the observations of the $n$ agents are independent given the value of $\tau$, they will be distributed according to $\mathcal{N}(\hat{\tau},\sigma^2)$ (given the value of $\tau$). Now consider the relative number of agents taking part in the activity given the magnitude parameter, $\hat{\tau}$.
+\begin{equation}\label{eqn:Nrel}
+	N_{rel}(\hat{\tau})=\frac{\#\text{agents with }x_i\geq \td}{n}
 \end{equation}
 
 Then, we have the following theorem.
 \begin{theorem}\label{thrm:relativefrequency}
 For the relative number of agents $N_{rel}(\hat{\tau})$, we have
-\begin{align}
-\lim_{n\to\infty}N_{rel}(\hat{\tau})=1-\Phi(\frac{\hat{\tau}-\tau^*}{\sigma^2})
-\end{align}
+\begin{equation}
+\lim_{n\to\infty}N_{rel}(\hat{\tau})=1-\Phi(\frac{\hat{\tau}-\td}{\sigma^2})
+\end{equation}
 where $\Phi$ is the cumulative distribution function (cdf) of a standard Gaussian. 
 \end{theorem}
 \begin{proof}
-Note that $N_{rel}(\hat{\tau})=\frac{1_{x_i\geq \tau^*}}{n}$ where $1_{\alpha\geq \beta}$ is the indicator function for $\alpha\geq \beta$. But note that for a given $\hat{\tau}$, $x_i$s are i.i.d.\ $\mathcal{N}(\hat{\tau},\sigma^2)$ random variables. Therefore, by the Gilvenko-Cantelli theorem \cite{durrett2010}, it follows that:
+Note that $N_{rel}(\hat{\tau})=\frac{\mathbf{I}_{x_i\geq \td}}{n}$ where $\mathbf{I}_{\alpha\geq \beta}$ is the indicator function for $\alpha\geq \beta$. But note that for a given $\hat{\tau}$, $x_i$s are i.i.d.\ $\mathcal{N}(\hat{\tau},\sigma^2)$ random variables. Therefore, by the Gilvenko-Cantelli theorem \cite{durrett2010}, it follows that:
 \begin{equation}
-\lim_{n\to\infty}N_{rel}(\hat{\tau})=1-F(\frac{\hat{\tau}-\tau^*}{\sigma^2})
+\lim_{n\to\infty}N_{rel}(\hat{\tau})=1-F(\frac{\hat{\tau}-\td}{\sigma^2})
 \end{equation}
-
 \end{proof}
-Therefore, for large $n$, the relative frequency of agents taking part into the activity has a shape that follows the shape of the cdf of a standard Gaussian random variable and a frequentist interpretation of ant colony activity in such a setting is that the probability of an ant taking part in the activity roughly follows the curve of this function. 
+
+\begin{figure}[!tb]
+	\centering\includegraphics[width=\columnwidth]{../figures/thm2fig.png}
+	\centering\caption{Visualization of Theorem~\ref{thrm:relativefrequency} as $N_{rel}$ begins to estimate $\Phi(\cdot)$. The plot was generated by running Eqn.~\ref{eqn:Nrel} 10,000 times for each point in $\hat{\tau} = [1,10,\text{ (inc.) }0.1]$. $\td = 5$ and $x_i = \hat{\tau} + \mathcal{N}(0, \sigma)$. Each curve in the plot is generated by sweeping $\sigma = \{0, 0.1, 1, 2, 10\}$, with $\sigma = 0$ being a step-function and $\sigma = 10$ having the \emph{flattest} slope.}\label{fig:thm2fig}
+\end{figure}
+
+Therefore, for large $n$, the relative frequency of agents taking part in the activity has a shape that follows the shape of the cdf of a standard Gaussian random variable. A frequentist interpretation of ant colony activity in such a setting is that the probability of an ant taking part in the activity roughly follows the curve of this function. 
 
 The final step to explain the prevalence of sigmoidal functions in multiagent settings is to note that:
 \begin{align}
 |\Phi(x)-\frac{1}{1+e^{-1.702x}}|\leq 0.01,
 \end{align}
 for all $x\in\R$, see \cite{camilli1994} and the references therein. The scaling constant $d = 1.702$ used in item response theory has been shown to minimize the
-maximum difference between the normal and logistic distribution functions, and $\frac{1}{1+e^{-dx}}$ is the standard, logistic sigmoid function. 
+maximum difference between the normal and logistic distribution functions, and $(1+e^{-d.x})^{-1}$ is the standard, logistic sigmoid function. 
 
 
 
