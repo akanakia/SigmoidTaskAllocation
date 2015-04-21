@@ -23,6 +23,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{enumerate}
+\usepackage{mathtools}
 
 % Packages for including pseudo-code
 \usepackage{algorithmicx}
@@ -68,17 +69,30 @@
 \newcommand{\amin}[1]{\underset{#1}\argmin}
 \DeclareMathOperator*{\argmax}{\arg\!\max\>}
 \newcommand{\amax}[1]{\underset{#1}\argmax}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
 
-\def\a{\mathbf{a}}
-\def\Z{\mathbb{Z}}
-\def\R{\mathbb{R}}
-\def\N{\mathcal{N}}
-\def\estt{\hat{\tau}}
-\def\estg{\gamma}
-\newcommand{\sig}{\mathcal{S}}
-\newcommand{\ceil}[1]{\lceil#1\rceil}
-\newcommand{\xm}{x_{\hat{m}}}
-\newcommand{\td}{\mathbf{t}}
+\newcommand{\vnorm}[1]{\left|\left|#1\right|\right|}
+\newcommand{\D}[2]{\frac{d#1}{d#2}}
+\newcommand{\PD}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\V}[1]{\mathbf{#1}}
+\newcommand{\ubar}[1]{\underline{#1}}
+
+\def\a{\mathbf{a}}    % Action profile
+\def\Z{\mathbb{Z}}    % Integers
+\def\R{\mathbb{R}}    % Reals
+\def\N{\mathcal{N}}   % Naturals
+\def\td{\mathbf{t}}   % response-threshold value
+\def\Ac{\mathcal{A}}  % (Bayesian) Action Profile
+\def\St{\mathcal{S}}  % (Bayesian/Extensive) State List, Strategy set
+\def\Pl{\mathcal{N}}  % (Extensive/Bayesian) Player List
+\def\Hi{\mathcal{H}}  % (Extensive) Game History
+\def\Pf{\mathcal{P}}  % (Extensive) Player Function
+\def\Th{\mathcal{Z}}  % (Extensive) Terminal History
+\def\Ta{\mathcal{T}}  % (Cooperative) Targets/Resources
+\def\Co{\mathcal{C}}  % (Cooperative) Player assignment constraints
+\def\sig{\mathcal{S}} % Sigmoid function
+
 
 \begin{document}
 \title{Existence of an Equilibrium Strategy for Communication-Free Multi-Robot Task-Assignment}
