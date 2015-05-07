@@ -95,7 +95,7 @@
 
 \author{Anshul Kanakia and John Klingner and Nikolaus Correll}
 
-\institute{Anshul Kanakia, John Klingner and Nikolaus Correll \at University of Colorado, Boulder\\ Dept. of Computer Science\\ \email{anshul.kanakia@colorado.edu}\\ \email{john.klingner@colorado.edu}\\ \email{nikolaus.correll@colorado.edu}}
+\institute{Anshul Kanakia (corresponding author), John Klingner and Nikolaus Correll \at University of Colorado, Boulder, USA\\ Dept. of Computer Science\\ \email{anshul.kanakia@colorado.edu}\\ \email{john.klingner@colorado.edu}\\ \email{nikolaus.correll@colorado.edu}}
 
 \begin{document}
 \maketitle
@@ -105,7 +105,9 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \abstract{
-We present a multi agent collaboration algorithm to recruit an approximate number of individually simple robots with controllable variance. We propose a sigmoid response threshold function motivated by task allocation in social insects, and describe macro-level models backed by micro-level simulations to predict the resulting team sizes and their variance.  These results are further validated through physical experiments using the ``Droplet'' swarm robotics platform. We show that the slope of the response threshold function can be used to control the variance of group size, allowing agents to trade off deterministic team size with coordination speed, and making the proposed mechanism applicable to a variety of applications.}
+We present a multi agent collaboration algorithm to recruit an approximate number of individually simple robots with controllable variance. We propose a sigmoid response threshold function motivated by task allocation in social insects, and describe macro-level models backed by micro-level simulations to predict the resulting team sizes and their variance.  These results are further validated through physical experiments using the ``Droplet'' swarm robotics platform. We show that the slope of the response threshold function can be used to control the variance of group size, allowing agents to trade off deterministic team size with coordination speed, and making the proposed mechanism applicable to a variety of applications.
+\keywords{swarm robotics, multi-agent systems, collaboration, task-allocation, response-threshold}
+}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -137,12 +139,12 @@ While a response threshold function can also be applied to the swarm distributio
 \section{Response threshold-based task allocation}\label{sec:expsetup}
 \begin{figure*}[!htb]`
 \centering\includegraphics[width=.98\textwidth]{../figures/setup.png}
-\centering\caption{A visual representation of the collaboration experiment firefighting scenario using the Droplet swarm robotic platform \cite{Farrow14,klingner14}.}\label{fig:setup}
+\centering\caption{A visual representation of the collaboration experiment firefighting scenario using the \emph{Droplet} swarm robotic platform.}\label{fig:setup}
 \end{figure*}
 
-We consider a generic collaboration task with $m$ uniformly distributed collaboration sites within a flat arena with area $A$. A swarm of individually simple robots such as the \emph{Droplet} platform \cite{Farrow14,Klingner14} is deployed within the arena, uniformly and at random. The number of robots being used per experiment varies, as we discuss results for a number of different scenarios. Collaboration sites in the arena can be of various sizes and configurations.
+We consider a generic collaboration task with $m$ uniformly distributed collaboration sites within a flat arena with area $A$. A swarm of individually simple robots such as the \emph{Droplet} platform \cite{Farrow2014,Klingner2014} is deployed within the arena, uniformly and at random. The number of robots being used per experiment varies, as we discuss results for a number of different scenarios. Collaboration sites in the arena can be of various sizes and configurations.
 
-Each individual agent is capable of locomotion \cite{Klingner14} and local sensing \cite{Farrow14}. The agents do not require global positioning and no centralized controller exists, but we assume each agent to be capable of local omnidirectional communication with other agents within its communication range. The agents are also capable of sensing the boundary of a collaboration site---we assume that sites have easily distinguishable boundary regions, as shown in Fig.~\ref{fig:setup}, for the purposes of the model studied in this paper. 
+Each individual agent is capable of locomotion \cite{Klingner2014} and local sensing \cite{Farrow2014}. The agents do not require global positioning and no centralized controller exists, but we assume each agent to be capable of local omnidirectional communication with other agents within its communication range. The agents are also capable of sensing the boundary of a collaboration site---we assume that sites have easily distinguishable boundary regions, as shown in Fig.~\ref{fig:setup}, for the purposes of the model studied in this paper. 
 
 The objective of each agent in the robot swarm is to find a collaboration site in the arena and perform a collective task with other agents at that site. The precise details of the collective task are not important for the purpose of understanding the coordination mechanism. We assume the actual collective task takes each agent a probabilistic, finite amount of time to complete. Once collaboration is complete, the agent detaches itself from its current site and returns to searching for other sites in the arena. 
 
@@ -226,7 +228,7 @@ P(n)=\int_{n/2}^{n} \mathcal{N}(n\sig(n),n\sig(n)(1-\sig(n)))\label{eq:normalcdf
 \end{equation}
 Therefore, in a group of size $n$, and $n$ reasonably high (see below), an average of $n\sig(n)$ robots will collaborate with group sizes of variance $n\sig(n)(1-\sig(n))$. In the special case of $n=\tau$, i.e., the group size has the desired value of $\tau$, \eqref{eq:normalcdf} evaluates to $P(\tau) = \sig(\tau)=0.5$. Therefore, the probability of a group of $n$ agents to collaborate is identical to the probability of a individual agent to collaborate. In all other cases \eqref{eq:normalcdf} allows us to calculate the micro-macro matching from $\sig(n)$ to $P(n)$.  
 
-A caveat of \eqref{eq:normalcdf} is that the Normal approximation yields poor results for small $n$, usually smaller than 20, and is better when $\sig(x)$ is neither close to 0 or 1 \cite{box78}. In these cases, exact solutions for $P(n)$ require numerical solutions of \eqref{eq:cdf} using what is known as \emph{continuity correction} \cite{Feller1945}. 
+A caveat of \eqref{eq:normalcdf} is that the Normal approximation yields poor results for small $n$, usually smaller than 20, and is better when $\sig(x)$ is neither close to 0 or 1 \cite{Box1978}. In these cases, exact solutions for $P(n)$ require numerical solutions of \eqref{eq:cdf} using what is known as \emph{continuity correction} \cite{Feller1945}. 
 
 
 
