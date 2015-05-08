@@ -39,21 +39,24 @@ This sheds light on the key complexity for collaboration; a common perceived sti
 %%% DONT FRAME THE PAPER AROUND THE SOLUTION "RESPONSE THRESHOLD", BUT AROUND THE COMMON SETUP: A NUMBER OF AGENTS MUST AGREE UPON SOMETHING BUT CANNOT TALK TO EACH OTHER, JUST OBSERVE A COMMON SIGNAL WITH MAYBE NOISE. 
 This is the scenario setup. There are a group of individual agents attempting to perform some collaborative task. Each agent has some internal representation of the magnitude of the task but does not share this information with the other agents. All agents decide, for themselves, whether or not to take part in the collaborative task. When a critical mass of agents willing to take part in the task is achieved, the task is successfully attempted, otherwise the attempt automatically fails.
 
-We have seen situations like this in a number of different fields including ethology, neurology, sociology, economics, and computer science. While collaboration in social organisms has been a topic of study for centuries, the underlying mechanisms of this process still elude researchers. A number of models have been proposed including the response threshold model (find others). Of these models, response threshold models have become popular due to their simplicity and accuracy with which they successfully describe collaborative task behavior in multi-agent systems. Roboticists have started using these models to engineer swarm systems.
+We have seen situations like this in a number of different fields including ethology, neurology, sociology, economics, and computer science. While collaboration in social organisms has been a topic of study for centuries, the underlying mechanisms of this process still elude researchers. A broadening in thinking of the way division of labor is achieved in social insect colonies is discussed in \cite{Gordon1996}. Here, the idea that individuals in a swarm decide what task to perform using both internal and external triggers in a dynamically shifting environment is first cultivated. In contrast, prior models outlined in \cite{Gordon1996} first attributed task allocation mechanisms to innate physiological differences in individuals (such as age and size, in research from the 1960s/70s) while later models tended to focus heavily on external agent stimulus (such as pheromone levels, seen in research from the 1980s). It is clear now that a combination of both internal and external parameters in essential for understanding the underlying mechanisms governing task-allocation in multi-agent systems. 
+
+Of these models, response-threshold models have become popular due to their simplicity and accuracy with which they successfully describe collaborative task behavior in multi-agent systems. Robinson \cite{Robinson1987} provides what is perhaps the first publication on empirical evidence for hormone regulated response-threshold labor division in honey bees. A number of other ethology research groups subsequently show similar hormone regulation based task-allocation processes in ants and termites providing further evidence of the ubiquitous nature of the response-threshold process. Roboticists have started using these models to engineer swarm systems. While extensive phenomenological evidence exists supporting the agreement between response-threshold models and successful task-assignment, there has so far been no logical argument for their extensive use.
 
 %%% THE PROBLEM HAS NOT ONLY BEEN STUDIED BY ETHOLOGISTS FOR ANTS BUT ALSO BY NEUROLOGISTS AND ECONOMISTS (GAME THEORY). WHO ELSE STUDIES TASK ALLOCATION IF IT IS REALLY SO IMPORTANT?
-Ethologists have studied the problem of division of labor in social insects extensively and have found that a class of models called response-threshold models explain observed behavior very well. Swarm roboticists have adopted this model of distributed task-assignment and adapted it for use with artificially engineered systems. While extensive phenomenological evidence exists supporting the agreement between response-threshold models and successful task-assignment, there has so far been no logical argument for their extensive use.
 
 %%% WHAT ARE THE COMMONALITIES AMONG ALL THE CONSENSUS PROBLEMS / WHAT CLASS OF PROBLEMS ARE WE INTERESTED IN. THIS SHOULD MATCH THE GAME THEORY DEFINITION. THERE ARE MANY. WHERE HAS THE RESPONSE THRESHOLD ALREADY BEEN OBSERVED AND WHERE IS IT USED? ETHOLOGY AND ROBOTICS. THEY ARE DIFFERENT THAN WHAT GAME THEORY ASSUMES, HERE IS WHY: NOISE. 
 
 % MAIN CLAIM: THERE ARE COUNTLESS SYSTMES THAT MUST USE RESPONSE THRESHOLDS, BECAUSE THEY ARE THE BEST WAY TO DO IT IN THIS CASE.
 
 % Notes on cited papers:
-The theory of global games was first introduced by Carlsson and Van Damme in \cite{Carlsson1993}.
 
-A broadening in thinking of the way division of labor is achieved in social insect colonies is discussed in \cite{Gordon1996}. Here, the idea that individuals in a swarm decide what task to perform using both internal and external triggers in a dynamically shifting environment is first cultivated. In contrast, prior models outlined in \cite{Gordon1996} first attributed task allocation mechanisms to innate physiological differences in individuals (such as age and size, in research from the 1960s/70s) while later models tended to focus heavily on external agent stimulus (such as pheromone levels, seen in research from the 1980s). It is clear now that  a combination of both internal and external parameters in essential for understanding the underlying mechanisms governing task-allocation in multi-agent systems.
 
-\cite{Theraulaz1998} introduces dynamic response thresholds and \cite{Bonabeau1998}
+The theory of global games was first introduced by Carlsson and Van Damme in \cite{Carlsson1993}. It lays the foundation for the proofs provided in the supplementary materials of this paper.
+
+A survey of the application of global games to economic settings is available in \cite{Morris2000}.
+
+Bonabeau \cite{Bonabeau1996} introduces the \emph{fixed} response-threshold model for division of labor in social insects which is later extended to incorporate the notion of \emph{dynamic} response-thresholds for task-allocation which overcomes a number of issues with the fixed model \cite{Theraulaz1998}.
 
 \cite{Martinoli1999}
 
@@ -62,8 +65,6 @@ A broadening in thinking of the way division of labor is achieved in social inse
 \cite{Krieger2000}
 
 \cite{Kube2000}
-
-A survey of the application of global games to economic settings is available in \cite{Morris2000}.
 
 \cite{Pynadath2002}
 
