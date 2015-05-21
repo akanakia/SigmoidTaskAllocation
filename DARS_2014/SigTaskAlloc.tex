@@ -93,9 +93,9 @@
 
 \title*{A Response Threshold Sigmoid Function Model for Swarm Robot Collaboration}
 
-\author{Anshul Kanakia and John Klingner and Nikolaus Correll}
+\author{Anshul Kanakia$^*$ and John Klingner and Nikolaus Correll}
 
-\institute{Anshul Kanakia (corresponding author), John Klingner and Nikolaus Correll \at University of Colorado, Boulder, USA\\ Dept. of Computer Science\\ \email{anshul.kanakia@colorado.edu}\\ \email{john.klingner@colorado.edu}\\ \email{nikolaus.correll@colorado.edu}}
+\institute{$^*$Corresponding author\\Anshul Kanakia, John Klingner and Nikolaus Correll \at University of Colorado, Boulder, USA\\ Dept. of Computer Science\\ \email{anshul.kanakia@colorado.edu}\\ \email{john.klingner@colorado.edu}\\ \email{nikolaus.correll@colorado.edu}}
 
 \begin{document}
 \maketitle
@@ -116,7 +116,7 @@ We present a multi agent collaboration algorithm to recruit an approximate numbe
 \section{Introduction}
 We propose a probabilistic, threshold based multi agent collaboration algorithm and analysis to recruit an \emph{approximate} number of robots for a collective task. Recruiting robots to collaboratively solve a task is a canonical problem in robotics \cite{Gerkey2004}. Formally introduced in the stick-pulling experiment, as described by Martinoli et al.~\cite{Martinoli2004, Martinoli1995}, to recruit exactly two robots to collaboratively pull a stick out of the ground, Lerman et al.~\cite{Lerman2001} have extended this model to larger teams of constant size. In each case the result of collaboration is binary, success or failure, based on whether an \emph{exact} number of robots are present at the collaboration site or not.
 
-We wish to extend the stick pulling model of constant group sizes of robots to include a more general case of collaboration tasks that involve only approximate robot group sizes for successful collaboration. More specifically, we deal with tasks that have the property of ``concurrent benefit'' where single agents must wait for a group---with a range of permissible size---to form at their collaboration site before being able to collectively begin the task and complete it successfully. Examples of such tasks include fire containment, collective transport \cite{sugawara2012}, pattern recognition \cite{beni1993swarm}, real-time mapping of oil spills \cite{beni2005swarm}, determining coverage area of forest fires \cite{krishnanand2006glowworm}, and many others that require a subset of a swarm to coalesce and tackle a task collaboratively.  
+We wish to extend the stick pulling model of constant group sizes of robots to include a more general case of collaboration tasks that involve only approximate robot group sizes for successful collaboration. More specifically, we deal with tasks that have the property of ``concurrent benefit'' where single agents must wait for a group---with a range of permissible size---to form at their collaboration site before being able to collectively begin the task and complete it successfully. Examples of such tasks include fire containment, collective transport \cite{Sugawara2012}, pattern recognition \cite{Beni1993}, real-time mapping of oil spills \cite{Beni2005}, determining coverage area of forest fires \cite{Krishnanand2006}, and many others that require a subset of a swarm to coalesce and tackle a task collaboratively.  
 
 A concrete example is fire containment (See Fig.~\ref{fig:setup}). Dropping incremental amounts of water on a fire will be futile until a critical mass of robots drop their water at the same time. Waiting for an exact number of robots, however, is not necessary either, motivating a task allocation scheme that will result in an average number of robots with predictable variance. 
 
@@ -306,15 +306,15 @@ For both experiments a single collaboration site is used and each run simulates 
 \section{Results}
 \begin{figure*}[!htb]
 \begin{subfigure}{0.33\textwidth}
-\centering\includegraphics[width=1.0\textwidth]{../figures/LermanCollabCompare3.png}
+\centering\includegraphics[width=1.0\textwidth]{../figures/LermanCollabCompare3New.png}
 \centering\caption{$\theta=2$}\label{fig:lercol3}
 \end{subfigure}~
 \begin{subfigure}{0.33\textwidth}
-\centering\includegraphics[width=1.0\textwidth]{../figures/LermanCollabCompare2.png}
+\centering\includegraphics[width=1.0\textwidth]{../figures/LermanCollabCompare2New.png}
 \centering\caption{$\theta=1$}\label{fig:lercol2}
 \end{subfigure}~
 \begin{subfigure}{0.33\textwidth}
-\centering\includegraphics[width=1.0\textwidth]{../figures/LermanCollabCompare1.png}
+\centering\includegraphics[width=1.0\textwidth]{../figures/LermanCollabCompare1New.png}
 \centering\caption{$\theta=0$}\label{fig:lercol1}
 \end{subfigure}
 \caption{Comparison of the collaboration rate for task allocation with probabilistic and deterministic \cite{Lerman2001} for different values of $\theta$ and team sizes $\tau$ in an environment with one collaboration site and one hundred robots. }\label{fig:lercol}
@@ -327,19 +327,19 @@ With increasing $\theta$ the Logistic function approximates a unit step, minimiz
 
 \begin{figure*}[!htb]
 \begin{subfigure}{0.5\textwidth}
-\centering\includegraphics[width=1.0\textwidth]{../figures/collabratesweep4.png}
+\centering\includegraphics[width=1.0\textwidth]{../figures/collabratesweep4New.png}
 \centering\caption{$\tau = 4$}\label{fig:collabsweep4}
 \end{subfigure}~
 \begin{subfigure}{0.5\textwidth}
-\centering\includegraphics[width=1.0\textwidth]{../figures/collabratesweep8.png}
+\centering\includegraphics[width=1.0\textwidth]{../figures/collabratesweep8New.png}
 \centering\caption{$\tau = 8$}\label{fig:collabsweep8}
 \end{subfigure}
 \begin{subfigure}{0.5\textwidth}
-\centering\includegraphics[width=1.0\textwidth]{../figures/collabratesweep16.png}
+\centering\includegraphics[width=1.0\textwidth]{../figures/collabratesweep16New.png}
 \centering\caption{$\tau = 16$}\label{fig:collabsweep16}
 \end{subfigure}~
 \begin{subfigure}{0.5\textwidth}
-\centering\includegraphics[width=1.0\textwidth]{../figures/collabratesweep32.png}
+\centering\includegraphics[width=1.0\textwidth]{../figures/collabratesweep32New.png}
 \centering\caption{$\tau = 32$}\label{fig:collabsweep32}
 \end{subfigure}
 \caption{Histograms of resulting team sizes for various values of $\tau$ and $\theta$ with one hundred robots and one collaboration site.}\label{fig:collabsweep}
@@ -349,11 +349,11 @@ We observe the collaboration rate to be qualitatively and quantitatively very si
 
 \begin{figure*}[!htb]
 \begin{subfigure}{0.5\textwidth}
-\centering\includegraphics[width=1.0\textwidth]{../figures/means.png}
+\centering\includegraphics[width=1.0\textwidth]{../figures/meansNew.png}
 \centering\caption{}\label{fig:means}
 \end{subfigure}~
 \begin{subfigure}{0.5\textwidth}
-\centering\includegraphics[width=1.0\textwidth]{../figures/variances.png}
+\centering\includegraphics[width=1.0\textwidth]{../figures/variancesNew.png}
 \centering\caption{}\label{fig:vars}
 \end{subfigure}
 \caption{Showing the effects of varying $\theta$ on means and variances corresponding to the histograms seen in Fig.~\ref{fig:collabsweep}.}\label{fig:meansvars}
