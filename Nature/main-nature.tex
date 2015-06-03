@@ -135,13 +135,17 @@ By Lemma~\ref{lemma:thresholdBR}, the best response of a threshold policy is a t
 
 
 
-We show in Box 1 that a simple response threshold is sufficient to achieve a Bayes Nash Equilibrium. This insight is consistent with phenomenological observations in social insects, which are believed to use response thresholds for coordination. For example, Robinson\cite{Robinson1987} provides first empirical evidence for hormone regulated response-threshold labor division in honey bees. A number of other ethology research groups subsequently show similar hormone regulation based task-allocation processes in ants and termites providing further evidence of the ubiquitous nature of the response-threshold process. Roboticists have started using these models to engineer swarm systems\cite{Krieger2000}. Bonabeau \cite{Bonabeau1996} introduces the \emph{fixed} response-threshold model for division of labor in social insects which is later extended to incorporate the notion of \emph{dynamic} response-thresholds for task-allocation which overcomes a number of issues with the fixed model \cite{Theraulaz1998}.
+We show in Box 1 that a simple response threshold is sufficient to achieve a Bayes Nash Equilibrium. This insight is consistent with phenomenological observations in social insects, which are believed to use response thresholds for coordination. For example, Robinson\cite{Robinson1987} provides first empirical evidence for hormone regulated response-threshold labor division in honey bees, and similar observations have been made for termites, ants and other social insects \cite{bonabeau1999swarm,camazineprinceton}.
 
-Yet, observations in ethology suggest sigmoid threshold function \cite{Bonabeau1996} \textbf{THIS SENTENCE IS INCOMPLETE}. We argue that this behavior can be a direct result of using a simple discrete threshold under the influence of perception noise. Indeed, one can show that a sigmoid threshold function is the outcome of deterministic threshold functions on noise observations. When engineering a system, this noise can be controlled and enhanced using computation, allowing artificial agents to trade between exploitation and exploration. 
+%A number of other ethology research groups subsequently show similar hormone regulation based task-allocation processes in ants and termites providing further evidence of the ubiquitous nature of the response-threshold process. 
+
+Roboticists have started using these models to engineer swarm systems\cite{Krieger2000}. Bonabeau \cite{Bonabeau1996} introduces the \emph{fixed} response-threshold model for division of labor in social insects which is later extended to incorporate the notion of \emph{dynamic} response-thresholds for task-allocation which overcomes a number of issues with the fixed model \cite{Theraulaz1998}.
+
+Yet, observations in ethology suggest sigmoid threshold function \cite{Bonabeau1996}, rather than fixed thresholds as suggested by the game theoretic framework. We argue that this behavior can be a direct result of using a simple discrete threshold under the influence of perception noise. Indeed, one can show that a sigmoid threshold function is the outcome of deterministic threshold functions on noise observations. When engineering a system, this noise can be controlled and enhanced using computation, allowing artificial agents to trade between exploitation and exploration. 
 
 After showing that discrete thresholds indeed result in a BNE for systems in which agents do not directly communicate, we will now show how sensor noise at the individual level results in a continuous response-threshold phenomena that is prevalent in MAS and social insects. 
 
-Suppose that all the agents share the same utility function $u(a_i,g,\tau)$ and also, assume that the observation noise of the $n$ agents ($\eta_1,\ldots,\eta_n$) are independent and identically distributed (i.i.d) $\mathcal{N}(0,\sigma^2)$ Gaussian random variables. Then, it is not hard to see that there exists a BNE with threshold strategies that have the same threshold value $\td$ (see  \cite{Morris2000}). Now, consider a realization of $\tau=\hat{\tau}$ and suppose that we have a large number of agents $n$ observing a noisy variation of $\hat{\tau}$. Take for example the case of fire-fighting agents, and let $\hat{\tau}$ be the magnitude (including type, intensity, area, etc.) of the fire. Then, since the observations of the $n$ agents are independent given the value of $\tau$, they will be distributed according to $\mathcal{N}(\hat{\tau},\sigma^2)$ (given the value of $\tau$). Now consider the relative number of agents taking part in the activity given the realized magnitude parameter $\hat{\tau}$ and denote it by 
+Suppose that all the agents share the same utility function $u(a_i,g,\tau)$ and also, assume that the observation noise of the $n$ agents ($\eta_1,\ldots,\eta_n$) are independent and identically distributed (i.i.d) $\mathcal{N}(0,\sigma^2)$ Gaussian random variables. Then, it is not hard to see that there exists a BNE with threshold strategies that have the same threshold value $\td$\cite{Morris2000}. Now, consider a realization of $\tau=\hat{\tau}$ and suppose that we have a large number of agents $n$ observing a noisy variation of $\hat{\tau}$. Take for example the case of fire-fighting agents, and let $\hat{\tau}$ be the magnitude (including type, intensity, area, etc.) of the fire. Then, since the observations of the $n$ agents are independent given the value of $\tau$, they will be distributed according to $\mathcal{N}(\hat{\tau},\sigma^2)$ (given the value of $\tau$). Now consider the relative number of agents taking part in the activity given the realized magnitude parameter $\hat{\tau}$ and denote it by 
 \begin{equation}\label{eqn:Nrel}
 	N_{rel}(\hat{\tau}):=\frac{\#\text{agents with }x_i\geq \td}{n}.
 \end{equation}
@@ -161,8 +165,9 @@ Note that $N_{rel}(\hat{\tau})=\frac{\sum_{i=1}^n\mathbf{I}_{x_i\geq \td}}{n}$ w
 \begin{align*}
 \lim_{n\to\infty}N_{rel}(\hat{\tau})=\Phi(\frac{\hat{\tau}-\td}{\sigma^2}).
 \end{align*}
-\vspace{-5px}
+\vspace{-35px}
 \end{proof}
+\vspace{-30px}
 The final step to explain the prevalence of sigmoid functions in multiagent settings is to note that:
 \begin{align*}
 |\Phi(\frac{\hat{\tau}-\td}{\sigma^2})-\frac{1}{1+e^{-d(\frac{\hat{\tau}-\td}{\sigma^2})}}|\leq 0.01,
@@ -171,11 +176,9 @@ for all $\hat{\tau}\in\R$ and some optimal value $d\approx 1.704$ (see \cite{cam
 \end{framed}
 \end{figure}
 
+These results also hold when moving from a discrete to a continuous response threshold, which is shown in Box 2. Therefore, for large $n$, the relative frequency of agents taking part in the activity has a shape that follows the shape of the cdf of a standard Gaussian random variable, as seen in Fig.~\ref{fig:thm2fig}, i.e. agents may use deterministic threshold strategies but their aggregate behavior would appear to an \textit{outside observer} as a continuous (sigmoid) threshold function.
 
-
-Interestingly, these results also hold when moving from a discrete to a continuous response threshold, which is shown in Box 2. Therefore, for large $n$, the relative frequency of agents taking part in the activity has a shape that follows the shape of the cdf of a standard Gaussian random variable, as seen in Fig.~\ref{fig:thm2fig}, i.e. agents may use deterministic threshold strategies but their aggregate behavior would appear to an \textit{outside observer} as a continuous (sigmoid) threshold function.
-
-These results suggest that global games can potentially describe a wide range of collective decision making scenarios, explaining the prevalence of sigmoid threshold policy in natural systems and artificial systems. While such a policy preserves a Bayesian Nash Equilibrium as the total number of agents increase, it also allows the system to balance between exploitation and exploration, thereby allowing to design swarms that are flexible and can alter strategies for changing environmental parameters.
+These results suggest that global games can potentially describe a wide range of collective decision making scenarios, explaining the prevalence of sigmoid threshold policy in natural systems and artificial systems. While such a policy preserves a Bayesian Nash Equilibrium as the total number of agents increase, it also allows the system to balance between exploitation and exploration, thereby allowing to design swarms that are flexible and can alter strategies for changing environmental parameters without requiring communication.
 \bibliography{references}
 
 \begin{addendum}
