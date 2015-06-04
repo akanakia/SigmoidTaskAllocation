@@ -7,8 +7,6 @@
 %% LaTeX can find them
 \bibliographystyle{naturemag}
 
-\title{Optimal task allocation in systems with limited communication across species}
-
 %% Notice placement of commas and superscripts and use of &
 %% in the author list
 \usepackage{amsthm}
@@ -24,6 +22,9 @@
 \usepackage{mathtools}
 \usepackage{framed}
 
+\usepackage{lineno}
+
+% ----------- CUSTOM MACROS ----------------
 \DeclareMathOperator*{\argmin}{\arg\!\min\>}
 \newcommand{\amin}[1]{\underset{#1}\argmin}
 \DeclareMathOperator*{\argmax}{\arg\!\max\>}
@@ -46,19 +47,20 @@
 
 \def\citerq{$^\text{citation reqd.}$}
 
+% ----------------- TITLE AND AUTHORS --------------------
+\title{Optimal task allocation in systems with limited communication across species}
 \author{Anshul Kanakia$^{1,2}$, Behrouz Touri$^{1,3}$ \& Nikolaus Correll$^{1,2}$}
 
-
 \begin{document}
-
 \maketitle
-
 \begin{affiliations}
  \item College of Engineering and Applied Sciences, University of Colorado, Boulder, USA. 
  \item Dept. of Computer Science.
  \item Dept. of Electrical, Computer \& Energy Engineering.
 \end{affiliations}
 
+% --------------- PAPER BODY --------------------
+\linenumbers
 \begin{abstract}
 Task allocation in systems that are subject to communication constraints is ubiquitous in nature at all scales, ranging from cellular systems\cite{Yoshida2010, Suzuki2015} and social insects\cite{Robinson1987, Gordon1996, Bonabeau1998, Theraulaz1998} to large animal herds\cite{Conradt2003, Conradt2005} and human society\cite{Raafat2009}. Although the ability to communicate decisions such as during voting\cite{Conradt2003}, e.g., increases with agent complexity, inter-agent communication might not always be possible. This might be either due to limitations at agent level (cellular/insect level) or properties of the task itself (adversary behavior in humans). Formalizing this class of problems as a global game, a concept from the field of game theory, reveals that a simple threshold policy leads to a Bayesian Nash Equilibrium, that is an optimal assignment in the absence of communication between agents. While this result provides an hypothesis about the inner workings of a wide range of systems in which limited communication between agents is likely, it provides a formal explanation for threshold-based task allocation in social insects. In particular, we show how noise in the perception apparatus of such systems leads to commonly  observed sigmoid response threshold functions that control the trade-off between exploration and exploitation\cite{Bonabeau1997}, and can be used to design engineered systems ranging from swarm robotics\cite{Martinoli1999, Krieger2000, Kube2000, Mataric2003, Gerkey2004} to smart composites\cite{McEvoy2015}, made of computational elements with very low complexity. 
 \end{abstract}
@@ -83,10 +85,10 @@ Without loss of generality, the class of tasks discussed in this paper have the 
 
 Note that in order to have such a task, we need the above conditions to hold for all the agents, i.e.\ for all $i\in\{1,\ldots,n\}$. An example of a utility function that would satisfy such conditions is a function $u_i(a_i,g,\tau)=a_i(1-e^{-(g+1)}+\tau)$. In most real-world scenarios agents have a common utility function which is aligned with the system's objective but, in general, they may have different utility functions that need to satisfy the above conditions. 
 
-
-The main challenge in devising strategies in performing a concurrent benefit task is that the true value of $\tau$ is not easily accessible to the agents. For example, consider the firefighting scenario described above. The magnitude of the task is not easily estimated by each agent and they only have noisy, imperfect information through their on-board sensors and their local measurements.  We model this imperfect knowledge by assuming that agent $i$ observes $x_i=\tau+\eta_i$ where $\eta_i$ is a Gaussian $\mathcal{N}(0,\sigma_i^2)$ random variable, as seen in Fig.~\ref{fig:ggsetup}. Throughout our discussion, we assume that the task magnitude $\tau$ is a Gaussian random variable\footnote{This analysis is extendable to a larger class of random variables but for the simplicity of the discussion, we consider Gaussian random variables here.} and it is independent of $\eta_1,\ldots,\eta_n$. Now, the main question is that given a agent's private measurement $x_i$, what is a \emph{sensible strategy} to follow. 
+The main challenge in devising strategies in performing a concurrent benefit task is that the true value of $\tau$ is not easily accessible to the agents. For example, consider the firefighting scenario described above. The magnitude of the task is not easily estimated by each agent and they only have noisy, imperfect information through their on-board sensors and their local measurements.  We model this imperfect knowledge by assuming that agent $i$ observes $x_i=\tau+\eta_i$ where $\eta_i$ is a Gaussian $\mathcal{N}(0,\sigma_i^2)$ random variable, as seen in Fig.~1. Throughout our discussion, we assume that the task magnitude $\tau$ is a Gaussian random variable\footnote{This analysis is extendable to a larger class of random variables but for the simplicity of the discussion, we consider Gaussian random variables here.} and it is independent of $\eta_1,\ldots,\eta_n$. Now, the main question is that given a agent's private measurement $x_i$, what is a \emph{sensible strategy} to follow. 
 
 A function that maps measurements (observations) to actions $A_i$ are referred to as a \textit{strategy}. Mathematically, a strategy $s_i$ for the $i$th agent is a (measurable) function $s_i:\R\to A_i$. Strategy $s_i$ prescribes what action the $i$th agent should take given its own measurement $x_i$. Given this, consider a set of agents with strategies $s_1,\ldots,s_n$. Let us denote the strategies of the $n-1$ agents other than the $i$th agent by the vector $s_{-i}=(s_1,\ldots,s_{i-1},s_{i+1},\ldots,s_n)$.  We say that a strategy $s_i$ is a \emph{threshold strategy} if $s_i(x)=\text{step}(x, t_i)$, i.e.\ the step function with a jump from $0$ to $1$ at $t_i$. For the $i$th agent, we define the best-response $BR(s_{-i})$ (to the strategies of the other agents) to be a strategy $\tilde{s}$ that for any $x\in \R$:
+
 \begin{align*}\label{eqn:BR}
 BR(s_{-i})(x)&=\tilde{s}(x)=\amax{a_i\in A_i} E(u_i(a_i,g,\tau)\mid x_i=x)\\
 &=\amax{a_i\in A_i} E(u_i(a_i,\sum_{j\not=i}s_j(x_j),\tau)\mid x_i=x),
@@ -102,7 +104,7 @@ We now show that any task with concurrent benefit admits a threshold strategy BN
 \end{enumerate}
 
 
-
+\nolinenumbers
 \begin{figure}
 \begin{framed}
 \textbf{Box 1} %In general, the existence of a BNE for a game is a questionable fact. Especially, once we impose additional constraints on the structure of strategies. However, in this case, we can show that there exists a sensible threshold policy for the class of tasks with concurrent benefits. To prove this, we show some intermediate results. 
@@ -130,11 +132,7 @@ By Lemma~\ref{lemma:thresholdBR}, the best response of a threshold policy is a t
 \end{framed}
 \end{figure}
 
-
-%Finally, through Lemmas~\ref{lemma:thresholdBR} and \ref{lemma:continuous} in Box 1, we are ready to prove our main result. 
-
-
-
+\linenumbers
 We show in Box 1 that a simple response threshold is sufficient to achieve a Bayes Nash Equilibrium. This insight is consistent with phenomenological observations in social insects, which are believed to use response thresholds for coordination. For example, Robinson\cite{Robinson1987} provides first empirical evidence for hormone regulated response-threshold labor division in honey bees, and similar observations have been made for termites, ants and other social insects \cite{bonabeau1999swarm,camazineprinceton}.
 
 %A number of other ethology research groups subsequently show similar hormone regulation based task-allocation processes in ants and termites providing further evidence of the ubiquitous nature of the response-threshold process. 
@@ -150,6 +148,7 @@ Suppose that all the agents share the same utility function $u(a_i,g,\tau)$ and 
 	N_{rel}(\hat{\tau}):=\frac{\#\text{agents with }x_i\geq \td}{n}.
 \end{equation}
 
+\nolinenumbers
 \begin{figure}
 \begin{framed}
 \begin{theorem}\label{thrm:relativefrequency}
@@ -176,9 +175,12 @@ for all $\hat{\tau}\in\R$ and some optimal value $d\approx 1.704$ (see \cite{cam
 \end{framed}
 \end{figure}
 
-These results also hold when moving from a discrete to a continuous response threshold, which is shown in Box 2. Therefore, for large $n$, the relative frequency of agents taking part in the activity has a shape that follows the shape of the cdf of a standard Gaussian random variable, as seen in Fig.~\ref{fig:thm2fig}, i.e. agents may use deterministic threshold strategies but their aggregate behavior would appear to an \textit{outside observer} as a continuous (sigmoid) threshold function.
+\linenumbers
+These results also hold when moving from a discrete to a continuous response threshold, which is shown in Box 2. Therefore, for large $n$, the relative frequency of agents taking part in the activity has a shape that follows the shape of the cdf of a standard Gaussian random variable, as seen in Fig.~2, i.e. agents may use deterministic threshold strategies but their aggregate behavior would appear to an \textit{outside observer} as a continuous (sigmoid) threshold function.
 
 These results suggest that global games can potentially describe a wide range of collective decision making scenarios, explaining the prevalence of sigmoid threshold policy in natural systems and artificial systems. While such a policy preserves a Bayesian Nash Equilibrium as the total number of agents increase, it also allows the system to balance between exploitation and exploration, thereby allowing to design swarms that are flexible and can alter strategies for changing environmental parameters without requiring communication.
+
+\nolinenumbers
 \bibliography{references}
 
 \begin{addendum}
@@ -195,7 +197,8 @@ should be addressed to Dr. Nikolaus Correll.~(email: ncorrell@colorado.edu).
 %% If there are any tables, put them here.
 %%
 
-\appendix
+\newpage
+\section*{Supplementary Material}
 
 \setcounter{lemma}{0}
 \begin{lemma}
@@ -232,17 +235,6 @@ Using the fact that $f$ has a Gaussian distribution and is continuous on all its
 \end{align*}
 where $u^{r}$ is a threshold strategy with threshold $r$. Therefore, the $\lim_{k\to\infty}L(\alpha(k))=L(\alpha)$ for a sequence $\{\alpha(k)\}$ that is converging to $\alpha$.
 \end{proof}
-
-
-\begin{figure}
-	\includegraphics[width=0.5\columnwidth]{../figures/globalgamesetup.png}
-	\caption{A multi-agent fire fighting scenario set up as a global game. Each player's imperfect estimate of the task is represented by $x_i$, a sum of the global magnitude parameter-$\tau$ and noisy sensor measurements-$\eta_i$.}\vspace{-10px}\label{fig:ggsetup}
-\end{figure}
-
-\begin{figure}
-	\includegraphics[width=.5\columnwidth]{../figures/thm2fig.png}
-	\caption{Visualization of Theorem~\ref{thrm:relativefrequency} as $N_{rel}$ estimates $\Phi(\cdot)$. The plot was generated by running Eqn.~\ref{eqn:Nrel} 10,000 times for each point in $\hat{\tau} = [1,10,\text{ (inc.) }0.1]$. $n = 10$, $\td = 5$ and $x_i = \hat{\tau} + \eta_i$ ($\eta_i \sim\mathcal{N}(0, \sigma)$). Each curve in the plot is generated by sweeping $\sigma = \{0, 0.1, 1, 2, 10\}$, with $\sigma = 0$ being a step-function and $\sigma = 10$ having the \emph{flattest} slope.}\label{fig:thm2fig}
-\end{figure}
 
 
 \end{document}
