@@ -1,14 +1,5 @@
-%% Template for a preprint Letter or Article for submission
-%% to the journal Nature.
-%% Written by Peter Czoschke, 26 February 2004
-%%
-\documentclass{nature}
-%% make sure you have the nature.cls and naturemag.bst files where
-%% LaTeX can find them
-\bibliographystyle{naturemag}
+\documentclass{article}
 
-%% Notice placement of commas and superscripts and use of &
-%% in the author list
 \usepackage{amsthm}
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}{Lemma}
@@ -21,8 +12,8 @@
 \usepackage{enumerate}
 \usepackage{mathtools}
 \usepackage{framed}
-
 \usepackage{lineno}
+\usepackage{subcaption}
 
 % ----------- CUSTOM MACROS ----------------
 \DeclareMathOperator*{\argmin}{\arg\!\min\>}
@@ -53,18 +44,18 @@
 
 \begin{document}
 \maketitle
-\begin{affiliations}
- \item College of Engineering and Applied Sciences, University of Colorado, Boulder, USA. 
- \item Dept. of Computer Science.
- \item Dept. of Electrical, Computer \& Energy Engineering.
-\end{affiliations}
+%\begin{affiliations}
+% \item College of Engineering and Applied Sciences, University of Colorado, Boulder, USA. 
+% \item Dept. of Computer Science.
+% \item Dept. of Electrical, Computer \& Energy Engineering.
+%\end{affiliations}
 
 % --------------- PAPER BODY --------------------
-\linenumbers
 \begin{abstract}
 Task allocation subject to communication constraints is ubiquitous in nature at all scales, ranging from cellular systems\cite{Yoshida2010, Suzuki2015} and social insects\cite{Robinson1987, Gordon1996, Bonabeau1998, Theraulaz1998} to large animal herds\cite{Conradt2003, Conradt2005} and human society\cite{Raafat2009}. Inter-agent communication in large systems is not always possible or desired, either due to physical limitations at the agent level (cellular/insect systems) or properties of the task itself (adversary behaviour in humans). Here we show that formalizing task allocation problems as a global game, a concept from the field of game theory, reveals that a simple threshold strategy leads to Bayesian Nash Equilibria (BNE) despite the absence of communication between agents. This result not only provides a hypothesis about the inner workings of a wide range of systems with limited communication between agents but also provides a formal explanation for threshold-based task allocation in social insects. In particular, we show how noise in the perception apparatus of individual agents leads to commonly observed sigmoid response threshold functions that control the trade-off between exploration and exploitation\cite{Bonabeau1997} in natural systems and can be used to design engineered systems ranging from swarm robotics\cite{Martinoli1999, Krieger2000, Kube2000, Mataric2003, Gerkey2004} to smart composites\cite{McEvoy2015}, made of computational elements with very low complexity. 
 \end{abstract}
 
+\linenumbers
 Consider a group of agents performing a task contributing to a common goal, which we refer to as a concurrent benefit. This benefit is related to a stimulus $\tau$ that can be observed by all agents, albeit subject to sensing noise. Agents do not share any information. All agents decide, for themselves, whether or not to engage in the task. A task is successfully attempted if a critical mass of agents is willing to participate in it. Otherwise, the attempt fails.
 
 Situations like this arise in a number of different fields including neurology\cite{Yoshida2010, Suzuki2015}, ethology\cite{Robinson1987, Gordon1996, Bonabeau1998, Theraulaz1998}, sociology\cite{Raafat2009}, economics\cite{Morris2000}, and robotics\cite{Martinoli1999, Krieger2000, Kube2000, Pynadath2002, Gerkey2003, Mataric2003, Gerkey2004, Kanakia2014}. All of these multi-agent scenarios share the common notion of a joint action or response to a commonly observed stimulus. The task can take on many forms ranging from neurons simply firing in concert, collective decision problems like flocking, herd grazing and colony defense to individual actions based on the environment and other agents' beliefs like foraging, bank runs, and political revolutions. 
@@ -88,7 +79,6 @@ The main challenge in devising task allocation strategies is that the true value
 We model this imperfect knowledge by assuming that agent $i$ observes $x_i=\tau+\eta_i$ where $\eta_i$ is a Gaussian $\mathcal{N}(0,\sigma_i^2)$ random variable, as seen in Fig.~1. Throughout our discussion, we assume that the task stimulus $\tau$ is a Gaussian\footnote{This analysis is extendable to a larger class of random variables but for the simplicity of the discussion, we consider Gaussian random variables here.} random variable and is independent of $\eta_1,\ldots,\eta_n$.  Given these constraints, the question is what strategy the agents should follow to reach a BNE. In other words, an outcome in which no agent has the incentive to deviate from its current strategy.
 
 A \emph{strategy} $s_i$ for the $i^{\text{th}}$ agent is a measurable function $s_i:\R\to A_i$, mapping measurements (observations) to actions. Strategy $s_i$ prescribes what action the $i^{\text{th}}$ agent should take given its own measurement $x_i$. Given this, consider a set of agents with strategies $s_1,\ldots,s_n$. Let us denote the strategies of the $n-1$ agents other than the $i^{\text{th}}$ agent by the vector $S_{-i}=\{s_1,\ldots,s_{i-1},s_{i+1},\ldots,s_n\}$.  We say that a strategy $s_i$ is a \emph{threshold strategy} if $s_i(x)=\text{step}(x, \td_i)$, i.e.\ the step function with a jump from $0$ to $1$ at $\td_i$, where $\td_i$ is the internal threshold value of the $i^{\text{th}}$ agent. For the $i^{\text{th}}$ agent, we define the best-response $BR(S_{-i})$ (to the strategies of the other agents) to be a strategy $\tilde{s}$ that for any $x\in \R$:
-\vspace{-50px}
 
 \begin{align*}\label{eqn:BR}
 BR(S_{-i})(x)&=\tilde{s}(x)\in\amax{a_i\in A_i} E(u_i(a_i,g,\tau)\mid x_i=x)\\
@@ -102,8 +92,21 @@ We now show that any task with concurrent benefit admits a threshold strategy BN
 \item If the measurement is above $\td_i$ take part in the collaborative task, otherwise hold off.
 \end{enumerate}
 
+We show in Box 1 that a simple response threshold is sufficient to achieve a BNE. This insight is consistent with phenomenological observations of social insects, which are believed to use response thresholds for coordination. For example, Robinson\cite{Robinson1987} provides first empirical evidence for hormone regulated response-threshold labor division in honey bees, and similar observations have been made for termites, ants and other social insects\cite{Bonabeau1999,Camazine2001}. Given their prevalence in social insects and humans, it is likely that similar coordination mechanisms are in place to regulate concurrent activities across many natural systems of varying sizes and scales.
+
+Roboticists have started using these models to engineer swarm systems\cite{Bonabeau1996,Theraulaz1998,Krieger2000}. Yet, observations in ethology suggest sigmoid threshold functions\cite{Bonabeau1996}, rather than fixed thresholds as suggested by the game theoretic results shown above. We argue that this behaviour can be a direct result of using a simple discrete threshold under the influence of perception noise. Indeed, one can show that a sigmoid threshold function is the outcome of deterministic threshold functions on noisy observations. When engineering a system, this noise can be controlled and enhanced using computation, allowing artificial agents to trade between exploitation and exploration. 
+
+After showing that discrete thresholds indeed result in BNE for systems in which agents do not directly communicate, we will now show how sensor noise at the individual level results in a continuous response-threshold phenomena that is prevalent in multi-agent systems and social insects. Suppose that all the agents share the same utility function $u(a_i,g,\tau)$ and also, assume that the observation noise of the $n$ agents ($\eta_1,\ldots,\eta_n$) are independent and identically distributed (IID) $\mathcal{N}(0,\sigma^2)$ Gaussian random variables. Then, it is not hard to see that there exists a BNE with threshold strategies that have the same threshold value $\td$\cite{Morris2000}.
+
+Box 2 shows that for large $n$, the relative frequency of agents taking part in the activity has a shape that follows the shape of the cdf of a standard Gaussian random variable. Theroem \ref{thrm:relativefrequency} is shown numerically verified in Fig.~2. Therefore we have shown that agents may use deterministic threshold strategies but their \emph{aggregate behaviour} would appear to an outside observer as a continuous sigmoid threshold function instead of numerous discrete thresholds.
+
+The theorems presented in this paper suggest that global games can  describe a wide range of collective decision making scenarios, explaining the prevalence of sigmoid threshold strategies in natural and artificial systems that preserve the beneficial BNE property. By varying noise in the system and thereby changing the slope of the sigmoid function, the response threshold strategy also allows the system to balance between exploitation and exploration. This, in turn, may lead to designing robust robot swarms that are flexible and can alter strategies for changing environmental parameters without requiring communication; a highly desired property that is often observed in natural swarms and is of great interest for engineered systems.
+
 \nolinenumbers
-\begin{figure}
+
+\newpage
+\subsection*{Figures and Tables}
+\begin{figure}[!ht]
 \begin{framed}
 \textbf{Box 1}
 To show that there exists a sensible threshold strategy for the class of tasks with concurrent benefit, we will first show that the best response to threshold strategies is a threshold strategy, and then we show that there exists an equlibrium consists of threshold strategies\cite{Carlsson1993, Morris2000}. Proofs for Lemmas 1 and 2 are provided in the supplementary materials.
@@ -126,19 +129,8 @@ By Lemma~\ref{lemma:thresholdBR}, the best response of a threshold strategy is a
 \end{framed}
 \end{figure}
 
-\linenumbers
-We show in Box 1 that a simple response threshold is sufficient to achieve a BNE. This insight is consistent with phenomenological observations of social insects, which are believed to use response thresholds for coordination. For example, Robinson\cite{Robinson1987} provides first empirical evidence for hormone regulated response-threshold labor division in honey bees, and similar observations have been made for termites, ants and other social insects\cite{Bonabeau1999,Camazine2001}. Given their prevalence in social insects and humans, it is likely that similar coordination mechanisms are in place to regulate concurrent activities across many natural systems of varying sizes and scales.
-%
-%A number of other ethology research groups subsequently show similar hormone regulation based task-allocation processes in ants and termites providing further evidence of the ubiquitous nature of the response-threshold process. 
-%
-Roboticists have started using these models to engineer swarm systems\cite{Bonabeau1996,Theraulaz1998,Krieger2000}. %Bonabeau \cite{Bonabeau1996} introduces the \emph{fixed} response-threshold model for division of labor in social insects which is later extended to incorporate the notion of \emph{dynamic} response-thresholds for task-allocation\cite{Theraulaz1998}.
-
-Yet, observations in ethology suggest sigmoid threshold functions\cite{Bonabeau1996}, rather than fixed thresholds as suggested by the game theoretic results shown above. We argue that this behaviour can be a direct result of using a simple discrete threshold under the influence of perception noise. Indeed, one can show that a sigmoid threshold function is the outcome of deterministic threshold functions on noisy observations. When engineering a system, this noise can be controlled and enhanced using computation, allowing artificial agents to trade between exploitation and exploration. 
-
-After showing that discrete thresholds indeed result in BNE for systems in which agents do not directly communicate, we will now show how sensor noise at the individual level results in a continuous response-threshold phenomena that is prevalent in multi-agent systems and social insects. Suppose that all the agents share the same utility function $u(a_i,g,\tau)$ and also, assume that the observation noise of the $n$ agents ($\eta_1,\ldots,\eta_n$) are independent and identically distributed (IID) $\mathcal{N}(0,\sigma^2)$ Gaussian random variables. Then, it is not hard to see that there exists a BNE with threshold strategies that have the same threshold value $\td$\cite{Morris2000}.
-
-\nolinenumbers
-\begin{figure}
+\newpage
+\begin{figure}[!ht]
 \begin{framed}
 \textbf{Box 2} 
 Consider a realization of $\tau=\hat{\tau}$ and suppose that we have a large number of agents $n$ observing a noisy variation of $\hat{\tau}$. Take for example the case of fire-fighting agents, and let $\hat{\tau}$ be the magnitude (including type, intensity, area, etc.) of the fire. Then, since the observations of the $n$ agents are IID given the value of $\tau$, they will be distributed according to $\mathcal{N}(\hat{\tau},\sigma^2)$. Now consider the relative number of agents taking part in the activity given $\hat{\tau}$ as defined by, 
@@ -170,27 +162,44 @@ for all $\hat{\tau}\in\R$ and some optimal value $d\approx 1.704$ as described i
 \end{framed}
 \end{figure}
 
-\linenumbers
-Box 2 shows that for large $n$, the relative frequency of agents taking part in the activity has a shape that follows the shape of the cdf of a standard Gaussian random variable. Theroem \ref{thrm:relativefrequency} is shown numerically verified in Fig.~2. Therefore we have shown that agents may use deterministic threshold strategies but their \emph{aggregate behaviour} would appear to an outside observer as a continuous sigmoid threshold function instead of numerous discrete thresholds.
+\newpage
+\begin{figure*}[ht!]
+    \centering\begin{subfigure}[t]{0.41\textwidth}
+        \centering
+        \includegraphics[width=1\textwidth]{figures/firefighting.png}
+        \caption{Robot Firefighting}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[t]{0.41\textwidth}
+        \centering
+        \includegraphics[width=1\textwidth]{figures/bankrun.png}
+        \caption{Bank Run}
+    \end{subfigure}
+    \begin{subfigure}[t]{.82\textwidth}
+        \centering
+        \includegraphics[width=1\textwidth]{figures/foraging.png}
+        \caption{Ant Foraging}
+    \end{subfigure}    
+    \caption{Robotic fire fighting, ant foraging, and bank run scenarios presented as global games. Each player's imperfect estimate of the task is represented by $x_i$, comprising of the global stimulus parameter $\tau$ and noisy sensor measurements $\eta_i$. In the robot firefighting scenario $\tau$ is representative of the magnitude of the fire, while in the case of a bank run $\tau$ is indicative of an agent's current level of trust in the nation's economy. For the ant foraging scenario $\tau$ represents an ant's willingness to take part in the foraging task based on a number of internally measured parameters such as the distance to the food source ($t_t$), the wait time to deliver food ($t_w$), and the food stores currently at the nest ($s$), among others.}    
+\end{figure*}
 
-The theorems presented in this paper suggest that global games can  describe a wide range of collective decision making scenarios, explaining the prevalence of sigmoid threshold strategies in natural and artificial systems that preserve the beneficial BNE property. By varying noise in the system and thereby changing the slope of the sigmoid function, the response threshold strategy also allows the system to balance between exploitation and exploration. This, in turn, may lead to designing robust robot swarms that are flexible and can alter strategies for changing environmental parameters without requiring communication; a highly desired property that is often observed in natural swarms and is of great interest for engineered systems.
+\newpage
+\begin{figure}[!ht]
+	\centering\includegraphics[width=0.7\columnwidth]{figures/thm2fig.png}
+	\centering\caption{Visualization of Theorem~2 as $N_{rel}$ estimates $\Phi(\cdot)$. The plot was generated by running Eqn.~1 10,000 times for each point in $\hat{\tau} = 1$ to $10$ in increments of $0.1$. $n = 10$, $\td = 5$ and $x_i = \hat{\tau} + \eta_i$ ($\eta_i \sim\mathcal{N}(0, \sigma^2)$). Each curve in the plot is generated by sweeping $\sigma^2 = \{0, 0.1, 1, 2, 10\}$, with $\sigma^2 = 0$ being a step-function and $\sigma^2 = 10$ having the \emph{flattest} slope.}\label{fig:thm2fig}
+\end{figure}
 
-\nolinenumbers
+\newpage
 \bibliography{references}
+\bibliographystyle{plain}
 
-\begin{addendum}
- \item A. Kanakia and N. Correll have been supported by NSF CAREER grant \#1150223. We are grateful for this support. 
- \item[Competing Interests] The authors declare that they have no
-competing financial interests.
- \item[Correspondence] Correspondence and requests for materials
-should be addressed to Dr. Nikolaus Correll.~(email: ncorrell@colorado.edu).
-\end{addendum}
-
-%%
-%% TABLES
-%%
-%% If there are any tables, put them here.
-%%
+%\begin{addendum}
+% \item A. Kanakia and N. Correll have been supported by NSF CAREER grant \#1150223. We are grateful for this support. 
+% \item[Competing Interests] The authors declare that they have no
+%competing financial interests.
+% \item[Correspondence] Correspondence and requests for materials
+%should be addressed to Dr. Nikolaus Correll.~(email: ncorrell@colorado.edu).
+%\end{addendum}
 
 \newpage
 \section*{Supplementary Material}
@@ -211,7 +220,6 @@ We first show that if for some observation $x_i=x$, we have $BR(S_{-i})(x)=\tild
 \end{align*}
 Therefore $\tilde{s}_i(y)=1$. Similarly, if for some value of $x$, we have $\tilde{s}_i(x)=0$, then it follows that $\tilde{s}_i(y)=0$ for $y\leq x$. Therefore, $\tilde{s}_i$ would be a threshold strategy.  
 \end{proof}
-
 
 \begin{lemma}
 The mapping $L$ that maps the threshold values of threshold strategies to the threshold values of the best-response strategies is a continuous mapping. 
