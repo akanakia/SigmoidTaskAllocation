@@ -223,7 +223,8 @@ Roboticists have started using these models to engineer swarm systems\cite{Bonab
 
 After showing that discrete thresholds indeed result in BNE for systems in which agents do not directly communicate, we will now show how sensor noise at the individual level results in a continuous response-threshold phenomena that is prevalent in multi-agent systems and social insects. Suppose that all the agents share the same utility function $u(a_i,g,\tau)$ and also, assume that the observation noise of the $n$ agents ($\eta_1,\ldots,\eta_n$) are independent and identically distributed (IID) $\mathcal{N}(0,\sigma^2)$ Gaussian random variables. Then, it is not hard to see that there exists a BNE with threshold strategies that have the same threshold value $\td$\cite{Morris2000}.
 
-Consider a realization of $\tau=\hat{\tau}$ and suppose that we have a large number of agents $n$ observing a noisy variation of $\hat{\tau}$. Take for example the case of fire-fighting agents, and let $\hat{\tau}$ be the magnitude (including type, intensity, area, etc.) of the fire. Then, since the observations of the $n$ agents are IID given the value of $\tau$, they will be distributed according to $\mathcal{N}(\hat{\tau},\sigma^2)$. Now consider the relative number of agents taking part in the activity given $\hat{\tau}$ as defined by, 
+Consider a realization of $\tau=\hat{\tau}$ and suppose that we have a large number of agents $n$ observing a noisy variation of $\hat{\tau}$. Take for example the case of fire-fighting agents, and let $\hat{\tau}$ be the magnitude (including type, intensity, area, etc.) of the fire. Then, since the observations of the $n$ agents are IID given the value of $\tau$, they will be distributed according to $\mathcal{N}(\hat{\tau},\sigma^2)$. Now consider the relative number of agents taking part in the activity given $\hat{\tau}$ as defined by,
+
 \begin{equation*}
 	N_{rel}(\hat{\tau}):=\frac{\#\text{agents with }x_i\geq \td}{n}.
 \end{equation*}
@@ -235,17 +236,24 @@ For the relative number of agents $N_{rel}(\hat{\tau})$, we have
 \end{equation}
 where $\Phi$ is the cumulative distribution function (cdf) of a standard Gaussian. 
 \end{theorem}
+
 \begin{proof}
 Note that $N_{rel}(\hat{\tau})=\frac{\sum_{i=1}^n\mathbf{I}_{x_i\geq \td}}{n}$ where $\mathbf{I}_{i\geq j}$ is the indicator function for $i\geq j$. For a given $\hat{\tau}$, $x_i$ are IID $\mathcal{N}(\hat{\tau},\sigma^2)$ random variables and hence, $\mathbf{I}_{x_i\geq \td}$ are IID random variables for all agents with $E(\mathbf{I}_{x_i\geq \td})=\Phi(\frac{\hat{\tau}-\td}{\sigma^2})$. Therefore, by the Law of Large Numbers, it follows that:
+
+\vspace{-20px}
 \begin{align*}
 \lim_{n\to\infty}N_{rel}(\hat{\tau})=\Phi(\frac{\hat{\tau}-\td}{\sigma^2}).
 \end{align*}
+\nolinenumbers
 \end{proof}
-
+\linenumbers
 The final step to explain the prevalence of sigmoid functions in multi-agent settings is to note that:
+
+\vspace{-20px}
 \begin{align*}
 |\Phi(\frac{\hat{\tau}-\td}{\sigma^2})-\frac{1}{1+e^{-d(\frac{\hat{\tau}-\td}{\sigma^2})}}|\leq 0.01,
 \end{align*}
+
 for all $\hat{\tau}\in\R$ and some optimal value $d\approx 1.704$ as described in\cite{Camilli1994}. This means that the aggregate behaviour of the agents following deterministic threshold strategies would closely follow (to within a constant error term) the shape of the commonly observed logistic sigmoid function whose drift is directly proportional to $\td$ and the slope is inversely proportional to $\sigma^2$. 
 
 Theorem~\ref{thrm:relativefrequency} shows that for large $n$, the relative frequency of agents taking part in the activity has a shape that follows the shape of the cdf of a standard Gaussian random variable. Theroem \ref{thrm:relativefrequency} is shown numerically verified in Fig.~2. Therefore we have shown that agents may use deterministic threshold strategies but their \emph{aggregate behaviour} would appear to an outside observer as a continuous sigmoid threshold function instead of numerous discrete thresholds.
@@ -254,6 +262,18 @@ The theorems presented in this paper suggest that global games can  describe a w
 
 \nolinenumbers
 
+\newpage
+\bibliography{references}
+\bibliographystyle{Science}
+
+% Following is a new environment, {scilastnote}, that's defined in the
+% preamble and that allows authors to add a reference at the end of the
+% list that's not signaled in the text; such references are used in
+% *Science* for acknowledgments of funding, help, etc.
+
+\begin{scilastnote}
+\item A. Kanakia and N. Correll have been supported by NSF CAREER grant \#1150223. We are grateful for this support.
+\end{scilastnote}
 
 % For your review copy (i.e., the file you initially send in for
 % evaluation), you can use the {figure} environment and the
@@ -294,19 +314,43 @@ The theorems presented in this paper suggest that global games can  describe a w
 \end{figure}
 
 \newpage
-\bibliography{references}
-\bibliographystyle{Science}
+\section*{Supplementary Material}
+
+\setcounter{lemma}{0}
+\begin{lemma}
+Let $S=\{s_1,\ldots,s_n\}$ be a strategy profile consisting of threshold strategies for a task with  concurrent benefit. Let $\tilde{s}_i=BR(S_{-i})$. Then $\tilde{s}_i$ is a threshold strategy. 
+\end{lemma} 
+
+\begin{proof}
+We first show that if for some observation $x_i=x$, we have $BR(S_{-i})(x)=\tilde{s}_i(x)=1$, then $\tilde{s}_i(y)=1$ for $y\geq x$. To show this,  we note that $P(x_j\geq \tau_j\mid x_i=x)$ is an increasing function of $x$ as $x_j-x_i$ is a normally distributed random variable. Therefore, using the monotone property of concurrent tasks and the fact that $x_i=\tau+\eta_i$, we conclude that:
+\vspace{-5px}
+\begin{align*}
+&E(u_i(1,\sum_{j\not=i}s_j(x_j),\tau)\mid x_i=y)\\ 
+&\qquad-E(u_i(0,\sum_{j\not=i}s_j(x_j),\tau)\mid x_i=y)\\ 
+&>E(u_i(1,\sum_{j\not=i}s_j(x_j),\tau)\mid x_i=x)\\
+&\qquad-E(u_i(0,\sum_{j\not=i}s_j(x_j),\tau)\mid x_i=x)\geq 0.
+\end{align*}
+Therefore $\tilde{s}_i(y)=1$. Similarly, if for some value of $x$, we have $\tilde{s}_i(x)=0$, then it follows that $\tilde{s}_i(y)=0$ for $y\leq x$. Therefore, $\tilde{s}_i$ would be a threshold strategy.  
+\end{proof}
 
 
+\begin{lemma}
+The mapping $L$ that maps the threshold values of threshold strategies to the threshold values of the best-response strategies is a continuous mapping. 
+\end{lemma}
 
-% Following is a new environment, {scilastnote}, that's defined in the
-% preamble and that allows authors to add a reference at the end of the
-% list that's not signaled in the text; such references are used in
-% *Science* for acknowledgments of funding, help, etc.
-
-\begin{scilastnote}
-\item A. Kanakia and N. Correll have been supported by NSF CAREER grant \#1150223. We are grateful for this support.
-\end{scilastnote}
+\begin{proof}
+Let $x_{-i}=(x_1,\ldots,x_{i-1},x_{i+1},\ldots,x_n)$ be the vector of observations of $n-1$ agents except the $i^{\text{th}}$ agent. Note that the vector $(x_{-i},\tau)$ given $x_i=x$ is a normally distributed random vector with some continuous density function $f_{x}(x_{-i},\tau)$. Now, let $\{\alpha(k)\}$ be a sequence in $\R^n$ that is converging to $\alpha\in\R^n$. Let $\{\beta(k)\}$ be the sequence of thresholds corresponding to the best-response strategy of the strategy with threshold vector $\alpha(k)$. Let $s$ be the threshold strategy corresponding to the threshold vector $\alpha$ and let $\alpha^*$ be the threshold strategy corresponding to the $BR(\alpha)$. By the definition of the best-response strategy, $\beta_i(k)$ is a point where 
+\begin{align*}
+&\int_{\R^{n}}f_{\beta(k)}(z,t)\left(u_i(1,\sum_{j\not=i}u^{\alpha_j(k)}(x_j),\tau)\right.\\
+&\qquad\left.-u_i(0,\sum_{j\not=i}u^{\alpha_j(k)}(x_j),\tau)\right)d(z\times t)=0.
+\end{align*}
+Using the fact that $f$ has a Gaussian distribution and is continuous on all its arguments and the fact that $|u_i(\cdot,\cdot,\tau)|\leq \tau^p$, by taking the limit $k\to\infty$ and the dominated convergence theorem:
+\begin{align*}
+&\int_{\R^{n}}f_{\beta}(z,t)(u_i(1,\sum_{j\not=i}u^{\alpha_j}(x_j),\tau)\\ 
+&\qquad-u_i(0,\sum_{j\not=i}u^{\alpha(k)}(x_j),\tau))d(z\times t)=0,
+\end{align*}
+where $u^{r}$ is a threshold strategy with threshold $r$. Therefore, the $\lim_{k\to\infty}L(\alpha(k))=L(\alpha)$ for a sequence $\{\alpha(k)\}$ that is converging to $\alpha$.
+\end{proof}
 
 \end{document}
 
