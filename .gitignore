@@ -91,3 +91,7 @@ sympy-plots-for-*.tex/
 
 # TeXMaker
 *.tks
+
+# word files
+*.tmp
+~*
