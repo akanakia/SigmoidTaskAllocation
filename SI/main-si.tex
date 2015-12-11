@@ -214,7 +214,14 @@ We first show that if for some observation $x_i=x$, we have $BR(S_{-i})(x)=\tild
 Therefore $\tilde{s}_i(y)=1$. Similarly, if for some value of $x$, we have $\tilde{s}_i(x)=0$, then it follows that $\tilde{s}_i(y)=0$ for $y\leq x$. Therefore, $\tilde{s}_i$ would be a threshold strategy.  
 \end{proof}
 
-We can view the best-response of threshold strategies as a mapping from $\R^n$ to $\R^n$ that maps $n$ thresholds of strategies to $n$ thresholds of the best-response strategies. Denote this mapping by $L:\R^n\to\R^n$.
+We can view the best-response of threshold strategies as a mapping from $\R^n$ to $\R^n$ that maps $n$ thresholds of strategies to $n$ thresholds of the best-response strategies. Denote this mapping by $L:\R^n\to\R^n$. \edit{To show that there exists a BNE threshold policy, we show that the mapping $L$ has a fixed point. Note that not all the functions from $\R^n$ to $\R^n$ admit a fixed-point. For example, the function 
+	\begin{align*}
+		f(x)=\left\{\begin{array}{ll}
+			-1&x>0\\
+			1&x\leq 0
+			\end{array}\right.
+	\end{align*}
+	does not admit a fixed point value, i.e.\ a point $x^*$ such that $f(x^*)=x^*$. In order to show that $L$ has a fixed point we use the fact that $L$ is continuous. }
 \begin{lemma}\label{lemma:continuous}
 The mapping $L$ that maps the threshold values of threshold strategies to the threshold values of the best-response strategies is a continuous mapping. 
 \end{lemma}
@@ -265,7 +272,9 @@ For the relative number of agents $N_{rel}(\hat{\tau})$, we have
 where $\Phi$ is the cumulative distribution function (cdf) of a standard Gaussian. 
 \end{theorem}
 \begin{proof}
-Note that $N_{rel}(\hat{\tau})=\frac{\sum_{i=1}^n\mathbf{I}_{x_i\geq \td}}{n}$ where $\mathbf{I}_{i\geq j}$ is the indicator function for $i\geq j$. For a given $\hat{\tau}$, $x_i$ are IID $\mathcal{N}(\hat{\tau},\sigma^2)$ random variables and hence, $\mathbf{I}_{x_i\geq \td}$ are IID random variables for all agents with $E(\mathbf{I}_{x_i\geq \td})=\Phi(\frac{\hat{\tau}-\td}{\sigma^2})$. Therefore, by the Law of Large Numbers, it follows that:
+Note that $N_{rel}(\hat{\tau})=\frac{\sum_{i=1}^n\mathbf{I}_{x_i\geq \td}}{n}$ where $\mathbf{I}_{i\geq j}$ is the indicator function for $i\geq j$. For a given $\hat{\tau}$, $x_i$ are IID $\mathcal{N}(\hat{\tau},\sigma^2)$ random variables and hence, $\mathbf{I}_{x_i\geq \td}$ are IID random variables. \edit{This follows from the fact that if $X_1,\ldots,X_n$ are independent random variables, then $g_1(X_1),\ldots,g_n(X_n)$ are independent random variables for a deterministic (measurable) functions $g_i:\R\to\R$ (cf.\ Theorem 2.1.6 in \cite{durrett2010probability}).} Also, we have 
+\[E(\mathbf{I}_{x_i\geq \td})=P(x_i\geq \td)=\Phi(\frac{\hat{\tau}-\td}{\sigma^2}).\]
+ Therefore, by the Law of Large Numbers, it follows that:
 \begin{align*}
 \lim_{n\to\infty}N_{rel}(\hat{\tau})=\Phi(\frac{\hat{\tau}-\td}{\sigma^2}).
 \end{align*}
